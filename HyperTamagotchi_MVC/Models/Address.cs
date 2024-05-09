@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace HyperTamagotchi_MVC.Models;
-
+// update because of git commit :)
 public class Address
 {
     public int AddressId { get; set; }
