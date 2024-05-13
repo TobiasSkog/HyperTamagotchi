@@ -1,0 +1,69 @@
+﻿@model IEnumerable<HyperTamagotchi_MVC.Models.ShoppingItem>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ShoppingItemName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Stock)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CurrencyType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Discount)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+            string discountValue = item.Discount == 1 ? "No discount" : $"Discount {@HyperTamagotchi_MVC.Data.DiscountConversionHelper.ConvertFromShoppingItemToDiscountDisplayDiscount(item.Discount)}%";
+            <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShoppingItemName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Stock)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CurrencyType)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => discountValue)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ShoppingItemId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ShoppingItemId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ShoppingItemId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
