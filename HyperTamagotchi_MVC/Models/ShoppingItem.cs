@@ -38,6 +38,10 @@ public class ShoppingItem
     [Range(0, 2, ErrorMessage = "Discount must be between 0 and 2")]
     public float Discount { get; set; } = 1.00f;
 
+    [Required]
+    [StringLength(50, MinimumLength = 3, ErrorMessage = "Image path must be between 3 and 50 characters")]
+    public string ImagePath { get; set; } = @"/Assets/Img/404.jpg";
+
     // Shopping Cart specifics
     [Range(0, 256, ErrorMessage = "Quantity must be between 0 and 256")]
     public byte? Quantity { get; set; }

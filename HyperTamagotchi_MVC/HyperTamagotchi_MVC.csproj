@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
-    <Folder Include="wwwroot\Assets\" />
+    <Folder Include="wwwroot\Assets\Img\" />
   </ItemGroup>
 
 </Project>
