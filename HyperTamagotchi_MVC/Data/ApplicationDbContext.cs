@@ -18,6 +18,11 @@ public class ApplicationDbContext : IdentityDbContext
         modelBuilder.Entity<Order>()
             .HasIndex(o => o.OrderDate);
 
+        modelBuilder.Entity<ShoppingItem>()
+            .HasDiscriminator<string>("Discriminator")
+            .HasValue<ShoppingItem>("ShoppingItem")
+            .HasValue<Tamagotchi>("Tamagotchi");
+
         // This line is used if using identity and if having a overrided OnModelCreating
         base.OnModelCreating(modelBuilder);
     }

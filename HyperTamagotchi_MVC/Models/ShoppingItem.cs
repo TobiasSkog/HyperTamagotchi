@@ -11,8 +11,8 @@ public class ShoppingItem
 
     [Required]
     [StringLength(50, MinimumLength = 1, ErrorMessage = "Item name must be between 1 and 50 characters")]
-    [DisplayName("Product")]
-    public string ShoppingItemName { get; set; }
+    [DisplayName("Product Name")]
+    public virtual string Name { get; set; }
 
 
     [StringLength(100, MinimumLength = 0, ErrorMessage = "Description can maximum be of 100 characters")]
@@ -24,7 +24,6 @@ public class ShoppingItem
     [DisplayName("Amount In Stock")]
     public byte Stock { get; set; }
 
-    //How to maximize cost efficiency when using Azure and the decimal datatype?
 
     [Required]
     public float Price { get; set; }
@@ -40,7 +39,8 @@ public class ShoppingItem
 
     [Required]
     [StringLength(50, MinimumLength = 3, ErrorMessage = "Image path must be between 3 and 50 characters")]
-    public string ImagePath { get; set; } = @"/Assets/Img/404.jpg";
+    [DisplayName("Image Name (Image.jpg)")]
+    public string ImagePath { get; set; } = @"404.jpg";
 
     // Shopping Cart specifics
     [Range(0, 256, ErrorMessage = "Quantity must be between 0 and 256")]

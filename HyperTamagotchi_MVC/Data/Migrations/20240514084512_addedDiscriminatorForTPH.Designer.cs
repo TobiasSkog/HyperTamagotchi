@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace HyperTamagotchi_MVC.Data.Migrations
+namespace HyperTamagotchi_MVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240509090239_Updated ShoppingItems with CurrencyType again")]
-    partial class UpdatedShoppingItemswithCurrencyTypeagain
+    [Migration("20240514084512_addedDiscriminatorForTPH")]
+    partial class addedDiscriminatorForTPH
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -118,16 +118,26 @@ namespace HyperTamagotchi_MVC.Data.Migrations
                     b.Property<float>("Discount")
                         .HasColumnType("real");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<float>("Price")
                         .HasColumnType("real");
 
                     b.Property<byte?>("Quantity")
                         .HasColumnType("tinyint");
-
-                    b.Property<string>("ShoppingItemName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
 
                     b.Property<byte>("Stock")
                         .HasColumnType("tinyint");
@@ -135,6 +145,10 @@ namespace HyperTamagotchi_MVC.Data.Migrations
                     b.HasKey("ShoppingItemId");
 
                     b.ToTable("ShoppingItems");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("ShoppingItem");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("HyperTamagotchi_MVC.Models.ShoppingItemOrder", b =>
@@ -165,49 +179,6 @@ namespace HyperTamagotchi_MVC.Data.Migrations
                     b.HasIndex("ShoppingCartId");
 
                     b.ToTable("ShoppingItemShoppingCarts");
-                });
-
-            modelBuilder.Entity("HyperTamagotchi_MVC.Models.Tamagotchi", b =>
-                {
-                    b.Property<int>("TamagotchiId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TamagotchiId"));
-
-                    b.Property<string>("CustomerId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<byte>("Experience")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("ImagePath")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<byte>("Mood")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<byte>("TamagotchiColor")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte>("TamagotchiStage")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte>("TamagotchiType")
-                        .HasColumnType("tinyint");
-
-                    b.HasKey("TamagotchiId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("Tamagotchis");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -421,6 +392,33 @@ namespace HyperTamagotchi_MVC.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("HyperTamagotchi_MVC.Models.Tamagotchi", b =>
+                {
+                    b.HasBaseType("HyperTamagotchi_MVC.Models.ShoppingItem");
+
+                    b.Property<string>("CustomerId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<byte>("Experience")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Mood")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("TamagotchiColor")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("TamagotchiStage")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("TamagotchiType")
+                        .HasColumnType("tinyint");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasDiscriminator().HasValue("Tamagotchi");
+                });
+
             modelBuilder.Entity("HyperTamagotchi_MVC.Models.Customer", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -499,13 +497,6 @@ namespace HyperTamagotchi_MVC.Data.Migrations
                     b.Navigation("ShoppingItem");
                 });
 
-            modelBuilder.Entity("HyperTamagotchi_MVC.Models.Tamagotchi", b =>
-                {
-                    b.HasOne("HyperTamagotchi_MVC.Models.Customer", null)
-                        .WithMany("Tamagotchis")
-                        .HasForeignKey("CustomerId");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -555,6 +546,13 @@ namespace HyperTamagotchi_MVC.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("HyperTamagotchi_MVC.Models.Tamagotchi", b =>
+                {
+                    b.HasOne("HyperTamagotchi_MVC.Models.Customer", null)
+                        .WithMany("Tamagotchis")
+                        .HasForeignKey("CustomerId");
                 });
 
             modelBuilder.Entity("HyperTamagotchi_MVC.Models.Customer", b =>

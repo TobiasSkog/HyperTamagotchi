@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace HyperTamagotchi_MVC.Data.Migrations
+namespace HyperTamagotchi_MVC.Migrations
 {
     /// <inheritdoc />
-    public partial class Initialmigration : Migration
+    public partial class addedDiscriminatorForTPH : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -51,24 +51,6 @@ namespace HyperTamagotchi_MVC.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ShoppingCarts", x => x.ShoppingCartId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ShoppingItems",
-                columns: table => new
-                {
-                    ShoppingItemId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ShoppingItemName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    Stock = table.Column<byte>(type: "tinyint", nullable: false),
-                    Price = table.Column<float>(type: "real", nullable: false),
-                    Discount = table.Column<float>(type: "real", nullable: false),
-                    Quantity = table.Column<byte>(type: "tinyint", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ShoppingItems", x => x.ShoppingItemId);
                 });
 
             migrationBuilder.CreateTable(
@@ -131,30 +113,6 @@ namespace HyperTamagotchi_MVC.Data.Migrations
                         column: x => x.ShoppingCartId,
                         principalTable: "ShoppingCarts",
                         principalColumn: "ShoppingCartId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ShoppingItemShoppingCarts",
-                columns: table => new
-                {
-                    ShoppingItemId = table.Column<int>(type: "int", nullable: false),
-                    ShoppingCartId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ShoppingItemShoppingCarts", x => new { x.ShoppingItemId, x.ShoppingCartId });
-                    table.ForeignKey(
-                        name: "FK_ShoppingItemShoppingCarts_ShoppingCarts_ShoppingCartId",
-                        column: x => x.ShoppingCartId,
-                        principalTable: "ShoppingCarts",
-                        principalColumn: "ShoppingCartId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ShoppingItemShoppingCarts_ShoppingItems_ShoppingItemId",
-                        column: x => x.ShoppingItemId,
-                        principalTable: "ShoppingItems",
-                        principalColumn: "ShoppingItemId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -266,25 +224,32 @@ namespace HyperTamagotchi_MVC.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tamagotchis",
+                name: "ShoppingItems",
                 columns: table => new
                 {
-                    TamagotchiId = table.Column<int>(type: "int", nullable: false)
+                    ShoppingItemId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    TamagotchiColor = table.Column<byte>(type: "tinyint", nullable: false),
-                    TamagotchiType = table.Column<byte>(type: "tinyint", nullable: false),
-                    Mood = table.Column<byte>(type: "tinyint", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Stock = table.Column<byte>(type: "tinyint", nullable: false),
+                    Price = table.Column<float>(type: "real", nullable: false),
+                    CurrencyType = table.Column<string>(type: "nvarchar(3)", nullable: false),
+                    Discount = table.Column<float>(type: "real", nullable: false),
                     ImagePath = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    TamagotchiStage = table.Column<byte>(type: "tinyint", nullable: false),
-                    Experience = table.Column<byte>(type: "tinyint", nullable: false),
+                    Quantity = table.Column<byte>(type: "tinyint", nullable: true),
+                    Discriminator = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
+                    TamagotchiColor = table.Column<byte>(type: "tinyint", nullable: true),
+                    TamagotchiType = table.Column<byte>(type: "tinyint", nullable: true),
+                    Mood = table.Column<byte>(type: "tinyint", nullable: true),
+                    TamagotchiStage = table.Column<byte>(type: "tinyint", nullable: true),
+                    Experience = table.Column<byte>(type: "tinyint", nullable: true),
                     CustomerId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tamagotchis", x => x.TamagotchiId);
+                    table.PrimaryKey("PK_ShoppingItems", x => x.ShoppingItemId);
                     table.ForeignKey(
-                        name: "FK_Tamagotchis_AspNetUsers_CustomerId",
+                        name: "FK_ShoppingItems_AspNetUsers_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
@@ -308,6 +273,30 @@ namespace HyperTamagotchi_MVC.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ShoppingItemOrders_ShoppingItems_ShoppingItemId",
+                        column: x => x.ShoppingItemId,
+                        principalTable: "ShoppingItems",
+                        principalColumn: "ShoppingItemId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ShoppingItemShoppingCarts",
+                columns: table => new
+                {
+                    ShoppingItemId = table.Column<int>(type: "int", nullable: false),
+                    ShoppingCartId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShoppingItemShoppingCarts", x => new { x.ShoppingItemId, x.ShoppingCartId });
+                    table.ForeignKey(
+                        name: "FK_ShoppingItemShoppingCarts_ShoppingCarts_ShoppingCartId",
+                        column: x => x.ShoppingCartId,
+                        principalTable: "ShoppingCarts",
+                        principalColumn: "ShoppingCartId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ShoppingItemShoppingCarts_ShoppingItems_ShoppingItemId",
                         column: x => x.ShoppingItemId,
                         principalTable: "ShoppingItems",
                         principalColumn: "ShoppingItemId",
@@ -381,14 +370,14 @@ namespace HyperTamagotchi_MVC.Data.Migrations
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ShoppingItems_CustomerId",
+                table: "ShoppingItems",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ShoppingItemShoppingCarts_ShoppingCartId",
                 table: "ShoppingItemShoppingCarts",
                 column: "ShoppingCartId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Tamagotchis_CustomerId",
-                table: "Tamagotchis",
-                column: "CustomerId");
         }
 
         /// <inheritdoc />
@@ -414,9 +403,6 @@ namespace HyperTamagotchi_MVC.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "ShoppingItemShoppingCarts");
-
-            migrationBuilder.DropTable(
-                name: "Tamagotchis");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

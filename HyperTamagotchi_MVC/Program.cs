@@ -37,6 +37,8 @@ public class Program
             app.UseHsts();
         }
 
+        //app.UseMiddleware<ErrorHandlingMiddleware>();
+
         app.UseHttpsRedirection();
         app.UseStaticFiles();
 

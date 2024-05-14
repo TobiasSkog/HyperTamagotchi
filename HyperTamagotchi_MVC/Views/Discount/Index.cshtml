@@ -6,63 +6,71 @@
 
 <h1>Discount</h1>
 <form asp-action="AddDiscountToShoppingItems">
-<p>
+    <p>
         <input type="number" name="discountValue" min="0" max="100" />
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th></th>
-            <th>
-                @Html.DisplayNameFor(model => model.ShoppingItemName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Stock)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CurrencyType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Discount)
-            </th>            
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            string discountValue = item.Discount == 1 ? "No discount" : $"Discount {@HyperTamagotchi_MVC.Data.DiscountConversionHelper.ConvertFromShoppingItemToDiscountDisplayDiscount(item.Discount)}%";
+    </p>
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                        <input type="checkbox" name="selectedShoppingItems" value="@item.ShoppingItemId" />
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ShoppingItemName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Stock)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CurrencyType)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => discountValue)
-                </td>
+                <th></th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Stock)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Price)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CurrencyType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Discount)
+                </th>
+                <th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                string discountValue = item.Discount == 1 ? "No discount" : $"Discount {@HyperTamagotchi_MVC.Data.DiscountConversionHelper.ConvertFromShoppingItemToDiscountDisplayDiscount(item.Discount)}%";
+                <tr>
+                    <td>
+                        <input type="checkbox" name="selectedShoppingItems" value="@item.ShoppingItemId" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Stock)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CurrencyType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => discountValue)
+                    </td>
+                    @if (item.Discount != 1)
+                    {
+                        <td>
+                            Discounted Price: @((float)Math.Round(item.Price * item.Discount, 2)) @item.CurrencyType
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
     <button type="submit">Update Discounts</button>
 
 </form>
+
