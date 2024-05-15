@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace HyperTamagotchi_MVC.Models;
+namespace HyperTamagotchi_SharedModels.Models;
 // update because of git commit :)
 public class Address
 {

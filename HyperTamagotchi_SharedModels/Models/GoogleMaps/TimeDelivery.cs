@@ -1,4 +1,4 @@
-﻿//namespace HyperTamagotchi_MVC.Models.GoogleMaps
+﻿//namespace HyperTamagotchi_SharedModels.Models.GoogleMaps
 //{
 //    public class TimeDelivery
 //    {

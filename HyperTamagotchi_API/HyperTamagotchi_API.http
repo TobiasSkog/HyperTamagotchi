@@ -1,0 +1,6 @@
+@HyperTamagotchi_API_HostAddress = http://localhost:5029
+
+GET {{HyperTamagotchi_API_HostAddress}}/shoppingitems/
+Accept: application/json
+
+###

@@ -1,4 +1,4 @@
-using HyperTamagotchi_MVC.Models;
+using HyperTamagotchi_SharedModels.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -13,11 +13,13 @@ public class HomeController : Controller
         _logger = logger;
     }
 
+    //[Authorize(Roles = "Customer")]
     public IActionResult Index()
     {
         return View();
     }
 
+    //[Authorize(Roles = "Admin")]
     public IActionResult Privacy()
     {
         return View();

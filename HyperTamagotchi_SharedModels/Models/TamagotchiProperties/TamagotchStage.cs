@@ -1,4 +1,4 @@
-﻿namespace HyperTamagotchi_MVC.Models.TamagotchiProperties;
+﻿namespace HyperTamagotchi_SharedModels.Models.TamagotchiProperties;
 
 public enum TamagotchiStage : byte
 {

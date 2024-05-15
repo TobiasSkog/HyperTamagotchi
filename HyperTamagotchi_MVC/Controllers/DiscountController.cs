@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace HyperTamagotchi_MVC.Controllers;
-
 [Authorize(Roles = "Admin")]
 public class DiscountController : Controller
 {
@@ -20,21 +19,9 @@ public class DiscountController : Controller
         return View(await _context.ShoppingItems.ToListAsync());
     }
 
-    public async Task<IActionResult> AddDiscountToShoppingItems(List<int> selectedShoppingItems, float discountValue)
+    public IActionResult AddDiscountToShoppingItems(List<int> selectedShoppingItems, float discountValue)
     {
         float discountPercentage = DiscountConversionHelper.ConvertFromUserInputToShoppingItem(discountValue);
-        var foundShoppingItems = await _context.ShoppingItems
-            .Where(si => selectedShoppingItems.Contains(si.ShoppingItemId))
-            .ToListAsync();
-
-        foreach (var item in foundShoppingItems)
-        {
-            item.Discount = discountPercentage;
-            _context.Update(item);
-        }
-
-        await _context.SaveChangesAsync();
-
-        return RedirectToAction("Index");
+        return View();
     }
 }

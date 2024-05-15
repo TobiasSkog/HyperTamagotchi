@@ -1,6 +1,6 @@
 ﻿using HyperTamagotchi_MVC.Data;
-using HyperTamagotchi_MVC.Models;
-using HyperTamagotchi_MVC.Models.TamagotchiProperties;
+using HyperTamagotchi_SharedModels.Models;
+using HyperTamagotchi_SharedModels.Models.TamagotchiProperties;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;

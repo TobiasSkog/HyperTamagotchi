@@ -1,9 +1,9 @@
-﻿using HyperTamagotchi_MVC.Models.ExchangeRate;
+﻿using HyperTamagotchi_SharedModels.ExchangeRate;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace HyperTamagotchi_MVC.Models;
+namespace HyperTamagotchi_SharedModels.Models;
 
 public class ShoppingItem
 {
