@@ -6,7 +6,6 @@ public class Order
 {
     public int OrderId { get; set; }
 
-    // Limit the ASP.NET GUID ID Strings to less than 450...
     public string CustomerId { get; set; }
     public Customer Customer { get; set; }
 
