@@ -13,13 +13,11 @@ public class HomeController : Controller
         _logger = logger;
     }
 
-    //[Authorize(Roles = "Customer")]
     public IActionResult Index()
     {
         return View();
     }
 
-    //[Authorize(Roles = "Admin")]
     public IActionResult Privacy()
     {
         return View();

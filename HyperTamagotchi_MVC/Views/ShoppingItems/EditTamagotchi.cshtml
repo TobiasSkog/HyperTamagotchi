@@ -1,17 +1,42 @@
-﻿@model HyperTamagotchi_MVC.Models.ShoppingItem
+﻿@model HyperTamagotchi_MVC.Models.Tamagotchi
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "EditTamagotchi";
 }
 
-<h1>Edit</h1>
+<h1>EditTamagotchi</h1>
 
-<h4>ShoppingItem</h4>
+<h4>Tamagotchi</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="EditTamagotchi">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="TamagotchiColor" class="control-label"></label>
+                <select asp-for="TamagotchiColor" asp-items="ViewBag.Colors" class="form-control" value="@Model.TamagotchiColor"></select>
+                <span asp-validation-for="TamagotchiColor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TamagotchiType" class="control-label"></label>
+                <select asp-for="TamagotchiType" asp-items="ViewBag.Types" class="form-control" value="@Model.TamagotchiType"></select>
+                <span asp-validation-for="TamagotchiType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Mood" class="control-label"></label>
+                <select asp-for="Mood" asp-items="ViewBag.Moods" class="form-control" value="@Model.Mood"></select>
+                <span asp-validation-for="Mood" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TamagotchiStage" class="control-label"></label>
+                <select asp-for="TamagotchiStage" asp-items="ViewBag.Stages" class="form-control" value="@Model.TamagotchiStage"></select>
+                <span asp-validation-for="TamagotchiStage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Experience" class="control-label"></label>
+                <input asp-for="Experience" class="form-control" value="@Model.Experience" />
+                <span asp-validation-for="Experience" class="text-danger"></span>
+            </div>
             <input type="hidden" asp-for="ShoppingItemId" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -38,18 +63,14 @@
                 <input asp-for="CurrencyType" class="form-control" readonly value="@Model.CurrencyType" />
                 <span asp-validation-for="CurrencyType" class="text-danger"></span>
             </div>
-            
+                <input type="hidden" asp-for="Discount" />
             <div class="form-group">
                 <label asp-for="ImagePath" class="control-label"></label>
                 <input asp-for="ImagePath" class="form-control" />
                 <span asp-validation-for="ImagePath" class="text-danger"></span>
             </div>
-
-
-            <div class="form-group">
-                <input asp-for="Discount" class="form-control" hidden value="@Model.Discount" />
-                <span asp-validation-for="Discount" class="text-danger"></span>
-            </div>
+                
+            <input type="hidden" asp-for="Quantity"/>
 
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary mt-2" />
