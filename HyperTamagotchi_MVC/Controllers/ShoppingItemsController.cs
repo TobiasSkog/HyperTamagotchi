@@ -1,9 +1,10 @@
-﻿using HyperTamagotchi_MVC.Services;
+﻿using HyperTamagotchi_MVC.Filters;
+using HyperTamagotchi_MVC.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HyperTamagotchi_MVC.Controllers;
 
-//[Authorize(Roles = "Admin")]
+[AuthorizeByRole("Admin")]
 public class ShoppingItemsController : Controller
 {
     //private readonly ApplicationDbContext _context;

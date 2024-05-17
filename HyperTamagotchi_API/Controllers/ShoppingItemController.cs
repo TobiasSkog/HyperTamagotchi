@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace HyperTamagotchi_API.Controllers;
-[Route("api/[controller]")]
+[Route("/api/[controller]")]
 [ApiController]
 public class ShoppingItemController : ControllerBase
 {

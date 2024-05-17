@@ -1,7 +1,4 @@
-﻿using HyperTamagotchi_API.Data;
-using HyperTamagotchi_API.Helpers.ExchangeRate;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
+﻿using HyperTamagotchi_API.Helpers.ExchangeRate;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -55,67 +52,67 @@ public class ShoppingItem
 }
 
 
-public static class ShoppingItemEndpoints
-{
-    public static void MapShoppingItemEndpoints(this IEndpointRouteBuilder routes)
-    {
-        var group = routes.MapGroup("/api/ShoppingItem").WithTags(nameof(ShoppingItem));
+//public static class ShoppingItemEndpoints
+//{
+//    public static void MapShoppingItemEndpoints(this IEndpointRouteBuilder routes)
+//    {
+//        var group = routes.MapGroup("/api/ShoppingItem").WithTags(nameof(ShoppingItem));
 
-        group.MapGet("/", async (ApplicationDbContext db) =>
-        {
-            return await db.ShoppingItems.ToListAsync();
-        })
-        .WithName("GetAllShoppingItems")
-        .WithOpenApi();
+//        group.MapGet("/", async (ApplicationDbContext db) =>
+//        {
+//            return await db.ShoppingItems.ToListAsync();
+//        })
+//        .WithName("GetAllShoppingItems")
+//        .WithOpenApi();
 
-        group.MapGet("/{id}", async Task<Results<Ok<ShoppingItem>, NotFound>> (int shoppingitemid, ApplicationDbContext db) =>
-        {
-            return await db.ShoppingItems.AsNoTracking()
-                .FirstOrDefaultAsync(model => model.ShoppingItemId == shoppingitemid)
-                is ShoppingItem model
-                    ? TypedResults.Ok(model)
-                    : TypedResults.NotFound();
-        })
-        .WithName("GetShoppingItemById")
-        .WithOpenApi();
+//        group.MapGet("/{id}", async Task<Results<Ok<ShoppingItem>, NotFound>> (int shoppingitemid, ApplicationDbContext db) =>
+//        {
+//            return await db.ShoppingItems.AsNoTracking()
+//                .FirstOrDefaultAsync(model => model.ShoppingItemId == shoppingitemid)
+//                is ShoppingItem model
+//                    ? TypedResults.Ok(model)
+//                    : TypedResults.NotFound();
+//        })
+//        .WithName("GetShoppingItemById")
+//        .WithOpenApi();
 
-        group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int shoppingitemid, ShoppingItem shoppingItem, ApplicationDbContext db) =>
-        {
-            var affected = await db.ShoppingItems
-                .Where(model => model.ShoppingItemId == shoppingitemid)
-                .ExecuteUpdateAsync(setters => setters
-                  .SetProperty(m => m.ShoppingItemId, shoppingItem.ShoppingItemId)
-                  .SetProperty(m => m.Name, shoppingItem.Name)
-                  .SetProperty(m => m.Description, shoppingItem.Description)
-                  .SetProperty(m => m.Stock, shoppingItem.Stock)
-                  .SetProperty(m => m.Price, shoppingItem.Price)
-                  .SetProperty(m => m.CurrencyType, shoppingItem.CurrencyType)
-                  .SetProperty(m => m.Discount, shoppingItem.Discount)
-                  .SetProperty(m => m.ImagePath, shoppingItem.ImagePath)
-                  .SetProperty(m => m.Quantity, shoppingItem.Quantity)
-                  );
-            return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
-        })
-        .WithName("UpdateShoppingItem")
-        .WithOpenApi();
+//        group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int shoppingitemid, ShoppingItem shoppingItem, ApplicationDbContext db) =>
+//        {
+//            var affected = await db.ShoppingItems
+//                .Where(model => model.ShoppingItemId == shoppingitemid)
+//                .ExecuteUpdateAsync(setters => setters
+//                  .SetProperty(m => m.ShoppingItemId, shoppingItem.ShoppingItemId)
+//                  .SetProperty(m => m.Name, shoppingItem.Name)
+//                  .SetProperty(m => m.Description, shoppingItem.Description)
+//                  .SetProperty(m => m.Stock, shoppingItem.Stock)
+//                  .SetProperty(m => m.Price, shoppingItem.Price)
+//                  .SetProperty(m => m.CurrencyType, shoppingItem.CurrencyType)
+//                  .SetProperty(m => m.Discount, shoppingItem.Discount)
+//                  .SetProperty(m => m.ImagePath, shoppingItem.ImagePath)
+//                  .SetProperty(m => m.Quantity, shoppingItem.Quantity)
+//                  );
+//            return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
+//        })
+//        .WithName("UpdateShoppingItem")
+//        .WithOpenApi();
 
-        group.MapPost("/", async (ShoppingItem shoppingItem, ApplicationDbContext db) =>
-        {
-            db.ShoppingItems.Add(shoppingItem);
-            await db.SaveChangesAsync();
-            return TypedResults.Created($"/api/ShoppingItem/{shoppingItem.ShoppingItemId}", shoppingItem);
-        })
-        .WithName("CreateShoppingItem")
-        .WithOpenApi();
+//        group.MapPost("/", async (ShoppingItem shoppingItem, ApplicationDbContext db) =>
+//        {
+//            db.ShoppingItems.Add(shoppingItem);
+//            await db.SaveChangesAsync();
+//            return TypedResults.Created($"/api/ShoppingItem/{shoppingItem.ShoppingItemId}", shoppingItem);
+//        })
+//        .WithName("CreateShoppingItem")
+//        .WithOpenApi();
 
-        group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (int shoppingitemid, ApplicationDbContext db) =>
-        {
-            var affected = await db.ShoppingItems
-                .Where(model => model.ShoppingItemId == shoppingitemid)
-                .ExecuteDeleteAsync();
-            return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
-        })
-        .WithName("DeleteShoppingItem")
-        .WithOpenApi();
-    }
-}
+//        group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (int shoppingitemid, ApplicationDbContext db) =>
+//        {
+//            var affected = await db.ShoppingItems
+//                .Where(model => model.ShoppingItemId == shoppingitemid)
+//                .ExecuteDeleteAsync();
+//            return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
+//        })
+//        .WithName("DeleteShoppingItem")
+//        .WithOpenApi();
+//    }
+//}

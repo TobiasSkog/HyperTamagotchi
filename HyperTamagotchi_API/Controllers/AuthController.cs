@@ -6,21 +6,20 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HyperTamagotchi_API.Controllers;
+
 [Route("api/[controller]")]
 [ApiController]
-public class AuthController : ControllerBase
+public class AuthController(
+    UserManager<IdentityUser> userManager,
+    ApplicationDbContext context,
+    IJwtService jwtService,
+    SignInManager<IdentityUser> signInManager) : ControllerBase
 {
-    private readonly UserManager<IdentityUser> _userManager;
-    private readonly SignInManager<IdentityUser> _signinManager;
-    private readonly ApplicationDbContext _context;
-    private readonly ITokenRepository _tokenRepository;
-    public AuthController(UserManager<IdentityUser> userManager, ApplicationDbContext context, ITokenRepository tokenRepository, SignInManager<IdentityUser> signInManager)
-    {
-        _userManager = userManager;
-        _context = context;
-        _tokenRepository = tokenRepository;
-        _signinManager = signInManager;
-    }
+    private readonly UserManager<IdentityUser> _userManager = userManager;
+    private readonly SignInManager<IdentityUser> _signinManager = signInManager;
+    private readonly ApplicationDbContext _context = context;
+    private readonly IJwtService _jwtService = jwtService;
+
     //Post: /api/Auth/Register
     [HttpPost]
     [Route("Register")]
@@ -32,8 +31,10 @@ public class AuthController : ControllerBase
             City = registerRequestDto.City,
             ZipCode = registerRequestDto.ZipCode
         };
+
         await _context.AddAsync(address);
         await _context.SaveChangesAsync();
+
         var customer = new Customer
         {
             UserName = registerRequestDto.Email,
@@ -46,12 +47,14 @@ public class AuthController : ControllerBase
         };
 
         var identityResult = await _userManager.CreateAsync(customer, registerRequestDto.Password);
+
         if (identityResult.Succeeded)
         {
             identityResult = await _userManager.AddToRoleAsync(customer, "Customer");
             if (identityResult.Succeeded)
             {
-                return Ok("Customer account successfully registered!");
+                await _signinManager.SignInAsync(customer, false);
+                return Ok("Customer account successfully created!");
             }
         }
         return BadRequest("Customer registration failed.");
@@ -62,30 +65,73 @@ public class AuthController : ControllerBase
     [Route("Login")]
     public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
         var user = await _userManager.FindByEmailAsync(loginRequestDto.Username);
 
-
-        if (user != null)
+        if (user == null)
         {
-            var checkPasswordResult = await _userManager.CheckPasswordAsync(user, loginRequestDto.Password);
-            if (checkPasswordResult)
-            {
-                // get a role for the user
-                var roles = await _userManager.GetRolesAsync(user);
-                if (roles != null)
-                {
-                    var jwttoken = _tokenRepository.CreateJWTToken(user, [.. roles]);
-                    var response = new LoginResponseDto
-                    {
-                        AccessToken = jwttoken
-                    };
+            ModelState.AddModelError(string.Empty, "No user found with that email address.");
 
-                    await _signinManager.SignInAsync(user, false);
-
-                    return Ok(response);
-                }
-            }
+            return BadRequest();
         }
-        return BadRequest("Username or Password was incorrect.");
+
+        //var checkPasswordResult = await _signinManager.PasswordSignInAsync(user, loginRequestDto.Password, loginRequestDto.RememberMe, false);
+        var checkPasswordResult = await _userManager.CheckPasswordAsync(user, loginRequestDto.Password);
+
+        if (!checkPasswordResult)
+        {
+            await _userManager.AccessFailedAsync(user);
+            ModelState.AddModelError(string.Empty, "Incorrect Username or Password.");
+
+            return BadRequest();
+        }
+
+        var roles = await _userManager.GetRolesAsync(user);
+        if (!roles.Any())
+        {
+            await _userManager.AddToRoleAsync(user, "Customer");
+            roles = ["Customer"];
+        }
+        var loginResponse = await _signinManager.PasswordSignInAsync(loginRequestDto.Username, loginRequestDto.Password, loginRequestDto.RememberMe, false);
+
+        if (!loginResponse.Succeeded)
+        {
+            return Unauthorized();
+        }
+
+        var token = _jwtService.CreateJWTToken(user, [.. roles]);
+
+        var response = new LoginResponseDto
+        {
+            AccessToken = token
+        };
+
+        return Ok(response);
     }
 }
+
+
+//var checkPasswordResult = await _userManager.CheckPasswordAsync(user, loginRequestDto.Password);
+
+// get a role for the user
+//var roles = await _userManager.GetRolesAsync(user);
+//if (roles != null)
+//{
+//    if (user.Id == "f1690041-63a8-44ca-83a4-3ea44f8454cd")
+//    {
+//        await _userManager.AddToRoleAsync(user, "Admin");
+//    }
+//    var jwttoken = _jwtService.CreateJWTToken(user, [.. roles]);
+//    var response = new LoginResponseDto
+//    {
+//        AccessToken = jwttoken
+//    };
+//
+//    //await _signinManager.SignInAsync(user, false);
+//
+//    return Ok(response);
+//}

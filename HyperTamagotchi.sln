@@ -5,7 +5,7 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HyperTamagotchi_MVC", "HyperTamagotchi_MVC\HyperTamagotchi_MVC.csproj", "{81A230AF-4749-4B9D-97CA-EBE20BBA0212}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HyperTamagotchi_API", "HyperTamagotchi_API\HyperTamagotchi_API.csproj", "{54A05F11-C099-4C55-88E7-66C60CB060D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HyperTamagotchi_API", "HyperTamagotchi_API\HyperTamagotchi_API.csproj", "{54A05F11-C099-4C55-88E7-66C60CB060D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

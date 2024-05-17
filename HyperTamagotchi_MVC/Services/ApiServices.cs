@@ -1,4 +1,5 @@
 ﻿using HyperTamagotchi_MVC.Models.DTO;
+using HyperTamagotchi_MVC.Repositories;
 using HyperTamagotchi_SharedModels.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -6,16 +7,11 @@ using System.Net.Http.Headers;
 
 namespace HyperTamagotchi_MVC.Services;
 
-public class ApiServices
+public class ApiServices(IHttpClientFactory httpFactory, IHttpContextAccessor contextAccessor, IJwtTokenValidator jwtValidator)
 {
-    private readonly HttpClient _client;
-    private readonly IHttpContextAccessor _contextAccessor;
-
-    public ApiServices(IHttpClientFactory httpFactory, IHttpContextAccessor contextAccessor)
-    {
-        _client = httpFactory.CreateClient("API Tamagotchi");
-        _contextAccessor = contextAccessor;
-    }
+    private readonly HttpClient _client = httpFactory.CreateClient("API Tamagotchi");
+    private readonly IHttpContextAccessor _contextAccessor = contextAccessor;
+    private readonly IJwtTokenValidator _jwtValidator = jwtValidator;
 
     private void AddJwtTokenToRequest()
     {
@@ -32,16 +28,29 @@ public class ApiServices
 
         if (response.IsSuccessStatusCode)
         {
-            var loginResponse = await response.Content.ReadFromJsonAsync<ApiToken>();
-            var token = loginResponse?.AccessToken;
-            if (!string.IsNullOrEmpty(token))
+            var content = await response.Content.ReadAsStringAsync();
+            var loginResponse = JsonConvert.DeserializeObject<ApiToken>(content);
+
+            if (loginResponse != null && !string.IsNullOrEmpty(loginResponse.AccessToken))
             {
                 var cookieOptions = new CookieOptions
                 {
                     HttpOnly = true,
-                    Expires = DateTime.Now.AddMinutes(30)
+                    Expires = rememberMe ? DateTime.Now.AddDays(30) : DateTime.Now.AddMinutes(30)
                 };
-                _contextAccessor.HttpContext.Response.Cookies.Append("jwtToken", token, cookieOptions);
+
+                _contextAccessor.HttpContext.Response.Cookies.Append("jwtToken", loginResponse.AccessToken, cookieOptions);
+
+                var principal = _jwtValidator.ValidateToken(loginResponse.AccessToken);
+
+                if (principal != null)
+                {
+                    _contextAccessor.HttpContext.User = principal;
+
+                    var hej = principal.Claims.FirstOrDefault(c => c.Type == "name").Value;
+                }
+
+                AddJwtTokenToRequest();
 
                 return true;
             }

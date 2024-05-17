@@ -1,10 +1,12 @@
 ﻿using HyperTamagotchi_API.Helpers.ExchangeRate;
 using HyperTamagotchi_API.Models;
 using HyperTamagotchi_API.Models.TamagotchiProperties;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace HyperTamagotchi_API.Data;
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : IdentityDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
@@ -18,6 +20,85 @@ public class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Order>()
             .HasIndex(o => o.OrderDate);
+
+        modelBuilder.Entity<ShoppingItem>()
+           .HasDiscriminator<string>("Discriminator")
+           .HasValue<ShoppingItem>("ShoppingItem")
+           .HasValue<Tamagotchi>("Tamagotchi");
+
+        var adminRoleId = Guid.NewGuid().ToString();
+        var customerRoleId = Guid.NewGuid().ToString();
+        var adminUserId = Guid.NewGuid().ToString();
+        var customerUserId = Guid.NewGuid().ToString();
+        var hasher = new PasswordHasher<Customer>();
+
+        modelBuilder.Entity<IdentityRole>().HasData(
+            new { Id = adminRoleId, Name = "Admin", NormalizedName = "Admin".ToUpper() },
+            new { Id = customerRoleId, Name = "Customer", NormalizedName = "Customer".ToUpper() }
+            );
+
+        modelBuilder.Entity<Address>().HasData(
+            new { AddressId = 1, StreetAddress = "Timmermansgatan 2A", City = "Kiruna", ZipCode = "98137" },
+            new { AddressId = 2, StreetAddress = "Rundvägen 11D", City = "Örnsköldsvik", ZipCode = "89144" }
+            );
+        modelBuilder.Entity<ShoppingCart>().HasData(
+            new { ShoppingCartId = 1, CustomerId = adminUserId },
+            new { ShoppingCartId = 2, CustomerId = customerUserId }
+            );
+
+        modelBuilder.Entity<Customer>().HasData(
+            new
+            {
+                Id = adminUserId,
+                FirstName = "Admin",
+                LastName = "Adminsson",
+                AddressId = 1,
+                ShoppingCartId = 1,
+                UserName = "admin@gmail.com",
+                NormalizedUserName = "admin@gmail.com".ToUpper(),
+                Email = "admin@gmail.com",
+                NormalizedEmail = "admin@gmail.com".ToUpper(),
+                EmailConfirmed = true,
+                PasswordHash = hasher.HashPassword(null, "Abc123!"),
+                SecurityStamp = Guid.NewGuid().ToString(),
+                ConcurrencyStamp = Guid.NewGuid().ToString(),
+                PhoneNumber = "1234567890",
+                PhoneNumberConfirmed = true,
+                TwoFactorEnabled = false,
+                LockoutEnd = (DateTimeOffset?)null,
+                LockoutEnabled = true,
+                AccessFailedCount = 0
+
+            },
+            new
+            {
+                Id = customerUserId,
+                FirstName = "Tobias",
+                LastName = "Skog",
+                AddressId = 2,
+                ShoppingCartId = 2,
+                UserName = "tobias@gmail.com",
+                NormalizedUserName = "tobias@gmail.com".ToUpper(),
+                Email = "tobias@gmail.com",
+                NormalizedEmail = "tobias@gmail.com".ToUpper(),
+                EmailConfirmed = true,
+                PasswordHash = hasher.HashPassword(null, "Abc123!"),
+                SecurityStamp = Guid.NewGuid().ToString(),
+                ConcurrencyStamp = Guid.NewGuid().ToString(),
+                PhoneNumber = "1234567890",
+                PhoneNumberConfirmed = true,
+                TwoFactorEnabled = false,
+                LockoutEnd = (DateTimeOffset?)null,
+                LockoutEnabled = true,
+                AccessFailedCount = 0
+            }
+        );
+
+
+        modelBuilder.Entity<IdentityUserRole<string>>().HasData(
+            new { UserId = adminUserId, RoleId = adminRoleId },
+            new { UserId = customerUserId, RoleId = customerRoleId }
+            );
 
         modelBuilder.Entity<ShoppingItem>().HasData(
             new { ShoppingItemId = 1, Name = "Banana", Description = "Restores 10 energy to your Tamagotchi", Stock = (byte)50, Price = 25.00f, CurrencyType = CurrencyType.SEK, Discount = 1.00f, ImagePath = "none.png" },

@@ -1,10 +1,10 @@
 ﻿using HyperTamagotchi_MVC.Data;
-using Microsoft.AspNetCore.Authorization;
+using HyperTamagotchi_MVC.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace HyperTamagotchi_MVC.Controllers;
-[Authorize(Roles = "Admin")]
+[AuthorizeByRole("Admin")]
 public class DiscountController : Controller
 {
     private readonly ApplicationDbContext _context;

@@ -2,7 +2,7 @@
 
 namespace HyperTamagotchi_API.Repositories;
 
-public interface ITokenRepository
+public interface IJwtService
 {
     string CreateJWTToken(IdentityUser user, List<string> roles);
 }

@@ -8,6 +8,7 @@
     <div class="col-md-4">
         <section>
             <form id="loginForm" method="post" asp-controller="Account" asp-action="Login">
+                @Html.AntiForgeryToken()
                 <h2>Use a local account to log in.</h2>
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
