@@ -1,4 +1,4 @@
-﻿using HyperTamagotchi_SharedModels.ExchangeRate;
+﻿using HyperTamagotchi_SharedModels.Helpers.ExchangeRate;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

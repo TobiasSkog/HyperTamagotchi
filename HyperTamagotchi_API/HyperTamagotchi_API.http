@@ -1,6 +1,6 @@
-@HyperTamagotchi_API_HostAddress = http://localhost:5029
+@HyperTamagotchi_API_HostAddress = http://localhost:5100
 
-GET {{HyperTamagotchi_API_HostAddress}}/shoppingitems/
+GET {{HyperTamagotchi_API_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###

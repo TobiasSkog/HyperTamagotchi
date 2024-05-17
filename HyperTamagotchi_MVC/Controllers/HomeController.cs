@@ -14,8 +14,9 @@ public class HomeController : Controller
     }
 
     //[Authorize(Roles = "Customer")]
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
+
         return View();
     }
 

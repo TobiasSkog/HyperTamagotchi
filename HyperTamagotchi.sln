@@ -5,7 +5,7 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HyperTamagotchi_MVC", "HyperTamagotchi_MVC\HyperTamagotchi_MVC.csproj", "{81A230AF-4749-4B9D-97CA-EBE20BBA0212}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HyperTamagotchi_SharedModels", "HyperTamagotchi_SharedModels\HyperTamagotchi_SharedModels.csproj", "{0E32674D-11DB-459C-BA9F-9C87CFA4C94B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HyperTamagotchi_API", "HyperTamagotchi_API\HyperTamagotchi_API.csproj", "{54A05F11-C099-4C55-88E7-66C60CB060D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{81A230AF-4749-4B9D-97CA-EBE20BBA0212}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81A230AF-4749-4B9D-97CA-EBE20BBA0212}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81A230AF-4749-4B9D-97CA-EBE20BBA0212}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0E32674D-11DB-459C-BA9F-9C87CFA4C94B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0E32674D-11DB-459C-BA9F-9C87CFA4C94B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0E32674D-11DB-459C-BA9F-9C87CFA4C94B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0E32674D-11DB-459C-BA9F-9C87CFA4C94B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54A05F11-C099-4C55-88E7-66C60CB060D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54A05F11-C099-4C55-88E7-66C60CB060D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54A05F11-C099-4C55-88E7-66C60CB060D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54A05F11-C099-4C55-88E7-66C60CB060D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,26 +1,114 @@
-using HyperTamagotchi_MVC.Data;
+using HyperTamagotchi_API.Data;
+using HyperTamagotchi_API.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
+
+
 
 namespace HyperTamagotchi_API;
+
 public class Program
 {
-    public async static Task Main(string[] args)
+    public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-        builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(connectionString));
-        builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
         // Add services to the container.
-        //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        //    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 
         builder.Services.AddControllers();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        builder.Services.AddHttpContextAccessor();
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(options =>
+        {
+            options.SwaggerDoc("v1", new OpenApiInfo { Title = "Tamagotchi API", Version = "v0.01" });
+            options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
+            {
+                Name = "Authorization",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = JwtBearerDefaults.AuthenticationScheme
+            });
+
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+
+                {
+                    new OpenApiSecurityScheme
+                    {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = JwtBearerDefaults.AuthenticationScheme
+                    },
+                    Scheme = "Oauth2",
+                    Name = JwtBearerDefaults.AuthenticationScheme,
+                    In = ParameterLocation.Header
+                    },
+                    new List<string>()
+
+                }
+            });
+        });
+
+        // Azure DB = AzureConnection
+        // Local DB = DefaultConnection
+        // Auth DB = AuthConnection
+        builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(
+                builder.Configuration.GetConnectionString("DefaultConnection")));
+
+        builder.Services.AddDbContext<AuthDbContext>(options =>
+            options.UseSqlServer(
+                builder.Configuration.GetConnectionString("AuthConnection")));
+
+        builder.Services.AddScoped<ITokenRepository, TokenRepository>();
+
+        builder.Services.AddIdentityCore<IdentityUser>()
+            .AddRoles<IdentityRole>()
+            .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("Tamagotchi")
+            .AddEntityFrameworkStores<AuthDbContext>()
+            .AddDefaultTokenProviders();
+
+        builder.Services.Configure<IdentityOptions>(options =>
+        {
+            options.Password.RequireDigit = false;
+            options.Password.RequireLowercase = true;
+            options.Password.RequireUppercase = true;
+            options.Password.RequireNonAlphanumeric = true;
+            options.Password.RequiredLength = 6;
+            options.Password.RequiredUniqueChars = 1;
+        });
+
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy(name: "Cors",
+                policy =>
+                {
+                    //policy.WithOrigins("https://localhost:....")
+                    policy.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+                });
+        });
+
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+         .AddJwtBearer(options =>
+         options.TokenValidationParameters = new TokenValidationParameters
+         {
+             ValidateIssuer = true,
+             ValidateAudience = true,
+             ValidateLifetime = true,
+             ValidateIssuerSigningKey = true,
+             ValidIssuer = builder.Configuration["Jwt:Issuer"],
+             ValidAudience = builder.Configuration["Jwt:Audience"],
+             IssuerSigningKey = new SymmetricSecurityKey(
+                 Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+         });
+
 
         var app = builder.Build();
 
@@ -32,57 +120,16 @@ public class Program
         }
 
         app.UseHttpsRedirection();
-
+        app.UseRouting();
+        app.UseCors(builder => builder
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowAnyOrigin()
+        );
+        app.UseAuthentication();
         app.UseAuthorization();
 
-
         app.MapControllers();
-
-        //using (var scope = app.Services.CreateScope())
-        //{
-        //    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-
-
-        //    var roles = new[] { "Admin", "Customer" };
-
-        //    foreach (var role in roles)
-        //    {
-        //        if (!await roleManager.RoleExistsAsync(role))
-        //        {
-        //            await roleManager.CreateAsync(new IdentityRole(role));
-        //        }
-        //    }
-        //}
-
-        //using (var scope = app.Services.CreateScope())
-        //{
-        //    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-
-        //    var users = new[] { "carro", "daniel", "tobias", "wille" };
-        //    var emails = new[] { ".admin@gmail.com", ".customer@gmail.com" };
-        //    string password = "Abc123!";
-
-        //    // if no account found with above user create a new user
-        //    foreach (var user in users)
-        //    {
-        //        foreach (var email in emails)
-        //        {
-        //            if (await userManager.FindByEmailAsync($"{user}{email}") == null)
-        //            {
-        //                IdentityUser appUser = new()
-        //                {
-        //                    Email = user + email,
-        //                    UserName = user + email,
-        //                    EmailConfirmed = true
-        //                };
-
-        //                await userManager.CreateAsync(appUser, password);
-        //                var role = email.Contains("admin") ? "Admin" : "Customer";
-        //                await userManager.AddToRoleAsync(appUser, role);
-        //            }
-        //        }
-        //    }
-        //}
 
         app.Run();
     }
