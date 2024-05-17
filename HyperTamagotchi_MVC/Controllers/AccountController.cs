@@ -1,5 +1,7 @@
 ﻿using HyperTamagotchi_MVC.Models.DTO;
 using HyperTamagotchi_MVC.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HyperTamagotchi_MVC.Controllers;
@@ -54,5 +56,29 @@ public class AccountController : Controller
             ModelState.AddModelError(string.Empty, "Registration failed.");
         }
         return View(registerRequest);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Logout()
+    {
+        // Remove the JWT token from cookies
+        Response.Cookies.Delete("jwtToken");
+
+        // Sign out the user
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+        return RedirectToAction("Index", "Home");
+    }
+
+    public IActionResult Claims()
+    {
+        var claims = User.Claims.Select(c => new { c.Type, c.Value }).ToList();
+        return Json(claims);
+    }
+
+    public IActionResult AccessDenied()
+    {
+        return View();
     }
 }

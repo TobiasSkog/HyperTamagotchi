@@ -23,6 +23,16 @@ public class JwtTokenValidator(IConfiguration configuration) : IJwtTokenValidato
 
         var tokenHandler = new JwtSecurityTokenHandler();
         var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken validatedToken);
+
+        var jwtToken = validatedToken as JwtSecurityToken;
+        var roleClaims = jwtToken?.Claims.Where(claim => claim.Type == ClaimTypes.Role).ToList();
+
+        if (roleClaims != null)
+        {
+            var claimsIdentity = new ClaimsIdentity(roleClaims, "jwtToken");
+            principal.AddIdentity(claimsIdentity);
+        }
+
         return principal;
     }
 }

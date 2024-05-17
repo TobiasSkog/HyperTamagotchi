@@ -16,8 +16,15 @@ public class HomeController : Controller
     //[Authorize(Roles = "Customer")]
     public async Task<IActionResult> Index()
     {
-        User.Identity.IsAuthenticated.ToString();
-        await Console.Out.WriteLineAsync("hej");
+        var user = User;
+        if (user.IsInRole("Admin"))
+        {
+            //
+            await Console.Out.WriteLineAsync("Hej hej!");
+        }
+        User.Claims.ToList();
+
+
         return View();
     }
 

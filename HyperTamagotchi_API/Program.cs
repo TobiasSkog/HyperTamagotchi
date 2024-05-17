@@ -7,10 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 
-
-
 namespace HyperTamagotchi_API;
-
 public class Program
 {
     public static void Main(string[] args)
@@ -57,30 +54,19 @@ public class Program
             });
         });
 
-        // Azure DB = AzureConnection
-        // Local DB = DefaultConnection
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(
                 builder.Configuration.GetConnectionString("DefaultConnection")));
 
         builder.Services.AddScoped<IJwtService, JwtService>();
 
-        //builder.Services.Configure<IdentityOptions>(options =>
-        //{
-        //    options.Password.RequireDigit = true;
-        //    options.Password.RequireLowercase = true;
-        //    options.Password.RequireUppercase = true;
-        //    options.Password.RequireNonAlphanumeric = true;
-        //    options.Password.RequiredLength = 6;
-        //    options.Password.RequiredUniqueChars = 1;
-        //});
+
 
         builder.Services.AddCors(options =>
         {
             options.AddPolicy(name: "Cors",
                 policy =>
                 {
-                    //policy.WithOrigins("https://localhost:....")
                     policy.AllowAnyOrigin()
                        .AllowAnyHeader()
                        .AllowAnyMethod();
@@ -136,3 +122,12 @@ public class Program
 
 
 
+//builder.Services.Configure<IdentityOptions>(options =>
+//{
+//    options.Password.RequireDigit = true;
+//    options.Password.RequireLowercase = true;
+//    options.Password.RequireUppercase = true;
+//    options.Password.RequireNonAlphanumeric = true;
+//    options.Password.RequiredLength = 6;
+//    options.Password.RequiredUniqueChars = 1;
+//});

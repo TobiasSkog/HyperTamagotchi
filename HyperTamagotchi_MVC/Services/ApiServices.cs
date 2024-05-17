@@ -46,8 +46,6 @@ public class ApiServices(IHttpClientFactory httpFactory, IHttpContextAccessor co
                 if (principal != null)
                 {
                     _contextAccessor.HttpContext.User = principal;
-
-                    var hej = principal.Claims.FirstOrDefault(c => c.Type == "name").Value;
                 }
 
                 AddJwtTokenToRequest();

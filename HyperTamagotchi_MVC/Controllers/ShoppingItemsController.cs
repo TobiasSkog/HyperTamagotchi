@@ -7,31 +7,6 @@ namespace HyperTamagotchi_MVC.Controllers;
 [AuthorizeByRole("Admin")]
 public class ShoppingItemsController : Controller
 {
-    //private readonly ApplicationDbContext _context;
-    //public ShoppingItemsController(ApplicationDbContext context)
-    //{
-    //    _context = context;
-    //}
-    // public async Task<IActionResult> Index()
-    //{
-    //    return View(await _context.ShoppingItems.ToListAsync());
-    //}
-    //public async Task<IActionResult> Details(int? id)
-    //{
-    //    if (id == null)
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    var shoppingItem = await _context.ShoppingItems
-    //        .FirstOrDefaultAsync(m => m.ShoppingItemId == id);
-    //    if (shoppingItem == null)
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    return View(shoppingItem);
-    //}
     private readonly ApiServices _api;
     public ShoppingItemsController(ApiServices api)
     {

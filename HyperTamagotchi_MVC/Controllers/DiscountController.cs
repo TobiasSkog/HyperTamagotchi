@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace HyperTamagotchi_MVC.Controllers;
+
 [AuthorizeByRole("Admin")]
 public class DiscountController : Controller
 {
