@@ -2,6 +2,7 @@
 using HyperTamagotchi_MVC.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HyperTamagotchi_MVC.Controllers;
@@ -71,6 +72,9 @@ public class AccountController : Controller
         return RedirectToAction("Index", "Home");
     }
 
+
+    //Can be removed, just a simple way to debug to see what Claims the current user have
+    [Authorize]
     public IActionResult Claims()
     {
         var claims = User.Claims.Select(c => new { c.Type, c.Value }).ToList();

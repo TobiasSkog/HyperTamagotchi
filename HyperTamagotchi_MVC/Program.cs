@@ -19,6 +19,7 @@ public class Program
         builder.Services.AddHttpClient("API Tamagotchi", client =>
             client.BaseAddress = new Uri(
                 builder.Configuration.GetValue<string>("ApiUri:Tamagotchi")!));
+
         builder.Services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

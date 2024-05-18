@@ -67,9 +67,10 @@ public class Program
             options.AddPolicy(name: "Cors",
                 policy =>
                 {
-                    policy.AllowAnyOrigin()
-                       .AllowAnyHeader()
-                       .AllowAnyMethod();
+                    policy
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
                 });
         });
 

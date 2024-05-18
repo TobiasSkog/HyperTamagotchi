@@ -1,36 +1,25 @@
+using HyperTamagotchi_MVC.Services;
 using HyperTamagotchi_SharedModels.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace HyperTamagotchi_MVC.Controllers;
 
-public class HomeController : Controller
+public class HomeController(ApiServices api, ILogger<HomeController> logger) : Controller
 {
-    private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger)
-    {
-        _logger = logger;
-    }
+    private readonly ILogger<HomeController> _logger = logger;
+    private readonly ApiServices _api = api;
 
     //[Authorize(Roles = "Customer")]
     public async Task<IActionResult> Index()
     {
-        var user = User;
-        if (user.IsInRole("Admin"))
-        {
-            //
-            await Console.Out.WriteLineAsync("Hej hej!");
-        }
-        User.Claims.ToList();
-
-
-        return View();
+        return View(await _api.GetAllShoppingItemsAsync());
     }
 
     //[Authorize(Roles = "Admin")]
     public IActionResult Privacy()
     {
+        var hej = _api.Edit();
         return View();
     }
 
