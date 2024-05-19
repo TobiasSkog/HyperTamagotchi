@@ -79,7 +79,6 @@ public class AuthController(
             return BadRequest();
         }
 
-        //var checkPasswordResult = await _signinManager.PasswordSignInAsync(user, loginRequestDto.Password, loginRequestDto.RememberMe, false);
         var checkPasswordResult = await _userManager.CheckPasswordAsync(user, loginRequestDto.Password);
 
         if (!checkPasswordResult)
@@ -113,25 +112,3 @@ public class AuthController(
         return Ok(response);
     }
 }
-
-
-//var checkPasswordResult = await _userManager.CheckPasswordAsync(user, loginRequestDto.Password);
-
-// get a role for the user
-//var roles = await _userManager.GetRolesAsync(user);
-//if (roles != null)
-//{
-//    if (user.Id == "f1690041-63a8-44ca-83a4-3ea44f8454cd")
-//    {
-//        await _userManager.AddToRoleAsync(user, "Admin");
-//    }
-//    var jwttoken = _jwtService.CreateJWTToken(user, [.. roles]);
-//    var response = new LoginResponseDto
-//    {
-//        AccessToken = jwttoken
-//    };
-//
-//    //await _signinManager.SignInAsync(user, false);
-//
-//    return Ok(response);
-//}
