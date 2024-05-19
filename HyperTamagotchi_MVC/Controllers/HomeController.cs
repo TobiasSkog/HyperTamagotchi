@@ -1,27 +1,41 @@
+using HyperTamagotchi_MVC.Data;
 using HyperTamagotchi_MVC.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace HyperTamagotchi_MVC.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly ILogger<HomeController> _logger; 
+    private readonly ApplicationDbContext _context;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ApplicationDbContext context, ILogger<HomeController> logger)
     {
+        _context = context;
         _logger = logger;
     }
 
-    public IActionResult Index()
+    // GET: ShoppingItems
+    public async Task<IActionResult> Index()
     {
-        return View();
+        return View(await _context.ShoppingItems.ToListAsync());
     }
 
-    public IActionResult Privacy()
+
+    //ARBETAR PÅ DETTA -KÄROLAJN
+    public async Task<IActionResult> AddCart()
     {
-        return View();
+        return View()
     }
+
+
+    ////ADMIN
+    //public IActionResult Privacy()
+    //{
+    //    return View();
+    //}
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
