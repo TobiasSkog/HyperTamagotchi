@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\Assets\Img\" />
+    <Folder Include="wwwroot\Assets\ShoppingItem\" />
   </ItemGroup>
 
 </Project>

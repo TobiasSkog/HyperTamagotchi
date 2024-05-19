@@ -18,17 +18,27 @@ public partial class ApiServices(IHttpClientFactory httpFactory, IHttpContextAcc
         }
     }
 
-    private bool IsUserInRole(string role)
+    public bool IsUserInRole(string role)
     {
         return _contextAccessor.HttpContext.User.IsInRole(role);
+
+        // Used like this
+        //if (!_api.IsUserInRole("Admin")) <- Input your desired roll
+        //{
+        //    return RedirectToAction("AccessDenied", "Account"); <- The View and Controller you want to direct the user to
+        //}
     }
+    //public (string Controller, string View) IsUserInRole(string role)
+    //{
+    //    DenyAccessDto userPermission = new() { IsUserAllowed = _contextAccessor.HttpContext.User.IsInRole(role) };
 
+    //    if (!userPermission.IsUserAllowed)
+    //    {
+    //        return new("Account", userPermission.RedirectUrl);
+    //    }
 
-
-
-
-
-
+    //    return new("", "");
+    //}
 }
 
 

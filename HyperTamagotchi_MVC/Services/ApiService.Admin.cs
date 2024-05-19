@@ -3,16 +3,15 @@
 //[AuthorizeByRole("Admin")]
 public partial class ApiServices
 {
-    public bool Edit()
-    {
-        if (!IsUserInRole("Admin"))
-        {
-            return false;
-        }
+    //public string Edit()
+    //{
+    //    var userPermission = IsUserInRole("Admin");
 
+    //    if (!string.IsNullOrEmpty(userPermission))
+    //    {
+    //        return userPermission;
+    //    }
 
-
-        return true;
-
-    }
+    //    return "";
+    //}
 }

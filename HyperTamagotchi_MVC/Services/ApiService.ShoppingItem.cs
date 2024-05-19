@@ -1,4 +1,4 @@
-﻿using HyperTamagotchi_SharedModels.Models;
+﻿using HyperTamagotchi_MVC.Models;
 using Newtonsoft.Json;
 
 namespace HyperTamagotchi_MVC.Services;

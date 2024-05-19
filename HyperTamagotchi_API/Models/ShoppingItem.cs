@@ -38,7 +38,7 @@ public class ShoppingItem
     public float Discount { get; set; } = 1.00f;
 
     [Required]
-    [StringLength(50, MinimumLength = 3, ErrorMessage = "Image path must be between 3 and 50 characters")]
+    [StringLength(100, MinimumLength = 3, ErrorMessage = "Image path must be between 3 and 100 characters")]
     [DisplayName("Image Name (Image.jpg)")]
     public string ImagePath { get; set; } = @"404.jpg";
 

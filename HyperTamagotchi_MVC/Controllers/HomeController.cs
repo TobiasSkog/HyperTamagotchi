@@ -1,5 +1,5 @@
+using HyperTamagotchi_MVC.Models;
 using HyperTamagotchi_MVC.Services;
-using HyperTamagotchi_SharedModels.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -10,18 +10,16 @@ public class HomeController(ApiServices api, ILogger<HomeController> logger) : C
     private readonly ILogger<HomeController> _logger = logger;
     private readonly ApiServices _api = api;
 
-    //[Authorize(Roles = "Customer")]
+    //[AuthorizeByRole("Admin")]
     public async Task<IActionResult> Index()
     {
         return View(await _api.GetAllShoppingItemsAsync());
     }
-
-    //[Authorize(Roles = "Admin")]
-    public IActionResult Privacy()
+    public async Task<IActionResult> AddCart()
     {
-        var hej = _api.Edit();
         return View();
     }
+
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()

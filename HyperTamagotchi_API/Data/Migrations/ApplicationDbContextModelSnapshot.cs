@@ -4,7 +4,6 @@ using HyperTamagotchi_API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -12,11 +11,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HyperTamagotchi_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240517144744_init")]
-    partial class init
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -148,8 +145,8 @@ namespace HyperTamagotchi_API.Migrations
 
                     b.Property<string>("ImagePath")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -178,34 +175,166 @@ namespace HyperTamagotchi_API.Migrations
                         {
                             ShoppingItemId = 1,
                             CurrencyType = "SEK",
-                            Description = "Restores 10 energy to your Tamagotchi",
+                            Description = "Nutritious food pack to keep your Tamagotchi healthy and happy.",
                             Discount = 1f,
-                            ImagePath = "none.png",
-                            Name = "Banana",
-                            Price = 25f,
-                            Stock = (byte)50
+                            ImagePath = "Assets/ShoppingItem/FoodPack.png",
+                            Name = "Tamagotchi Food Pack",
+                            Price = 75f,
+                            Stock = (byte)200
                         },
                         new
                         {
                             ShoppingItemId = 2,
                             CurrencyType = "SEK",
-                            Description = "Restores 25 energy to your Tamagotchi",
+                            Description = "Portable water bottle to keep your Tamagotchi hydrated.",
                             Discount = 1f,
-                            ImagePath = "none.png",
-                            Name = "Sports Drank",
+                            ImagePath = "Assets/ShoppingItem/WaterBottle.png",
+                            Name = "Tamagotchi Water Bottle",
                             Price = 50f,
-                            Stock = (byte)25
+                            Stock = (byte)150
                         },
                         new
                         {
                             ShoppingItemId = 3,
                             CurrencyType = "SEK",
-                            Description = "Restores 1 energy to your Tamagotchi",
+                            Description = "Cozy bed for your Tamagotchi to sleep and rest comfortably.",
                             Discount = 1f,
-                            ImagePath = "none.png",
-                            Name = "Rice",
-                            Price = 10f,
-                            Stock = (byte)250
+                            ImagePath = "Assets/ShoppingItem/Bed.png",
+                            Name = "Tamagotchi Bed",
+                            Price = 200f,
+                            Stock = (byte)100
+                        },
+                        new
+                        {
+                            ShoppingItemId = 4,
+                            CurrencyType = "SEK",
+                            Description = "Fun exercise wheel to keep your Tamagotchi active and fit.",
+                            Discount = 1f,
+                            ImagePath = "Assets/ShoppingItem/ExerciseWheel.png",
+                            Name = "Tamagotchi Exercise Wheel",
+                            Price = 150f,
+                            Stock = (byte)120
+                        },
+                        new
+                        {
+                            ShoppingItemId = 5,
+                            CurrencyType = "SEK",
+                            Description = "Essential cleaning kit to maintain your Tamagotchi's hygiene.",
+                            Discount = 1f,
+                            ImagePath = "Assets/ShoppingItem/CleaningKit.png",
+                            Name = "Tamagotchi Cleaning Kit",
+                            Price = 100f,
+                            Stock = (byte)80
+                        },
+                        new
+                        {
+                            ShoppingItemId = 6,
+                            CurrencyType = "SEK",
+                            Description = "A set of fun toys to entertain your Tamagotchi.",
+                            Discount = 1f,
+                            ImagePath = "Assets/ShoppingItem/ToySet.png",
+                            Name = "Tamagotchi Toy Set",
+                            Price = 60f,
+                            Stock = (byte)170
+                        },
+                        new
+                        {
+                            ShoppingItemId = 7,
+                            CurrencyType = "SEK",
+                            Description = "Vitamins and supplements for your Tamagotchi's wellbeing.",
+                            Discount = 1f,
+                            ImagePath = "Assets/ShoppingItem/HealthSupplement.png",
+                            Name = "Tamagotchi Health Supplement",
+                            Price = 90f,
+                            Stock = (byte)130
+                        },
+                        new
+                        {
+                            ShoppingItemId = 8,
+                            CurrencyType = "SEK",
+                            Description = "Convenient carrier for traveling with your Tamagotchi safely.",
+                            Discount = 1f,
+                            ImagePath = "Assets/ShoppingItem/TravelCarrier.png",
+                            Name = "Tamagotchi Travel Carrier",
+                            Price = 180f,
+                            Stock = (byte)90
+                        },
+                        new
+                        {
+                            ShoppingItemId = 9,
+                            CurrencyType = "SEK",
+                            Description = "Complete bath kit to keep your Tamagotchi clean and fresh.",
+                            Discount = 1f,
+                            ImagePath = "Assets/ShoppingItem/BathKit.png",
+                            Name = "Tamagotchi Bath Kit",
+                            Price = 85f,
+                            Stock = (byte)110
+                        },
+                        new
+                        {
+                            ShoppingItemId = 10,
+                            CurrencyType = "SEK",
+                            Description = "Essential first aid items for your Tamagotchi's minor injuries.",
+                            Discount = 1f,
+                            ImagePath = "Assets/ShoppingItem/FirstAidKit.png",
+                            Name = "Tamagotchi First Aid Kit",
+                            Price = 120f,
+                            Stock = (byte)75
+                        },
+                        new
+                        {
+                            ShoppingItemId = 11,
+                            CurrencyType = "SEK",
+                            Description = "Comprehensive grooming kit for your Tamagotchi's fur and nails.",
+                            Discount = 1f,
+                            ImagePath = "Assets/ShoppingItem/GroomingKit.png",
+                            Name = "Tamagotchi Grooming Kit",
+                            Price = 110f,
+                            Stock = (byte)95
+                        },
+                        new
+                        {
+                            ShoppingItemId = 12,
+                            CurrencyType = "SEK",
+                            Description = "Soft and warm blanket for your Tamagotchi to snuggle in.",
+                            Discount = 1f,
+                            ImagePath = "Assets/ShoppingItem/Blanket.png",
+                            Name = "Tamagotchi Blanket",
+                            Price = 70f,
+                            Stock = (byte)140
+                        },
+                        new
+                        {
+                            ShoppingItemId = 13,
+                            CurrencyType = "SEK",
+                            Description = "Stylish feeding dish perfect for serving Tamagotchi meals.",
+                            Discount = 1f,
+                            ImagePath = "Assets/ShoppingItem/FeedingDish.png",
+                            Name = "Tamagotchi Feeding Dish",
+                            Price = 45f,
+                            Stock = (byte)160
+                        },
+                        new
+                        {
+                            ShoppingItemId = 14,
+                            CurrencyType = "SEK",
+                            Description = "Adorable sun hat to protect your Tamagotchi from the sun.",
+                            Discount = 1f,
+                            ImagePath = "Assets/ShoppingItem/SunHat.png",
+                            Name = "Tamagotchi Sun Hat",
+                            Price = 55f,
+                            Stock = (byte)180
+                        },
+                        new
+                        {
+                            ShoppingItemId = 15,
+                            CurrencyType = "SEK",
+                            Description = "Personalized ID tag with your Tamagotchi’s name and info.",
+                            Discount = 1f,
+                            ImagePath = "Assets/ShoppingItem/IdTag.png",
+                            Name = "Tamagotchi ID Tag",
+                            Price = 35f,
+                            Stock = (byte)200
                         });
                 });
 
@@ -268,13 +397,13 @@ namespace HyperTamagotchi_API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "87727f42-b401-448e-8b45-13cb074514bd",
+                            Id = "ca0afdb9-5a34-414f-b222-62222a2efa92",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "0c07ef5e-6e52-4365-8b50-83ad861380fa",
+                            Id = "933b9343-1b47-41be-963b-fa91ece9b165",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         });
@@ -443,13 +572,13 @@ namespace HyperTamagotchi_API.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "e1f514c7-1158-401b-9b96-226051742e58",
-                            RoleId = "87727f42-b401-448e-8b45-13cb074514bd"
+                            UserId = "5cc5ae32-47b2-407c-a746-ca2cf43e617b",
+                            RoleId = "ca0afdb9-5a34-414f-b222-62222a2efa92"
                         },
                         new
                         {
-                            UserId = "7d227526-7a92-4dd4-935e-807167c774c8",
-                            RoleId = "0c07ef5e-6e52-4365-8b50-83ad861380fa"
+                            UserId = "91949caf-a550-4a1b-ae17-b92a86aebdd2",
+                            RoleId = "933b9343-1b47-41be-963b-fa91ece9b165"
                         });
                 });
 
@@ -501,14 +630,110 @@ namespace HyperTamagotchi_API.Migrations
                     b.HasData(
                         new
                         {
-                            ShoppingItemId = 4,
+                            ShoppingItemId = 16,
                             CurrencyType = "SEK",
-                            Description = "Meet the young developer Darin",
+                            Description = "Meet Rocker Rick, the egg Tamagotchi.",
                             Discount = 1f,
-                            ImagePath = "Assets/Tamagotchi/Developer/Dev_Egg_Default.png",
+                            ImagePath = "Assets/Tamagotchi/Rocker/Rocker_Egg_Default.png",
+                            Name = "Rocker Rick",
+                            Price = 200f,
+                            Stock = (byte)100,
+                            Experience = (byte)0,
+                            Mood = (byte)1,
+                            TamagotchiColor = (byte)1,
+                            TamagotchiStage = (byte)1,
+                            TamagotchiType = (byte)1
+                        },
+                        new
+                        {
+                            ShoppingItemId = 17,
+                            CurrencyType = "SEK",
+                            Description = "Meet Rocker Rhonda, the child Tamagotchi.",
+                            Discount = 1f,
+                            ImagePath = "Assets/Tamagotchi/Rocker/Rocker_Child_Blue.png",
+                            Name = "Rocker Rhonda",
+                            Price = 250f,
+                            Stock = (byte)100,
+                            Experience = (byte)50,
+                            Mood = (byte)5,
+                            TamagotchiColor = (byte)4,
+                            TamagotchiStage = (byte)2,
+                            TamagotchiType = (byte)1
+                        },
+                        new
+                        {
+                            ShoppingItemId = 18,
+                            CurrencyType = "SEK",
+                            Description = "Meet Rocker Rex, the adult Tamagotchi.",
+                            Discount = 1f,
+                            ImagePath = "Assets/Tamagotchi/Rocker/Rocker_Adult_Red.png",
+                            Name = "Rocker Rex",
+                            Price = 300f,
+                            Stock = (byte)100,
+                            Experience = (byte)100,
+                            Mood = (byte)1,
+                            TamagotchiColor = (byte)2,
+                            TamagotchiStage = (byte)3,
+                            TamagotchiType = (byte)1
+                        },
+                        new
+                        {
+                            ShoppingItemId = 19,
+                            CurrencyType = "SEK",
+                            Description = "Meet Farmer Fred, the egg Tamagotchi.",
+                            Discount = 1f,
+                            ImagePath = "Assets/Tamagotchi/Farmer/Farmer_Egg_Default.png",
+                            Name = "Farmer Fred",
+                            Price = 200f,
+                            Stock = (byte)100,
+                            Experience = (byte)0,
+                            Mood = (byte)1,
+                            TamagotchiColor = (byte)1,
+                            TamagotchiStage = (byte)1,
+                            TamagotchiType = (byte)2
+                        },
+                        new
+                        {
+                            ShoppingItemId = 20,
+                            CurrencyType = "SEK",
+                            Description = "Meet Farmer Fiona, the child Tamagotchi.",
+                            Discount = 1f,
+                            ImagePath = "Assets/Tamagotchi/Farmer/Farmer_Child_Green.png",
+                            Name = "Farmer Fiona",
+                            Price = 250f,
+                            Stock = (byte)100,
+                            Experience = (byte)50,
+                            Mood = (byte)3,
+                            TamagotchiColor = (byte)3,
+                            TamagotchiStage = (byte)2,
+                            TamagotchiType = (byte)2
+                        },
+                        new
+                        {
+                            ShoppingItemId = 21,
+                            CurrencyType = "SEK",
+                            Description = "Meet Farmer Frank, the adult Tamagotchi.",
+                            Discount = 1f,
+                            ImagePath = "Assets/Tamagotchi/Farmer/Farmer_Adult_Red.png",
+                            Name = "Farmer Frank",
+                            Price = 300f,
+                            Stock = (byte)100,
+                            Experience = (byte)100,
+                            Mood = (byte)4,
+                            TamagotchiColor = (byte)2,
+                            TamagotchiStage = (byte)3,
+                            TamagotchiType = (byte)2
+                        },
+                        new
+                        {
+                            ShoppingItemId = 22,
+                            CurrencyType = "SEK",
+                            Description = "Meet Developer Darin, the egg Tamagotchi.",
+                            Discount = 1f,
+                            ImagePath = "Assets/Tamagotchi/Developer/Developer_Egg_Default.png",
                             Name = "Developer Darin",
                             Price = 200f,
-                            Stock = (byte)10,
+                            Stock = (byte)100,
                             Experience = (byte)0,
                             Mood = (byte)1,
                             TamagotchiColor = (byte)1,
@@ -517,51 +742,179 @@ namespace HyperTamagotchi_API.Migrations
                         },
                         new
                         {
-                            ShoppingItemId = 5,
+                            ShoppingItemId = 23,
                             CurrencyType = "SEK",
-                            Description = "Meet the senior developer Juaaaahhhn",
+                            Description = "Meet Developer Daisy, the child Tamagotchi.",
                             Discount = 1f,
-                            ImagePath = "Assets/Tamagotchi/Developer/Dev_Child_Green.png",
-                            Name = "Developer Juaaaahhhn",
-                            Price = 255f,
-                            Stock = (byte)2,
+                            ImagePath = "Assets/Tamagotchi/Developer/Developer_Child_Blue.png",
+                            Name = "Developer Daisy",
+                            Price = 250f,
+                            Stock = (byte)100,
                             Experience = (byte)50,
-                            Mood = (byte)5,
-                            TamagotchiColor = (byte)3,
+                            Mood = (byte)2,
+                            TamagotchiColor = (byte)4,
                             TamagotchiStage = (byte)2,
                             TamagotchiType = (byte)3
                         },
                         new
                         {
-                            ShoppingItemId = 6,
+                            ShoppingItemId = 24,
                             CurrencyType = "SEK",
-                            Description = "Meet the farmer Shaarraaa",
+                            Description = "Meet Developer Dave, the adult Tamagotchi.",
                             Discount = 1f,
-                            ImagePath = "Assets/Tamagotchi/Farmer/Farmer_Child_Blue.png",
-                            Name = "Farmer Shaarraaa",
-                            Price = 200f,
-                            Stock = (byte)6,
-                            Experience = (byte)50,
+                            ImagePath = "Assets/Tamagotchi/Developer/Developer_Adult_Green.png",
+                            Name = "Developer Dave",
+                            Price = 300f,
+                            Stock = (byte)100,
+                            Experience = (byte)100,
                             Mood = (byte)1,
-                            TamagotchiColor = (byte)4,
-                            TamagotchiStage = (byte)2,
-                            TamagotchiType = (byte)2
+                            TamagotchiColor = (byte)3,
+                            TamagotchiStage = (byte)3,
+                            TamagotchiType = (byte)3
                         },
                         new
                         {
-                            ShoppingItemId = 7,
+                            ShoppingItemId = 25,
                             CurrencyType = "SEK",
-                            Description = "Meet the farmer Ghäärryyy",
+                            Description = "Meet Athlete Alex, the egg Tamagotchi.",
                             Discount = 1f,
-                            ImagePath = "Assets/Tamagotchi/Farmer/Farmer_Egg_Red.png",
-                            Name = "Farmer Ghäärryyy",
-                            Price = 50f,
-                            Stock = (byte)3,
+                            ImagePath = "Assets/Tamagotchi/Athlete/Athlete_Egg_Default.png",
+                            Name = "Athlete Alex",
+                            Price = 200f,
+                            Stock = (byte)100,
                             Experience = (byte)0,
-                            Mood = (byte)2,
-                            TamagotchiColor = (byte)2,
+                            Mood = (byte)1,
+                            TamagotchiColor = (byte)1,
                             TamagotchiStage = (byte)1,
-                            TamagotchiType = (byte)2
+                            TamagotchiType = (byte)4
+                        },
+                        new
+                        {
+                            ShoppingItemId = 26,
+                            CurrencyType = "SEK",
+                            Description = "Meet Athlete Annie, the child Tamagotchi.",
+                            Discount = 1f,
+                            ImagePath = "Assets/Tamagotchi/Athlete/Athlete_Child_Green.png",
+                            Name = "Athlete Annie",
+                            Price = 250f,
+                            Stock = (byte)100,
+                            Experience = (byte)50,
+                            Mood = (byte)5,
+                            TamagotchiColor = (byte)3,
+                            TamagotchiStage = (byte)2,
+                            TamagotchiType = (byte)4
+                        },
+                        new
+                        {
+                            ShoppingItemId = 27,
+                            CurrencyType = "SEK",
+                            Description = "Meet Athlete Arnold, the adult Tamagotchi.",
+                            Discount = 1f,
+                            ImagePath = "Assets/Tamagotchi/Athlete/Athlete_Adult_Red.png",
+                            Name = "Athlete Arnold",
+                            Price = 300f,
+                            Stock = (byte)100,
+                            Experience = (byte)100,
+                            Mood = (byte)1,
+                            TamagotchiColor = (byte)2,
+                            TamagotchiStage = (byte)3,
+                            TamagotchiType = (byte)4
+                        },
+                        new
+                        {
+                            ShoppingItemId = 28,
+                            CurrencyType = "SEK",
+                            Description = "Meet Constructor Colin, the egg Tamagotchi.",
+                            Discount = 1f,
+                            ImagePath = "Assets/Tamagotchi/Constructor/Constructor_Egg_Default.png",
+                            Name = "Constructor Colin",
+                            Price = 200f,
+                            Stock = (byte)100,
+                            Experience = (byte)0,
+                            Mood = (byte)1,
+                            TamagotchiColor = (byte)1,
+                            TamagotchiStage = (byte)1,
+                            TamagotchiType = (byte)5
+                        },
+                        new
+                        {
+                            ShoppingItemId = 29,
+                            CurrencyType = "SEK",
+                            Description = "Meet Constructor Cindy, the child Tamagotchi.",
+                            Discount = 1f,
+                            ImagePath = "Assets/Tamagotchi/Constructor/Constructor_Child_Blue.png",
+                            Name = "Constructor Cindy",
+                            Price = 250f,
+                            Stock = (byte)100,
+                            Experience = (byte)50,
+                            Mood = (byte)2,
+                            TamagotchiColor = (byte)4,
+                            TamagotchiStage = (byte)2,
+                            TamagotchiType = (byte)5
+                        },
+                        new
+                        {
+                            ShoppingItemId = 30,
+                            CurrencyType = "SEK",
+                            Description = "Meet Constructor Carl, the adult Tamagotchi.",
+                            Discount = 1f,
+                            ImagePath = "Assets/Tamagotchi/Constructor/Constructor_Adult_Green.png",
+                            Name = "Constructor Carl",
+                            Price = 300f,
+                            Stock = (byte)100,
+                            Experience = (byte)100,
+                            Mood = (byte)1,
+                            TamagotchiColor = (byte)3,
+                            TamagotchiStage = (byte)3,
+                            TamagotchiType = (byte)5
+                        },
+                        new
+                        {
+                            ShoppingItemId = 31,
+                            CurrencyType = "SEK",
+                            Description = "Meet Philosopher Phil, the egg Tamagotchi.",
+                            Discount = 1f,
+                            ImagePath = "Assets/Tamagotchi/Philosopher/Philosopher_Egg_Default.png",
+                            Name = "Philosopher Phil",
+                            Price = 200f,
+                            Stock = (byte)100,
+                            Experience = (byte)0,
+                            Mood = (byte)1,
+                            TamagotchiColor = (byte)1,
+                            TamagotchiStage = (byte)1,
+                            TamagotchiType = (byte)6
+                        },
+                        new
+                        {
+                            ShoppingItemId = 32,
+                            CurrencyType = "SEK",
+                            Description = "Meet Philosopher Pippa, the child Tamagotchi.",
+                            Discount = 1f,
+                            ImagePath = "Assets/Tamagotchi/Philosopher/Philosopher_Child_Red.png",
+                            Name = "Philosopher Pippa",
+                            Price = 250f,
+                            Stock = (byte)100,
+                            Experience = (byte)50,
+                            Mood = (byte)3,
+                            TamagotchiColor = (byte)2,
+                            TamagotchiStage = (byte)2,
+                            TamagotchiType = (byte)6
+                        },
+                        new
+                        {
+                            ShoppingItemId = 33,
+                            CurrencyType = "SEK",
+                            Description = "Meet Philosopher Pete, the adult Tamagotchi.",
+                            Discount = 1f,
+                            ImagePath = "Assets/Tamagotchi/Philosopher/Philosopher_Adult_Blue.png",
+                            Name = "Philosopher Pete",
+                            Price = 300f,
+                            Stock = (byte)100,
+                            Experience = (byte)100,
+                            Mood = (byte)4,
+                            TamagotchiColor = (byte)4,
+                            TamagotchiStage = (byte)3,
+                            TamagotchiType = (byte)6
                         });
                 });
 
@@ -594,18 +947,18 @@ namespace HyperTamagotchi_API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e1f514c7-1158-401b-9b96-226051742e58",
+                            Id = "5cc5ae32-47b2-407c-a746-ca2cf43e617b",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b2915dc3-2c06-421b-a861-526fe7885fd6",
+                            ConcurrencyStamp = "6f9b307c-4b52-4fd2-9fd0-8b2b7c1049b2",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = true,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAELBpcp1+7gfkBBlgvAkKT2v9Y1dAZ1K8LOx+2RTLcTf8tppyYcs5XtAMlsWLzHFlhg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFoPvE47dhvMzAfmGwYpegGegdbJL4tmxqkFx+R2KQak66VZqgpwwrvG1C/FIoyM/Q==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "76c38c80-3819-4c6e-8d36-b1fc0d72d60d",
+                            SecurityStamp = "6b0086bc-df97-4fd4-a285-33959f7a8a55",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com",
                             AddressId = 1,
@@ -615,18 +968,18 @@ namespace HyperTamagotchi_API.Migrations
                         },
                         new
                         {
-                            Id = "7d227526-7a92-4dd4-935e-807167c774c8",
+                            Id = "91949caf-a550-4a1b-ae17-b92a86aebdd2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "381266a6-c9e7-4e8a-b4a9-d968716fe9e6",
+                            ConcurrencyStamp = "c7ce428d-08c7-4117-a881-79e97f40ef5c",
                             Email = "tobias@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = true,
                             NormalizedEmail = "TOBIAS@GMAIL.COM",
                             NormalizedUserName = "TOBIAS@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEGc321yI9tL4Uj2ccuYGR57kUVR6AS6l0wy9A+oQoWptyiqifVTSmmdzuOypGfR0GQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGQ4qJficF9XIE0Vv6zEqiv0NbzzsjTGGOg7fA+fUVp7m0Jb9gzZff/vEEdRRnmflw==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "dab751db-a608-4ed7-a03e-a81fa13eff20",
+                            SecurityStamp = "5b045c63-4233-44b3-bc4c-644b5a57a5b2",
                             TwoFactorEnabled = false,
                             UserName = "tobias@gmail.com",
                             AddressId = 2,

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<HyperTamagotchi_SharedModels.Models.ShoppingItem>
+﻿@model IEnumerable<HyperTamagotchi_MVC.Models.ShoppingItem>
 
 @{
     ViewData["Title"] = "Index";
@@ -37,7 +37,7 @@
         <tbody>
             @foreach (var item in Model)
             {
-                string discountValue = item.Discount == 1 ? "No discount" : $"Discount {HyperTamagotchi_SharedModels.Helpers.DiscountConversionHelper.ConvertFromShoppingItemToDiscountDisplayDiscount(item.Discount)}%";
+                string discountValue = item.Discount == 1 ? "No discount" : $"Discount {HyperTamagotchi_MVC.Helpers.DiscountConversionHelper.ConvertFromShoppingItemToDiscountDisplayDiscount(item.Discount)}%";
                 <tr>
                     <td>
                         <input type="checkbox" name="selectedShoppingItems" value="@item.ShoppingItemId" />

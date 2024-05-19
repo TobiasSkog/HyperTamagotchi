@@ -1,4 +1,4 @@
-namespace HyperTamagotchi_SharedModels.Models;
+namespace HyperTamagotchi_MVC.Models;
 
 public class ErrorViewModel
 {

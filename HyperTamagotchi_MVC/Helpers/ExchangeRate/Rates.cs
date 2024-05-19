@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace HyperTamagotchi_SharedModels.Helpers.ExchangeRate;
+namespace HyperTamagotchi_MVC.Helpers.ExchangeRate;
 
 // var apiKey = builder.Configuration.GetValue<string>("ApiKey:ExchangeRate") ?? throw new InvalidOperationException("ApiKey 'ExchangeRate' not found.");
 // Rates rates = new(apiKey);

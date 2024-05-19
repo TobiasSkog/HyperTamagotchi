@@ -1,4 +1,4 @@
-﻿namespace HyperTamagotchi_SharedModels.Models.TamagotchiProperties;
+﻿namespace HyperTamagotchi_MVC.Models.TamagotchiProperties;
 
 public enum TamagotchiType : byte
 {

@@ -1,8 +1,48 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<HyperTamagotchi_MVC.Models.ShoppingItem>
+
+@{
+    ViewData["Title"] = "Web shop";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container">
+    <h1 class="text-center">Webshop</h1>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @TempData["Message"]
+        </div>
+    }
+
+    <div class="d-flex justify-content-end mb-3">
+        <a href="@Url.Action("Cart", "Shopping")" class="btn btn-secondary">View Cart</a>
+    </div>
+
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="@item.ImagePath" class="card-img-top img-small-centered" alt="@item.Name" />
+                    <div class="card-body text-center">
+                        <h5 class="card-title">@item.Name</h5>
+                        <p class="card-text">@item.Description</p>
+                        <form asp-action="Buy" method="post">
+                            @* <input type="hidden" name="id" value="@item.Id" />  *@
+                            <button type="submit" class="btn btn-primary">Buy</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
+
+<style>
+    .img-small-centered {
+        max-width: 150px; /* Maximal bredd */
+        max-height: 150px; /* Maximal höjd */
+        display: block; /* Göra bilderna till blockelement för att kunna använda margin:auto */
+        margin: auto; /* Centrera bilderna horisontellt */
+    }
+</style>

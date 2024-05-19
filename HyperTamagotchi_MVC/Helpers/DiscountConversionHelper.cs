@@ -1,4 +1,4 @@
-﻿namespace HyperTamagotchi_SharedModels.Helpers;
+﻿namespace HyperTamagotchi_MVC.Helpers;
 
 public static class DiscountConversionHelper
 {

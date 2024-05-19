@@ -1,8 +1,8 @@
-﻿using HyperTamagotchi_SharedModels.Models.TamagotchiProperties;
+﻿using HyperTamagotchi_MVC.Models.TamagotchiProperties;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace HyperTamagotchi_SharedModels.Models;
+namespace HyperTamagotchi_MVC.Models;
 
 public class Tamagotchi : ShoppingItem
 {

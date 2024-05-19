@@ -1,4 +1,4 @@
-﻿using HyperTamagotchi_SharedModels.Models;
+﻿using HyperTamagotchi_MVC.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

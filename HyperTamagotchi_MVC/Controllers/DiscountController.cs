@@ -18,7 +18,7 @@ public class DiscountController(ApiServices api) : Controller
     public IActionResult AddDiscountToShoppingItems(List<int> selectedShoppingItems, float discountValue)
     {
         float discountPercentage = DiscountConversionHelper.ConvertFromUserInputToShoppingItem(discountValue);
-        var hej = _api.Edit();
+
 
         return View();
     }

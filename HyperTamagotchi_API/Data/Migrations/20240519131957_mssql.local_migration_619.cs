@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HyperTamagotchi_API.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class mssqllocal_migration_619 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -236,7 +236,7 @@ namespace HyperTamagotchi_API.Migrations
                     Price = table.Column<float>(type: "real", nullable: false),
                     CurrencyType = table.Column<string>(type: "nvarchar(3)", nullable: false),
                     Discount = table.Column<float>(type: "real", nullable: false),
-                    ImagePath = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ImagePath = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Quantity = table.Column<byte>(type: "tinyint", nullable: true),
                     Discriminator = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
                     TamagotchiColor = table.Column<byte>(type: "tinyint", nullable: true),
@@ -318,8 +318,8 @@ namespace HyperTamagotchi_API.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "0c07ef5e-6e52-4365-8b50-83ad861380fa", null, "Customer", "CUSTOMER" },
-                    { "87727f42-b401-448e-8b45-13cb074514bd", null, "Admin", "ADMIN" }
+                    { "2c624260-9450-4d5b-b054-bd0bc68ef92d", null, "Customer", "CUSTOMER" },
+                    { "3912e03b-215f-4005-a958-1da4fcf4483a", null, "Admin", "ADMIN" }
                 });
 
             migrationBuilder.InsertData(
@@ -336,9 +336,21 @@ namespace HyperTamagotchi_API.Migrations
                 columns: new[] { "ShoppingItemId", "CurrencyType", "Description", "Discount", "Discriminator", "ImagePath", "Name", "Price", "Quantity", "Stock" },
                 values: new object[,]
                 {
-                    { 1, "SEK", "Restores 10 energy to your Tamagotchi", 1f, "ShoppingItem", "none.png", "Banana", 25f, null, (byte)50 },
-                    { 2, "SEK", "Restores 25 energy to your Tamagotchi", 1f, "ShoppingItem", "none.png", "Sports Drank", 50f, null, (byte)25 },
-                    { 3, "SEK", "Restores 1 energy to your Tamagotchi", 1f, "ShoppingItem", "none.png", "Rice", 10f, null, (byte)250 }
+                    { 1, "SEK", "Nutritious food pack to keep your Tamagotchi healthy and happy.", 1f, "ShoppingItem", "FoodPack.png", "Tamagotchi Food Pack", 75f, null, (byte)200 },
+                    { 2, "SEK", "Portable water bottle to keep your Tamagotchi hydrated.", 1f, "ShoppingItem", "WaterBottle.png", "Tamagotchi Water Bottle", 50f, null, (byte)150 },
+                    { 3, "SEK", "Cozy bed for your Tamagotchi to sleep and rest comfortably.", 1f, "ShoppingItem", "Bed.png", "Tamagotchi Bed", 200f, null, (byte)100 },
+                    { 4, "SEK", "Fun exercise wheel to keep your Tamagotchi active and fit.", 1f, "ShoppingItem", "ExerciseWheel.png", "Tamagotchi Exercise Wheel", 150f, null, (byte)120 },
+                    { 5, "SEK", "Essential cleaning kit to maintain your Tamagotchi's hygiene.", 1f, "ShoppingItem", "CleaningKit.png", "Tamagotchi Cleaning Kit", 100f, null, (byte)80 },
+                    { 6, "SEK", "A set of fun toys to entertain your Tamagotchi.", 1f, "ShoppingItem", "ToySet.png", "Tamagotchi Toy Set", 60f, null, (byte)170 },
+                    { 7, "SEK", "Vitamins and supplements for your Tamagotchi's wellbeing.", 1f, "ShoppingItem", "HealthSupplement.png", "Tamagotchi Health Supplement", 90f, null, (byte)130 },
+                    { 8, "SEK", "Convenient carrier for traveling with your Tamagotchi safely.", 1f, "ShoppingItem", "TravelCarrier.png", "Tamagotchi Travel Carrier", 180f, null, (byte)90 },
+                    { 9, "SEK", "Complete bath kit to keep your Tamagotchi clean and fresh.", 1f, "ShoppingItem", "BathKit.png", "Tamagotchi Bath Kit", 85f, null, (byte)110 },
+                    { 10, "SEK", "Essential first aid items for your Tamagotchi's minor injuries.", 1f, "ShoppingItem", "FirstAidKit.png", "Tamagotchi First Aid Kit", 120f, null, (byte)75 },
+                    { 11, "SEK", "Comprehensive grooming kit for your Tamagotchi's fur and nails.", 1f, "ShoppingItem", "GroomingKit.png", "Tamagotchi Grooming Kit", 110f, null, (byte)95 },
+                    { 12, "SEK", "Soft and warm blanket for your Tamagotchi to snuggle in.", 1f, "ShoppingItem", "Blanket.png", "Tamagotchi Blanket", 70f, null, (byte)140 },
+                    { 13, "SEK", "Stylish feeding dish perfect for serving Tamagotchi meals.", 1f, "ShoppingItem", "FeedingDish.png", "Tamagotchi Feeding Dish", 45f, null, (byte)160 },
+                    { 14, "SEK", "Adorable sun hat to protect your Tamagotchi from the sun.", 1f, "ShoppingItem", "SunHat.png", "Tamagotchi Sun Hat", 55f, null, (byte)180 },
+                    { 15, "SEK", "Personalized ID tag with your Tamagotchi’s name and info.", 1f, "ShoppingItem", "IdTag.png", "Tamagotchi ID Tag", 35f, null, (byte)200 }
                 });
 
             migrationBuilder.InsertData(
@@ -346,10 +358,24 @@ namespace HyperTamagotchi_API.Migrations
                 columns: new[] { "ShoppingItemId", "CurrencyType", "CustomerId", "Description", "Discount", "Discriminator", "Experience", "ImagePath", "Mood", "Name", "Price", "Quantity", "Stock", "TamagotchiColor", "TamagotchiStage", "TamagotchiType" },
                 values: new object[,]
                 {
-                    { 4, "SEK", null, "Meet the young developer Darin", 1f, "Tamagotchi", (byte)0, "Assets/Tamagotchi/Developer/Dev_Egg_Default.png", (byte)1, "Developer Darin", 200f, null, (byte)10, (byte)1, (byte)1, (byte)3 },
-                    { 5, "SEK", null, "Meet the senior developer Juaaaahhhn", 1f, "Tamagotchi", (byte)50, "Assets/Tamagotchi/Developer/Dev_Child_Green.png", (byte)5, "Developer Juaaaahhhn", 255f, null, (byte)2, (byte)3, (byte)2, (byte)3 },
-                    { 6, "SEK", null, "Meet the farmer Shaarraaa", 1f, "Tamagotchi", (byte)50, "Assets/Tamagotchi/Farmer/Farmer_Child_Blue.png", (byte)1, "Farmer Shaarraaa", 200f, null, (byte)6, (byte)4, (byte)2, (byte)2 },
-                    { 7, "SEK", null, "Meet the farmer Ghäärryyy", 1f, "Tamagotchi", (byte)0, "Assets/Tamagotchi/Farmer/Farmer_Egg_Red.png", (byte)2, "Farmer Ghäärryyy", 50f, null, (byte)3, (byte)2, (byte)1, (byte)2 }
+                    { 16, "SEK", null, "Meet Rocker Rick, the egg Tamagotchi.", 1f, "Tamagotchi", (byte)0, "Assets/Tamagotchi/Rocker/Rocker_Egg_Default.png", (byte)1, "Rocker Rick", 200f, null, (byte)100, (byte)1, (byte)1, (byte)1 },
+                    { 17, "SEK", null, "Meet Rocker Rhonda, the child Tamagotchi.", 1f, "Tamagotchi", (byte)50, "Assets/Tamagotchi/Rocker/Rocker_Child_Blue.png", (byte)5, "Rocker Rhonda", 250f, null, (byte)100, (byte)4, (byte)2, (byte)1 },
+                    { 18, "SEK", null, "Meet Rocker Rex, the adult Tamagotchi.", 1f, "Tamagotchi", (byte)100, "Assets/Tamagotchi/Rocker/Rocker_Adult_Red.png", (byte)1, "Rocker Rex", 300f, null, (byte)100, (byte)2, (byte)3, (byte)1 },
+                    { 19, "SEK", null, "Meet Farmer Fred, the egg Tamagotchi.", 1f, "Tamagotchi", (byte)0, "Assets/Tamagotchi/Farmer/Farmer_Egg_Default.png", (byte)1, "Farmer Fred", 200f, null, (byte)100, (byte)1, (byte)1, (byte)2 },
+                    { 20, "SEK", null, "Meet Farmer Fiona, the child Tamagotchi.", 1f, "Tamagotchi", (byte)50, "Assets/Tamagotchi/Farmer/Farmer_Child_Green.png", (byte)3, "Farmer Fiona", 250f, null, (byte)100, (byte)3, (byte)2, (byte)2 },
+                    { 21, "SEK", null, "Meet Farmer Frank, the adult Tamagotchi.", 1f, "Tamagotchi", (byte)100, "Assets/Tamagotchi/Farmer/Farmer_Adult_Red.png", (byte)4, "Farmer Frank", 300f, null, (byte)100, (byte)2, (byte)3, (byte)2 },
+                    { 22, "SEK", null, "Meet Developer Darin, the egg Tamagotchi.", 1f, "Tamagotchi", (byte)0, "Assets/Tamagotchi/Developer/Developer_Egg_Default.png", (byte)1, "Developer Darin", 200f, null, (byte)100, (byte)1, (byte)1, (byte)3 },
+                    { 23, "SEK", null, "Meet Developer Daisy, the child Tamagotchi.", 1f, "Tamagotchi", (byte)50, "Assets/Tamagotchi/Developer/Developer_Child_Blue.png", (byte)2, "Developer Daisy", 250f, null, (byte)100, (byte)4, (byte)2, (byte)3 },
+                    { 24, "SEK", null, "Meet Developer Dave, the adult Tamagotchi.", 1f, "Tamagotchi", (byte)100, "Assets/Tamagotchi/Developer/Developer_Adult_Green.png", (byte)1, "Developer Dave", 300f, null, (byte)100, (byte)3, (byte)3, (byte)3 },
+                    { 25, "SEK", null, "Meet Athlete Alex, the egg Tamagotchi.", 1f, "Tamagotchi", (byte)0, "Assets/Tamagotchi/Athlete/Athlete_Egg_Default.png", (byte)1, "Athlete Alex", 200f, null, (byte)100, (byte)1, (byte)1, (byte)4 },
+                    { 26, "SEK", null, "Meet Athlete Annie, the child Tamagotchi.", 1f, "Tamagotchi", (byte)50, "Assets/Tamagotchi/Athlete/Athlete_Child_Green.png", (byte)5, "Athlete Annie", 250f, null, (byte)100, (byte)3, (byte)2, (byte)4 },
+                    { 27, "SEK", null, "Meet Athlete Arnold, the adult Tamagotchi.", 1f, "Tamagotchi", (byte)100, "Assets/Tamagotchi/Athlete/Athlete_Adult_Red.png", (byte)1, "Athlete Arnold", 300f, null, (byte)100, (byte)2, (byte)3, (byte)4 },
+                    { 28, "SEK", null, "Meet Constructor Colin, the egg Tamagotchi.", 1f, "Tamagotchi", (byte)0, "Assets/Tamagotchi/Constructor/Constructor_Egg_Default.png", (byte)1, "Constructor Colin", 200f, null, (byte)100, (byte)1, (byte)1, (byte)5 },
+                    { 29, "SEK", null, "Meet Constructor Cindy, the child Tamagotchi.", 1f, "Tamagotchi", (byte)50, "Assets/Tamagotchi/Constructor/Constructor_Child_Blue.png", (byte)2, "Constructor Cindy", 250f, null, (byte)100, (byte)4, (byte)2, (byte)5 },
+                    { 30, "SEK", null, "Meet Constructor Carl, the adult Tamagotchi.", 1f, "Tamagotchi", (byte)100, "Assets/Tamagotchi/Constructor/Constructor_Adult_Green.png", (byte)1, "Constructor Carl", 300f, null, (byte)100, (byte)3, (byte)3, (byte)5 },
+                    { 31, "SEK", null, "Meet Philosopher Phil, the egg Tamagotchi.", 1f, "Tamagotchi", (byte)0, "Assets/Tamagotchi/Philosopher/Philosopher_Egg_Default.png", (byte)1, "Philosopher Phil", 200f, null, (byte)100, (byte)1, (byte)1, (byte)6 },
+                    { 32, "SEK", null, "Meet Philosopher Pippa, the child Tamagotchi.", 1f, "Tamagotchi", (byte)50, "Assets/Tamagotchi/Philosopher/Philosopher_Child_Red.png", (byte)3, "Philosopher Pippa", 250f, null, (byte)100, (byte)2, (byte)2, (byte)6 },
+                    { 33, "SEK", null, "Meet Philosopher Pete, the adult Tamagotchi.", 1f, "Tamagotchi", (byte)100, "Assets/Tamagotchi/Philosopher/Philosopher_Adult_Blue.png", (byte)4, "Philosopher Pete", 300f, null, (byte)100, (byte)4, (byte)3, (byte)6 }
                 });
 
             migrationBuilder.InsertData(
@@ -357,8 +383,8 @@ namespace HyperTamagotchi_API.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "AddressId", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "ShoppingCartId", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "7d227526-7a92-4dd4-935e-807167c774c8", 0, 2, "381266a6-c9e7-4e8a-b4a9-d968716fe9e6", "Customer", "tobias@gmail.com", true, "Tobias", "Skog", true, null, "TOBIAS@GMAIL.COM", "TOBIAS@GMAIL.COM", "AQAAAAIAAYagAAAAEGc321yI9tL4Uj2ccuYGR57kUVR6AS6l0wy9A+oQoWptyiqifVTSmmdzuOypGfR0GQ==", "1234567890", true, "dab751db-a608-4ed7-a03e-a81fa13eff20", 2, false, "tobias@gmail.com" },
-                    { "e1f514c7-1158-401b-9b96-226051742e58", 0, 1, "b2915dc3-2c06-421b-a861-526fe7885fd6", "Customer", "admin@gmail.com", true, "Admin", "Adminsson", true, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAIAAYagAAAAELBpcp1+7gfkBBlgvAkKT2v9Y1dAZ1K8LOx+2RTLcTf8tppyYcs5XtAMlsWLzHFlhg==", "1234567890", true, "76c38c80-3819-4c6e-8d36-b1fc0d72d60d", 1, false, "admin@gmail.com" }
+                    { "22cfebc1-8d94-4a10-9b98-507770279c32", 0, 2, "7870a1da-d410-4d82-bab1-c9057194c4f9", "Customer", "tobias@gmail.com", true, "Tobias", "Skog", true, null, "TOBIAS@GMAIL.COM", "TOBIAS@GMAIL.COM", "AQAAAAIAAYagAAAAEHB/Di4M5U7pS3rzBi/ZLRr+0ignhdsGDMGKtBg6kKu+K3ftL0ntWrozll6OtYkufA==", "1234567890", true, "0aab90db-c2fb-4c60-906b-3ddc1b9b42d7", 2, false, "tobias@gmail.com" },
+                    { "6fc86bac-8833-46fe-9400-b594bc9f6d3f", 0, 1, "7399d232-1252-4065-aff3-ccd38596fe64", "Customer", "admin@gmail.com", true, "Admin", "Adminsson", true, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAIAAYagAAAAEEQN7oRGoEf2F2iV2BoTUoMBbs0JNIerdau0+L2YMCkZZjmjZ8Z8O2te5u1JVa5zkg==", "1234567890", true, "6f1c62c6-678b-4713-827a-2d75f19405b9", 1, false, "admin@gmail.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -366,8 +392,8 @@ namespace HyperTamagotchi_API.Migrations
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { "0c07ef5e-6e52-4365-8b50-83ad861380fa", "7d227526-7a92-4dd4-935e-807167c774c8" },
-                    { "87727f42-b401-448e-8b45-13cb074514bd", "e1f514c7-1158-401b-9b96-226051742e58" }
+                    { "2c624260-9450-4d5b-b054-bd0bc68ef92d", "22cfebc1-8d94-4a10-9b98-507770279c32" },
+                    { "3912e03b-215f-4005-a958-1da4fcf4483a", "6fc86bac-8833-46fe-9400-b594bc9f6d3f" }
                 });
 
             migrationBuilder.CreateIndex(
