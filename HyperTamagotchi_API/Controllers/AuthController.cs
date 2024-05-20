@@ -9,6 +9,7 @@ namespace HyperTamagotchi_API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+
 public class AuthController(
     UserManager<IdentityUser> userManager,
     ApplicationDbContext context,

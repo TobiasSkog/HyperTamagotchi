@@ -9,7 +9,7 @@ public partial class ApiServices
     [ValidateAntiForgeryToken]
     public async Task<bool> LoginAsync(string username, string password, bool rememberMe)
     {
-        var _client = _httpClientFactory.CreateClient("API Tamagotchi");
+        //var _client = _httpClientFactory.CreateClient("API Tamagotchi");
         var response = await _client.PostAsJsonAsync("api/Auth/Login", new LoginRequestDto { Username = username, Password = password, RememberMe = rememberMe });
 
         if (response.IsSuccessStatusCode)

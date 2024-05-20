@@ -9,18 +9,15 @@ namespace HyperTamagotchi_MVC.Services;
 
 public partial class ApiServices
 {
-
     [HttpPost]
     public async Task<bool> UpdateDiscountToShoppingItems(List<int> selectedShoppingItems, float discountPercentage)
     {
-
 
         var dto = new
         {
             SelectedShoppingItems = selectedShoppingItems,
             DiscountPercentage = discountPercentage
         };
-        var abo = _client.DefaultRequestHeaders;
         var response = await _client.PostAsJsonAsync($"api/Admin/AddDiscountToShoppingItems", dto);
 
         return response.IsSuccessStatusCode;
