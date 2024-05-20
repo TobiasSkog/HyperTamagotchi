@@ -6,46 +6,47 @@
     <title>@ViewData["Title"] - HyperTamagotchi_MVC</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/HyperTamagotchi_MVC.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <header class="header">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-0">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">HyperTamagotchi_MVC</a>
+                <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">TamWorld</a>
+                <span class="navbar-text" style="color: black; margin-left: 10px;">WebShop</span>
+
+                @*@if (User.IsInRole("Customer"))
+                {
+                <a class="btn btn-warning ms-2" asp-controller="Cart" asp-action="Index">My Cart</a>
+                }*@
+
+                @*@if (User.IsInRole("Admin"))
+                {
+                <a class="btn btn-dark ms-2" asp-controller="Admin" asp-action="Dashboard">Admin Dashboard</a>
+                <a class="btn btn-dark ms-2" asp-controller="Admin" asp-action="AddItem">Add Item</a>
+                <a class="btn btn-dark ms-2" asp-controller="Admin" asp-action="AddDiscount">Add Discount</a>
+                }*@
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="ShoppingItems" asp-action="Index">Admin Shop Items</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Discount" asp-action="Index">Admin Discounts</a>
-                        </li>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
+                    <ul class="navbar-nav">
+                        <partial name="_LoginPartial" />
                     </ul>
-                    <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container-flex">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="footer">
         <div class="container">
-            &copy; 2024 - HyperTamagotchi_MVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; @DateTime.Now.Year - TamWorld - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
