@@ -1,21 +1,81 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #FFFFFF;
+}
+
 body {
-  background-color: #F9E8D3;
+  display: flex;
+  flex-direction: column;
   color: #030303;
 }
 
-.navbar-custom {
+.header, .footer {
+  flex-shrink: 0;
+  width: 100%;
   background-color: #FFFFFF;
-  color: #030303;
+}
+
+.header {
+  margin: 0;
+  padding: 0;
+}
+
+.header .container-fluid {
+  padding-left: 50px;
+  padding-right: 50px;
+}
+
+.container-flex {
+  flex: 1;
+  padding: 15px;
+}
+
+.footer {
+  border-top: 1px solid #E4E6EA;
+  text-align: center;
+  padding: 10px 0;
+  padding-left: 50px;
+  padding-right: 50px;
+}
+
+.navbar-brand {
+  color: #F99E2F !important;
 }
 
 .btn-primary {
-  background-color: #F99E2F;
   color: #FFFFFF;
+  background-color: #F99E2F;
+  border-color: #F99E2F;
+}
+.btn-primary:hover {
+  background-color: #ee8607;
+  border-color: #ee8607;
 }
 
 .btn-secondary {
-  background-color: #E4E6EA;
   color: #030303;
+  background-color: #E4E6EA;
+  border-color: #E4E6EA;
+}
+.btn-secondary:hover {
+  background-color: #c7cbd4;
+  border-color: #c7cbd4;
+}
+
+/* Custom styles for the Cart view */
+.card-header.bg-warning {
+  background-color: #F99E2F;
+}
+
+/* Custom styles for the primary and secondary background colors */
+.bg-primary {
+  background-color: #F99E2F !important;
+}
+
+.bg-secondary {
+  background-color: #E4E6EA !important;
 }
 
 /*# sourceMappingURL=site.css.map */
