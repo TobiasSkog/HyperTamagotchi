@@ -1,15 +1,12 @@
 using HyperTamagotchi_MVC.Filters;
 using HyperTamagotchi_MVC.Models;
 using HyperTamagotchi_MVC.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace HyperTamagotchi_MVC.Controllers;
-public class HomeController(ApiServices api, ILogger<HomeController> logger) : BaseController(api)
+public class HomeController(ApiServices api) : BaseController(api)
 {
-    private readonly ILogger<HomeController> _logger = logger;
-
     public async Task<IActionResult> Index()
     {
         _api.EnsureJwtTokenIsAddedToRequest();
@@ -160,8 +157,7 @@ public class HomeController(ApiServices api, ILogger<HomeController> logger) : B
         return RedirectToAction("Index");
     }
     [HttpPost]
-    //[AuthorizeByRole("Admin", "Customer")]
-    [Authorize(Roles = "Admin, Customer")]
+    [AuthorizeByRole("Customer")]
     public IActionResult EmptyCart()
     {
         var shoppingCart = GetShoppingCartFromCookie();
