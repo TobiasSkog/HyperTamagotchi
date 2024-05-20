@@ -1,40 +1,53 @@
 ﻿using HyperTamagotchi_MVC.Data;
-using Microsoft.AspNetCore.Authorization;
+using HyperTamagotchi_MVC.Filters;
+using HyperTamagotchi_MVC.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace HyperTamagotchi_MVC.Controllers;
 
-[Authorize(Roles = "Admin")]
-public class DiscountController : Controller
+[AuthorizeByRole("Admin")]
+//[Authorize(Roles = "Admin")]
+
+public class DiscountController(ApiServices api) : Controller
 {
-    private readonly ApplicationDbContext _context;
+    private readonly ApiServices _api = api;
 
-    public DiscountController(ApplicationDbContext context)
-    {
-        _context = context;
-    }
-
+    [HttpGet]
     public async Task<IActionResult> Index()
     {
-        return View(await _context.ShoppingItems.ToListAsync());
+        _api.EnsureJwtTokenIsAddedToRequest();
+
+        return View(await _api.GetAllShoppingItemsAsync());
     }
 
-    public async Task<IActionResult> AddDiscountToShoppingItems(List<int> selectedShoppingItems, float discountValue)
+    [HttpPost]
+    public async Task<IActionResult> AddDiscountToShoppingItems(List<int> selectedShoppingItems, float? discountValue)
     {
-        float discountPercentage = DiscountConversionHelper.ConvertFromUserInputToShoppingItem(discountValue);
-        var foundShoppingItems = await _context.ShoppingItems
-            .Where(si => selectedShoppingItems.Contains(si.ShoppingItemId))
-            .ToListAsync();
 
-        foreach (var item in foundShoppingItems)
+        if (selectedShoppingItems == null || selectedShoppingItems.Count <= 0 || discountValue == null)
         {
-            item.Discount = discountPercentage;
-            _context.Update(item);
+            ModelState.AddModelError(string.Empty, "Invalid input.");
+            return RedirectToAction("Index");
         }
 
-        await _context.SaveChangesAsync();
+        if (selectedShoppingItems == null || selectedShoppingItems.Count <= 0)
+        {
+            ModelState.AddModelError(string.Empty, "No selected items.");
+            return RedirectToAction("Index");
+        }
+
+        float discountPercentage = DiscountConversionHelper.ConvertFromUserInputToShoppingItem((float)discountValue);
+
+        var success = await _api.UpdateDiscountToShoppingItems(selectedShoppingItems, discountPercentage);
+
+        if (!success)
+        {
+            await Console.Out.WriteLineAsync("Failed to update discount.");
+            ModelState.AddModelError(string.Empty, "Failed to update discount.");
+            return RedirectToAction("Index");
+        }
 
         return RedirectToAction("Index");
+
     }
 }

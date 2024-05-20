@@ -5,7 +5,7 @@
 }
 
 <h1>Discount</h1>
-<form asp-action="AddDiscountToShoppingItems">
+<form asp-controller="Discount" asp-action="AddDiscountToShoppingItems" method="post">
     <p>
         <input type="number" name="discountValue" min="0" max="100" />
     </p>
@@ -37,7 +37,7 @@
         <tbody>
             @foreach (var item in Model)
             {
-                string discountValue = item.Discount == 1 ? "No discount" : $"Discount {@HyperTamagotchi_MVC.Data.DiscountConversionHelper.ConvertFromShoppingItemToDiscountDisplayDiscount(item.Discount)}%";
+                string discountValue = item.Discount == 1 ? "No discount" : $"Discount {HyperTamagotchi_MVC.Helpers.DiscountConversionHelper.ConvertFromShoppingItemToDiscountDisplayDiscount(item.Discount)}%";
                 <tr>
                     <td>
                         <input type="checkbox" name="selectedShoppingItems" value="@item.ShoppingItemId" />

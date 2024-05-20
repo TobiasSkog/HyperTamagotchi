@@ -16,12 +16,8 @@ public class Customer : IdentityUser
     [DisplayName("Last Name")]
     public string LastName { get; set; }
 
-    public int AddressId { get; set; }
     public Address Address { get; set; }
-
-    public int ShoppingCartId { get; set; }
     public ShoppingCart ShoppingCart { get; set; }
-
     public ICollection<Order> Orders { get; set; } = [];
     public ICollection<Tamagotchi> Tamagotchis { get; set; } = [];
 }

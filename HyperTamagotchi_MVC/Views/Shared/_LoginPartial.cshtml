@@ -1,26 +1,49 @@
-﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 
-<ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
+@if (HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
 {
-    <li class="nav-item">
-        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
-    </li>
-    <li class="nav-item">
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-        </form>
+    int index = User.Identity.Name.IndexOf("@");
+    string userName = User.Identity.Name.Substring(0, index);
+    //string userName = @HttpContextAccessor.HttpContext.User.IsInRole("Admin") ? "Admin" : 
+
+    if (User.IsInRole("Admin"))
+    {
+        <partial name="_AdminPartial" />
+    }
+    else if (@User.IsInRole("Customer"))
+    {
+        <partial name="_ShoppingCartPartial" />
+    }
+
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="userAccountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-fill text-capitalize text-dark"> @userName</i>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end text-center" aria-labelledby="userAccountDropdown">
+            
+            @if(User.IsInRole("Customer"))
+            {
+                <li><a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Customer" asp-action="Order">Orders</a></li>
+            }
+
+            <form asp-controller="Account" asp-action="Logout" method="post" id="logoutForm">
+                <li>
+                <button type="submit" class="dropdown-item text-dark">Log out</button>
+                </li>
+            </form>
+        </ul>
     </li>
 }
 else
 {
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="userAccountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person text-capitalize text-dark"></i>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end text-center" aria-labelledby="userAccountDropdown">
+            <li><a class="dropdown-item text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a></li>
+            <li><a class="dropdown-item text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
+        </ul>
     </li>
 }
-</ul>

@@ -78,4 +78,16 @@ body {
   background-color: #E4E6EA !important;
 }
 
+/* Custom style to remove gutters */
+.no-gutters {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.no-gutters [class^="col-"],
+.no-gutters [class*=" col-"] {
+    padding-right: 0;
+    padding-left: 0;
+}
+
 /*# sourceMappingURL=site.css.map */
