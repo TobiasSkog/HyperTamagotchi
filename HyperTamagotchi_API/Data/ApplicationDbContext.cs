@@ -110,7 +110,7 @@ public class ApplicationDbContext : IdentityDbContext
             Price = 75.00f,
             CurrencyType = CurrencyType.SEK,
             Discount = 1.00f,
-            ImagePath = "Assets/ShoppingItem/FoodPack.png"
+            ImagePath = "Assets/ShoppingItem/Food_Pack.png"
         },
         new
         {
@@ -121,7 +121,7 @@ public class ApplicationDbContext : IdentityDbContext
             Price = 50.00f,
             CurrencyType = CurrencyType.SEK,
             Discount = 1.00f,
-            ImagePath = "Assets/ShoppingItem/WaterBottle.png"
+            ImagePath = "Assets/ShoppingItem/Water_Bottle.png"
         },
         new
         {
@@ -143,7 +143,7 @@ public class ApplicationDbContext : IdentityDbContext
             Price = 150.00f,
             CurrencyType = CurrencyType.SEK,
             Discount = 1.00f,
-            ImagePath = "Assets/ShoppingItem/ExerciseWheel.png"
+            ImagePath = "Assets/ShoppingItem/Exercise_Wheel.png"
         },
         new
         {
@@ -154,7 +154,7 @@ public class ApplicationDbContext : IdentityDbContext
             Price = 100.00f,
             CurrencyType = CurrencyType.SEK,
             Discount = 1.00f,
-            ImagePath = "Assets/ShoppingItem/CleaningKit.png"
+            ImagePath = "Assets/ShoppingItem/Cleaning_Kit.png"
         },
         new
         {
@@ -165,7 +165,7 @@ public class ApplicationDbContext : IdentityDbContext
             Price = 60.00f,
             CurrencyType = CurrencyType.SEK,
             Discount = 1.00f,
-            ImagePath = "Assets/ShoppingItem/ToySet.png"
+            ImagePath = "Assets/ShoppingItem/Toy_Set.png"
         },
         new
         {
@@ -176,7 +176,7 @@ public class ApplicationDbContext : IdentityDbContext
             Price = 90.00f,
             CurrencyType = CurrencyType.SEK,
             Discount = 1.00f,
-            ImagePath = "Assets/ShoppingItem/HealthSupplement.png"
+            ImagePath = "Assets/ShoppingItem/Health_Supplement.png"
         },
         new
         {
@@ -187,7 +187,7 @@ public class ApplicationDbContext : IdentityDbContext
             Price = 180.00f,
             CurrencyType = CurrencyType.SEK,
             Discount = 1.00f,
-            ImagePath = "Assets/ShoppingItem/TravelCarrier.png"
+            ImagePath = "Assets/ShoppingItem/Travel_Carrier.png"
         },
         new
         {
@@ -198,7 +198,7 @@ public class ApplicationDbContext : IdentityDbContext
             Price = 85.00f,
             CurrencyType = CurrencyType.SEK,
             Discount = 1.00f,
-            ImagePath = "Assets/ShoppingItem/BathKit.png"
+            ImagePath = "Assets/ShoppingItem/Bath_Kit.png"
         },
         new
         {
@@ -209,7 +209,7 @@ public class ApplicationDbContext : IdentityDbContext
             Price = 120.00f,
             CurrencyType = CurrencyType.SEK,
             Discount = 1.00f,
-            ImagePath = "Assets/ShoppingItem/FirstAidKit.png"
+            ImagePath = "Assets/ShoppingItem/First_Aid_Kit.png"
         },
         new
         {
@@ -220,7 +220,7 @@ public class ApplicationDbContext : IdentityDbContext
             Price = 110.00f,
             CurrencyType = CurrencyType.SEK,
             Discount = 1.00f,
-            ImagePath = "Assets/ShoppingItem/GroomingKit.png"
+            ImagePath = "Assets/ShoppingItem/Grooming_Kit.png"
         },
         new
         {
@@ -242,7 +242,7 @@ public class ApplicationDbContext : IdentityDbContext
             Price = 45.00f,
             CurrencyType = CurrencyType.SEK,
             Discount = 1.00f,
-            ImagePath = "Assets/ShoppingItem/FeedingDish.png"
+            ImagePath = "Assets/ShoppingItem/Feeding_Dish.png"
         },
         new
         {
@@ -253,7 +253,7 @@ public class ApplicationDbContext : IdentityDbContext
             Price = 55.00f,
             CurrencyType = CurrencyType.SEK,
             Discount = 1.00f,
-            ImagePath = "Assets/ShoppingItem/SunHat.png"
+            ImagePath = "Assets/ShoppingItem/Sun_Hat.png"
         },
         new
         {
@@ -264,7 +264,7 @@ public class ApplicationDbContext : IdentityDbContext
             Price = 35.00f,
             CurrencyType = CurrencyType.SEK,
             Discount = 1.00f,
-            ImagePath = "Assets/ShoppingItem/IdTag.png"
+            ImagePath = "Assets/ShoppingItem/Id_Tag.png"
         }
         );
         modelBuilder.Entity<Tamagotchi>().HasData(

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HyperTamagotchi_API.Migrations
 {
     /// <inheritdoc />
-    public partial class mssqllocal_migration_619 : Migration
+    public partial class mssqllocal_migration_978 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -318,8 +318,8 @@ namespace HyperTamagotchi_API.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "2c624260-9450-4d5b-b054-bd0bc68ef92d", null, "Customer", "CUSTOMER" },
-                    { "3912e03b-215f-4005-a958-1da4fcf4483a", null, "Admin", "ADMIN" }
+                    { "067028e6-3218-4632-9086-6e5a3eac11a3", null, "Admin", "ADMIN" },
+                    { "0793c5be-2c8a-4aee-abe9-97127838911f", null, "Customer", "CUSTOMER" }
                 });
 
             migrationBuilder.InsertData(
@@ -336,21 +336,21 @@ namespace HyperTamagotchi_API.Migrations
                 columns: new[] { "ShoppingItemId", "CurrencyType", "Description", "Discount", "Discriminator", "ImagePath", "Name", "Price", "Quantity", "Stock" },
                 values: new object[,]
                 {
-                    { 1, "SEK", "Nutritious food pack to keep your Tamagotchi healthy and happy.", 1f, "ShoppingItem", "FoodPack.png", "Tamagotchi Food Pack", 75f, null, (byte)200 },
-                    { 2, "SEK", "Portable water bottle to keep your Tamagotchi hydrated.", 1f, "ShoppingItem", "WaterBottle.png", "Tamagotchi Water Bottle", 50f, null, (byte)150 },
-                    { 3, "SEK", "Cozy bed for your Tamagotchi to sleep and rest comfortably.", 1f, "ShoppingItem", "Bed.png", "Tamagotchi Bed", 200f, null, (byte)100 },
-                    { 4, "SEK", "Fun exercise wheel to keep your Tamagotchi active and fit.", 1f, "ShoppingItem", "ExerciseWheel.png", "Tamagotchi Exercise Wheel", 150f, null, (byte)120 },
-                    { 5, "SEK", "Essential cleaning kit to maintain your Tamagotchi's hygiene.", 1f, "ShoppingItem", "CleaningKit.png", "Tamagotchi Cleaning Kit", 100f, null, (byte)80 },
-                    { 6, "SEK", "A set of fun toys to entertain your Tamagotchi.", 1f, "ShoppingItem", "ToySet.png", "Tamagotchi Toy Set", 60f, null, (byte)170 },
-                    { 7, "SEK", "Vitamins and supplements for your Tamagotchi's wellbeing.", 1f, "ShoppingItem", "HealthSupplement.png", "Tamagotchi Health Supplement", 90f, null, (byte)130 },
-                    { 8, "SEK", "Convenient carrier for traveling with your Tamagotchi safely.", 1f, "ShoppingItem", "TravelCarrier.png", "Tamagotchi Travel Carrier", 180f, null, (byte)90 },
-                    { 9, "SEK", "Complete bath kit to keep your Tamagotchi clean and fresh.", 1f, "ShoppingItem", "BathKit.png", "Tamagotchi Bath Kit", 85f, null, (byte)110 },
-                    { 10, "SEK", "Essential first aid items for your Tamagotchi's minor injuries.", 1f, "ShoppingItem", "FirstAidKit.png", "Tamagotchi First Aid Kit", 120f, null, (byte)75 },
-                    { 11, "SEK", "Comprehensive grooming kit for your Tamagotchi's fur and nails.", 1f, "ShoppingItem", "GroomingKit.png", "Tamagotchi Grooming Kit", 110f, null, (byte)95 },
-                    { 12, "SEK", "Soft and warm blanket for your Tamagotchi to snuggle in.", 1f, "ShoppingItem", "Blanket.png", "Tamagotchi Blanket", 70f, null, (byte)140 },
-                    { 13, "SEK", "Stylish feeding dish perfect for serving Tamagotchi meals.", 1f, "ShoppingItem", "FeedingDish.png", "Tamagotchi Feeding Dish", 45f, null, (byte)160 },
-                    { 14, "SEK", "Adorable sun hat to protect your Tamagotchi from the sun.", 1f, "ShoppingItem", "SunHat.png", "Tamagotchi Sun Hat", 55f, null, (byte)180 },
-                    { 15, "SEK", "Personalized ID tag with your Tamagotchi’s name and info.", 1f, "ShoppingItem", "IdTag.png", "Tamagotchi ID Tag", 35f, null, (byte)200 }
+                    { 1, "SEK", "Nutritious food pack to keep your Tamagotchi healthy and happy.", 1f, "ShoppingItem", "Assets/ShoppingItem/Food_Pack.png", "Tamagotchi Food Pack", 75f, null, (byte)200 },
+                    { 2, "SEK", "Portable water bottle to keep your Tamagotchi hydrated.", 1f, "ShoppingItem", "Assets/ShoppingItem/Water_Bottle.png", "Tamagotchi Water Bottle", 50f, null, (byte)150 },
+                    { 3, "SEK", "Cozy bed for your Tamagotchi to sleep and rest comfortably.", 1f, "ShoppingItem", "Assets/ShoppingItem/Bed.png", "Tamagotchi Bed", 200f, null, (byte)100 },
+                    { 4, "SEK", "Fun exercise wheel to keep your Tamagotchi active and fit.", 1f, "ShoppingItem", "Assets/ShoppingItem/Exercise_Wheel.png", "Tamagotchi Exercise Wheel", 150f, null, (byte)120 },
+                    { 5, "SEK", "Essential cleaning kit to maintain your Tamagotchi's hygiene.", 1f, "ShoppingItem", "Assets/ShoppingItem/Cleaning_Kit.png", "Tamagotchi Cleaning Kit", 100f, null, (byte)80 },
+                    { 6, "SEK", "A set of fun toys to entertain your Tamagotchi.", 1f, "ShoppingItem", "Assets/ShoppingItem/Toy_Set.png", "Tamagotchi Toy Set", 60f, null, (byte)170 },
+                    { 7, "SEK", "Vitamins and supplements for your Tamagotchi's wellbeing.", 1f, "ShoppingItem", "Assets/ShoppingItem/Health_Supplement.png", "Tamagotchi Health Supplement", 90f, null, (byte)130 },
+                    { 8, "SEK", "Convenient carrier for traveling with your Tamagotchi safely.", 1f, "ShoppingItem", "Assets/ShoppingItem/Travel_Carrier.png", "Tamagotchi Travel Carrier", 180f, null, (byte)90 },
+                    { 9, "SEK", "Complete bath kit to keep your Tamagotchi clean and fresh.", 1f, "ShoppingItem", "Assets/ShoppingItem/Bath_Kit.png", "Tamagotchi Bath Kit", 85f, null, (byte)110 },
+                    { 10, "SEK", "Essential first aid items for your Tamagotchi's minor injuries.", 1f, "ShoppingItem", "Assets/ShoppingItem/First_Aid_Kit.png", "Tamagotchi First Aid Kit", 120f, null, (byte)75 },
+                    { 11, "SEK", "Comprehensive grooming kit for your Tamagotchi's fur and nails.", 1f, "ShoppingItem", "Assets/ShoppingItem/Grooming_Kit.png", "Tamagotchi Grooming Kit", 110f, null, (byte)95 },
+                    { 12, "SEK", "Soft and warm blanket for your Tamagotchi to snuggle in.", 1f, "ShoppingItem", "Assets/ShoppingItem/Blanket.png", "Tamagotchi Blanket", 70f, null, (byte)140 },
+                    { 13, "SEK", "Stylish feeding dish perfect for serving Tamagotchi meals.", 1f, "ShoppingItem", "Assets/ShoppingItem/Feeding_Dish.png", "Tamagotchi Feeding Dish", 45f, null, (byte)160 },
+                    { 14, "SEK", "Adorable sun hat to protect your Tamagotchi from the sun.", 1f, "ShoppingItem", "Assets/ShoppingItem/Sun_Hat.png", "Tamagotchi Sun Hat", 55f, null, (byte)180 },
+                    { 15, "SEK", "Personalized ID tag with your Tamagotchi’s name and info.", 1f, "ShoppingItem", "Assets/ShoppingItem/Id_Tag.png", "Tamagotchi ID Tag", 35f, null, (byte)200 }
                 });
 
             migrationBuilder.InsertData(
@@ -383,8 +383,8 @@ namespace HyperTamagotchi_API.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "AddressId", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "ShoppingCartId", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "22cfebc1-8d94-4a10-9b98-507770279c32", 0, 2, "7870a1da-d410-4d82-bab1-c9057194c4f9", "Customer", "tobias@gmail.com", true, "Tobias", "Skog", true, null, "TOBIAS@GMAIL.COM", "TOBIAS@GMAIL.COM", "AQAAAAIAAYagAAAAEHB/Di4M5U7pS3rzBi/ZLRr+0ignhdsGDMGKtBg6kKu+K3ftL0ntWrozll6OtYkufA==", "1234567890", true, "0aab90db-c2fb-4c60-906b-3ddc1b9b42d7", 2, false, "tobias@gmail.com" },
-                    { "6fc86bac-8833-46fe-9400-b594bc9f6d3f", 0, 1, "7399d232-1252-4065-aff3-ccd38596fe64", "Customer", "admin@gmail.com", true, "Admin", "Adminsson", true, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAIAAYagAAAAEEQN7oRGoEf2F2iV2BoTUoMBbs0JNIerdau0+L2YMCkZZjmjZ8Z8O2te5u1JVa5zkg==", "1234567890", true, "6f1c62c6-678b-4713-827a-2d75f19405b9", 1, false, "admin@gmail.com" }
+                    { "43218869-d83d-4e9c-b19e-c1adc1da1453", 0, 1, "3d6ca0b4-edbc-42bd-a5eb-a01dd832c53c", "Customer", "admin@gmail.com", true, "Admin", "Adminsson", true, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAIAAYagAAAAENuyISfxmJLMxvqV4oWfz/Hs1eJE7P0yGv54CmTSS30UgPpSUUWmsl5WqpysUn/fpw==", "1234567890", true, "5ba17ede-a0a4-4a0f-bd86-2ec376d8dddd", 1, false, "admin@gmail.com" },
+                    { "fdd69357-45d0-4f57-a4ed-555d7e5df98b", 0, 2, "466aa377-7c7c-474e-b394-3f606f12b945", "Customer", "tobias@gmail.com", true, "Tobias", "Skog", true, null, "TOBIAS@GMAIL.COM", "TOBIAS@GMAIL.COM", "AQAAAAIAAYagAAAAELNbfVTKMC+jO+jAaptTrU4T8ueshg7WUx4zG4073CxpgZ+fZjiNccWN5s2H9KvZpA==", "1234567890", true, "8b374c31-14de-4361-8f2f-767d0e11f586", 2, false, "tobias@gmail.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -392,8 +392,8 @@ namespace HyperTamagotchi_API.Migrations
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { "2c624260-9450-4d5b-b054-bd0bc68ef92d", "22cfebc1-8d94-4a10-9b98-507770279c32" },
-                    { "3912e03b-215f-4005-a958-1da4fcf4483a", "6fc86bac-8833-46fe-9400-b594bc9f6d3f" }
+                    { "067028e6-3218-4632-9086-6e5a3eac11a3", "43218869-d83d-4e9c-b19e-c1adc1da1453" },
+                    { "0793c5be-2c8a-4aee-abe9-97127838911f", "fdd69357-45d0-4f57-a4ed-555d7e5df98b" }
                 });
 
             migrationBuilder.CreateIndex(

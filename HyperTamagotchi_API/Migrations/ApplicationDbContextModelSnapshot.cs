@@ -177,7 +177,7 @@ namespace HyperTamagotchi_API.Migrations
                             CurrencyType = "SEK",
                             Description = "Nutritious food pack to keep your Tamagotchi healthy and happy.",
                             Discount = 1f,
-                            ImagePath = "Assets/ShoppingItem/FoodPack.png",
+                            ImagePath = "Assets/ShoppingItem/Food_Pack.png",
                             Name = "Tamagotchi Food Pack",
                             Price = 75f,
                             Stock = (byte)200
@@ -188,7 +188,7 @@ namespace HyperTamagotchi_API.Migrations
                             CurrencyType = "SEK",
                             Description = "Portable water bottle to keep your Tamagotchi hydrated.",
                             Discount = 1f,
-                            ImagePath = "Assets/ShoppingItem/WaterBottle.png",
+                            ImagePath = "Assets/ShoppingItem/Water_Bottle.png",
                             Name = "Tamagotchi Water Bottle",
                             Price = 50f,
                             Stock = (byte)150
@@ -210,7 +210,7 @@ namespace HyperTamagotchi_API.Migrations
                             CurrencyType = "SEK",
                             Description = "Fun exercise wheel to keep your Tamagotchi active and fit.",
                             Discount = 1f,
-                            ImagePath = "Assets/ShoppingItem/ExerciseWheel.png",
+                            ImagePath = "Assets/ShoppingItem/Exercise_Wheel.png",
                             Name = "Tamagotchi Exercise Wheel",
                             Price = 150f,
                             Stock = (byte)120
@@ -221,7 +221,7 @@ namespace HyperTamagotchi_API.Migrations
                             CurrencyType = "SEK",
                             Description = "Essential cleaning kit to maintain your Tamagotchi's hygiene.",
                             Discount = 1f,
-                            ImagePath = "Assets/ShoppingItem/CleaningKit.png",
+                            ImagePath = "Assets/ShoppingItem/Cleaning_Kit.png",
                             Name = "Tamagotchi Cleaning Kit",
                             Price = 100f,
                             Stock = (byte)80
@@ -232,7 +232,7 @@ namespace HyperTamagotchi_API.Migrations
                             CurrencyType = "SEK",
                             Description = "A set of fun toys to entertain your Tamagotchi.",
                             Discount = 1f,
-                            ImagePath = "Assets/ShoppingItem/ToySet.png",
+                            ImagePath = "Assets/ShoppingItem/Toy_Set.png",
                             Name = "Tamagotchi Toy Set",
                             Price = 60f,
                             Stock = (byte)170
@@ -243,7 +243,7 @@ namespace HyperTamagotchi_API.Migrations
                             CurrencyType = "SEK",
                             Description = "Vitamins and supplements for your Tamagotchi's wellbeing.",
                             Discount = 1f,
-                            ImagePath = "Assets/ShoppingItem/HealthSupplement.png",
+                            ImagePath = "Assets/ShoppingItem/Health_Supplement.png",
                             Name = "Tamagotchi Health Supplement",
                             Price = 90f,
                             Stock = (byte)130
@@ -254,7 +254,7 @@ namespace HyperTamagotchi_API.Migrations
                             CurrencyType = "SEK",
                             Description = "Convenient carrier for traveling with your Tamagotchi safely.",
                             Discount = 1f,
-                            ImagePath = "Assets/ShoppingItem/TravelCarrier.png",
+                            ImagePath = "Assets/ShoppingItem/Travel_Carrier.png",
                             Name = "Tamagotchi Travel Carrier",
                             Price = 180f,
                             Stock = (byte)90
@@ -265,7 +265,7 @@ namespace HyperTamagotchi_API.Migrations
                             CurrencyType = "SEK",
                             Description = "Complete bath kit to keep your Tamagotchi clean and fresh.",
                             Discount = 1f,
-                            ImagePath = "Assets/ShoppingItem/BathKit.png",
+                            ImagePath = "Assets/ShoppingItem/Bath_Kit.png",
                             Name = "Tamagotchi Bath Kit",
                             Price = 85f,
                             Stock = (byte)110
@@ -276,7 +276,7 @@ namespace HyperTamagotchi_API.Migrations
                             CurrencyType = "SEK",
                             Description = "Essential first aid items for your Tamagotchi's minor injuries.",
                             Discount = 1f,
-                            ImagePath = "Assets/ShoppingItem/FirstAidKit.png",
+                            ImagePath = "Assets/ShoppingItem/First_Aid_Kit.png",
                             Name = "Tamagotchi First Aid Kit",
                             Price = 120f,
                             Stock = (byte)75
@@ -287,7 +287,7 @@ namespace HyperTamagotchi_API.Migrations
                             CurrencyType = "SEK",
                             Description = "Comprehensive grooming kit for your Tamagotchi's fur and nails.",
                             Discount = 1f,
-                            ImagePath = "Assets/ShoppingItem/GroomingKit.png",
+                            ImagePath = "Assets/ShoppingItem/Grooming_Kit.png",
                             Name = "Tamagotchi Grooming Kit",
                             Price = 110f,
                             Stock = (byte)95
@@ -309,7 +309,7 @@ namespace HyperTamagotchi_API.Migrations
                             CurrencyType = "SEK",
                             Description = "Stylish feeding dish perfect for serving Tamagotchi meals.",
                             Discount = 1f,
-                            ImagePath = "Assets/ShoppingItem/FeedingDish.png",
+                            ImagePath = "Assets/ShoppingItem/Feeding_Dish.png",
                             Name = "Tamagotchi Feeding Dish",
                             Price = 45f,
                             Stock = (byte)160
@@ -320,7 +320,7 @@ namespace HyperTamagotchi_API.Migrations
                             CurrencyType = "SEK",
                             Description = "Adorable sun hat to protect your Tamagotchi from the sun.",
                             Discount = 1f,
-                            ImagePath = "Assets/ShoppingItem/SunHat.png",
+                            ImagePath = "Assets/ShoppingItem/Sun_Hat.png",
                             Name = "Tamagotchi Sun Hat",
                             Price = 55f,
                             Stock = (byte)180
@@ -331,7 +331,7 @@ namespace HyperTamagotchi_API.Migrations
                             CurrencyType = "SEK",
                             Description = "Personalized ID tag with your Tamagotchi’s name and info.",
                             Discount = 1f,
-                            ImagePath = "Assets/ShoppingItem/IdTag.png",
+                            ImagePath = "Assets/ShoppingItem/Id_Tag.png",
                             Name = "Tamagotchi ID Tag",
                             Price = 35f,
                             Stock = (byte)200
@@ -397,13 +397,13 @@ namespace HyperTamagotchi_API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "ca0afdb9-5a34-414f-b222-62222a2efa92",
+                            Id = "067028e6-3218-4632-9086-6e5a3eac11a3",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "933b9343-1b47-41be-963b-fa91ece9b165",
+                            Id = "0793c5be-2c8a-4aee-abe9-97127838911f",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         });
@@ -572,13 +572,13 @@ namespace HyperTamagotchi_API.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "5cc5ae32-47b2-407c-a746-ca2cf43e617b",
-                            RoleId = "ca0afdb9-5a34-414f-b222-62222a2efa92"
+                            UserId = "43218869-d83d-4e9c-b19e-c1adc1da1453",
+                            RoleId = "067028e6-3218-4632-9086-6e5a3eac11a3"
                         },
                         new
                         {
-                            UserId = "91949caf-a550-4a1b-ae17-b92a86aebdd2",
-                            RoleId = "933b9343-1b47-41be-963b-fa91ece9b165"
+                            UserId = "fdd69357-45d0-4f57-a4ed-555d7e5df98b",
+                            RoleId = "0793c5be-2c8a-4aee-abe9-97127838911f"
                         });
                 });
 
@@ -947,18 +947,18 @@ namespace HyperTamagotchi_API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5cc5ae32-47b2-407c-a746-ca2cf43e617b",
+                            Id = "43218869-d83d-4e9c-b19e-c1adc1da1453",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6f9b307c-4b52-4fd2-9fd0-8b2b7c1049b2",
+                            ConcurrencyStamp = "3d6ca0b4-edbc-42bd-a5eb-a01dd832c53c",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = true,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFoPvE47dhvMzAfmGwYpegGegdbJL4tmxqkFx+R2KQak66VZqgpwwrvG1C/FIoyM/Q==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENuyISfxmJLMxvqV4oWfz/Hs1eJE7P0yGv54CmTSS30UgPpSUUWmsl5WqpysUn/fpw==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "6b0086bc-df97-4fd4-a285-33959f7a8a55",
+                            SecurityStamp = "5ba17ede-a0a4-4a0f-bd86-2ec376d8dddd",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com",
                             AddressId = 1,
@@ -968,18 +968,18 @@ namespace HyperTamagotchi_API.Migrations
                         },
                         new
                         {
-                            Id = "91949caf-a550-4a1b-ae17-b92a86aebdd2",
+                            Id = "fdd69357-45d0-4f57-a4ed-555d7e5df98b",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c7ce428d-08c7-4117-a881-79e97f40ef5c",
+                            ConcurrencyStamp = "466aa377-7c7c-474e-b394-3f606f12b945",
                             Email = "tobias@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = true,
                             NormalizedEmail = "TOBIAS@GMAIL.COM",
                             NormalizedUserName = "TOBIAS@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEGQ4qJficF9XIE0Vv6zEqiv0NbzzsjTGGOg7fA+fUVp7m0Jb9gzZff/vEEdRRnmflw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELNbfVTKMC+jO+jAaptTrU4T8ueshg7WUx4zG4073CxpgZ+fZjiNccWN5s2H9KvZpA==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "5b045c63-4233-44b3-bc4c-644b5a57a5b2",
+                            SecurityStamp = "8b374c31-14de-4361-8f2f-767d0e11f586",
                             TwoFactorEnabled = false,
                             UserName = "tobias@gmail.com",
                             AddressId = 2,
