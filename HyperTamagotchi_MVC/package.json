@@ -1,19 +1,18 @@
 {
-	"name": "hypertamagotchi_mvc",
-	"version": "1.0.0",
-	"description": "",
-	"main": "index.js",
-	"scripts": {
-		"build-css": "sass wwwroot/scss/custom.scss wwwroot/css/site.css",
-		"watch-css": "sass --watch wwwroot/scss/custom.scss:wwwroot/css/site.css",
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
-	"dependencies": {
-		"bootstrap": "^5.3.0",
-		"bootstrap-icons": "^1.11.3",
-		"sass": "^1.77.1"
-	}
+  "name": "hypertamagotchi_mvc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build-css": "sass wwwroot/scss/custom.scss wwwroot/css/site.css",
+    "watch-css": "sass --watch wwwroot/scss/custom.scss:wwwroot/css/site.css",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^5.3.0",
+    "sass": "^1.77.1"
+  }
 }
