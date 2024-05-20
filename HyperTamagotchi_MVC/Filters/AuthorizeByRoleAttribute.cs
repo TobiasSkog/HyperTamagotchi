@@ -13,12 +13,11 @@ public class AuthorizeByRoleAttribute(params string[] roles) : ActionFilterAttri
 
         if (!user.Identity.IsAuthenticated || !_allowedRoles.Any(role => user.IsInRole(role)))
         {
-            context.Result = new RedirectResult("/Account/AccessDenied");//new ForbidResult(); // Or Redirect to unauthorized page
+            context.Result = new RedirectResult("/Account/AccessDenied");
         }
         else
         {
             await next();
         }
     }
-
 }

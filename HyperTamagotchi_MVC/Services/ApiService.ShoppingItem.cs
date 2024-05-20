@@ -18,7 +18,7 @@ public partial class ApiServices
         return shoppingItems!;
     }
 
-    public async Task<ShoppingItem> GetShoppingItem(int? id)
+    public async Task<ShoppingItem> GetShoppingItemByIdAsync(int? id)
     {
         var response = await _client.GetAsync($"api/ShoppingItem/{id}");
         if (!response.IsSuccessStatusCode)
@@ -28,6 +28,7 @@ public partial class ApiServices
 
         var jsonResponse = await response.Content.ReadAsStringAsync();
         var shoppingItem = JsonConvert.DeserializeObject<ShoppingItem>(jsonResponse);
+
         return shoppingItem!;
     }
 }

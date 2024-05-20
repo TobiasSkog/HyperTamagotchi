@@ -44,9 +44,6 @@ public class ShoppingItem
 
     // Shopping Cart specifics
     [Range(0, 256, ErrorMessage = "Quantity must be between 0 and 256")]
-    public byte? Quantity { get; set; }
-    public ICollection<ShoppingItemShoppingCart> Items { get; set; } = [];
+    public byte? Quantity { get; set; } = (byte)0;
 
-    // Navigation to order
-    public ICollection<ShoppingItemOrder> Orders { get; set; } = [];
 }

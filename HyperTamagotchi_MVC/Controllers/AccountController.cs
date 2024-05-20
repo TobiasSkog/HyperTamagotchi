@@ -2,17 +2,12 @@
 using HyperTamagotchi_MVC.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HyperTamagotchi_MVC.Controllers;
-public class AccountController : Controller
+public class AccountController(ApiServices api) : Controller
 {
-    private readonly ApiServices _api;
-    public AccountController(ApiServices api)
-    {
-        _api = api;
-    }
+    private readonly ApiServices _api = api;
 
     [HttpGet]
     public IActionResult Login()
@@ -33,7 +28,7 @@ public class AccountController : Controller
             }
             ModelState.AddModelError(string.Empty, "Invalid login attempt.");
         }
-
+        _api.EnsureJwtTokenIsAddedToRequest();
         return View(loginRequest);
     }
 
@@ -59,12 +54,15 @@ public class AccountController : Controller
         return View(registerRequest);
     }
 
+    //[HttpGet]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()
     {
         // Remove the JWT token from cookies
         Response.Cookies.Delete("jwtToken");
+        Response.Cookies.Delete("ShoppingCart");
+        Response.Cookies.Delete(".AspNetCore.Identity.Application");
 
         // Sign out the user
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -74,7 +72,6 @@ public class AccountController : Controller
 
 
     //Can be removed, just a simple way to debug to see what Claims the current user have
-    [Authorize]
     public IActionResult Claims()
     {
         var claims = User.Claims.Select(c => new { c.Type, c.Value }).ToList();

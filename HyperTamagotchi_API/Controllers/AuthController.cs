@@ -102,7 +102,7 @@ public class AuthController(
             return Unauthorized();
         }
 
-        var token = _jwtService.CreateJWTToken(user, [.. roles]);
+        var token = _jwtService.CreateJWTToken(user, [.. roles], loginRequestDto.RememberMe);
 
         var response = new LoginResponseDto
         {

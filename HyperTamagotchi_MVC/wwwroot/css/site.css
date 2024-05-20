@@ -1,22 +1,31 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
 body {
-  margin-bottom: 60px;
+  background-color: #F9E8D3;
+  color: #030303;
 }
+
+.navbar-custom {
+  background-color: #FFFFFF;
+  color: #030303;
+}
+
+.btn-primary {
+  background-color: #F99E2F;
+  color: #FFFFFF;
+}
+
+.btn-secondary {
+  background-color: #E4E6EA;
+  color: #030303;
+}
+
+.no-gutters {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.no-gutters [class^="col-"],
+.no-gutters [class*=" col-"] {
+    padding-right: 0;
+    padding-left: 0;
+}
+/*# sourceMappingURL=site.css.map */

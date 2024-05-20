@@ -5,7 +5,7 @@
 }
 
 <h1>Discount</h1>
-<form asp-action="AddDiscountToShoppingItems">
+<form asp-controller="Discount" asp-action="AddDiscountToShoppingItems" method="post">
     <p>
         <input type="number" name="discountValue" min="0" max="100" />
     </p>

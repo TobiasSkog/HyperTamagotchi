@@ -1,17 +1,40 @@
-﻿namespace HyperTamagotchi_MVC.Services;
+﻿using HyperTamagotchi_MVC.Filters;
+using Microsoft.AspNetCore.Mvc;
 
-//[AuthorizeByRole("Admin")]
+namespace HyperTamagotchi_MVC.Services;
+
+
+[AuthorizeByRole("Admin")]
+//[Authorize(Roles = "Admin")]
+
 public partial class ApiServices
 {
-    //public string Edit()
-    //{
-    //    var userPermission = IsUserInRole("Admin");
 
-    //    if (!string.IsNullOrEmpty(userPermission))
-    //    {
-    //        return userPermission;
-    //    }
+    [HttpPost]
+    public async Task<bool> UpdateDiscountToShoppingItems(List<int> selectedShoppingItems, float discountPercentage)
+    {
 
-    //    return "";
-    //}
+
+        var dto = new
+        {
+            SelectedShoppingItems = selectedShoppingItems,
+            DiscountPercentage = discountPercentage
+        };
+        var abo = _client.DefaultRequestHeaders;
+        var response = await _client.PostAsJsonAsync($"api/Admin/AddDiscountToShoppingItems", dto);
+
+        return response.IsSuccessStatusCode;
+    }
 }
+
+//public string Edit()
+//{
+//    var userPermission = IsUserInRole("Admin");
+
+//    if (!string.IsNullOrEmpty(userPermission))
+//    {
+//        return userPermission;
+//    }
+
+//    return "";
+//}

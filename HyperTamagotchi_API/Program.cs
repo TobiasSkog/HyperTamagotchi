@@ -1,4 +1,5 @@
 using HyperTamagotchi_API.Data;
+using HyperTamagotchi_API.Mapper;
 using HyperTamagotchi_API.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -21,7 +22,7 @@ public class Program
         builder.Services.AddControllers();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddEndpointsApiExplorer();
-
+        builder.Services.AddAutoMapper(typeof(ShoppingCartProfile));
 
         builder.Services.AddSwaggerGen(options =>
         {
@@ -74,25 +75,22 @@ public class Program
                 });
         });
 
-        builder.Services.AddAuthentication(options =>
-        {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddJwtBearer(options =>
-        {
-            options.TokenValidationParameters = new TokenValidationParameters
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
             {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                ValidAudience = builder.Configuration["Jwt:Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
-            };
-        });
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                };
+            });
         builder.Services.AddAuthorization();
+
 
         var app = builder.Build();
 
@@ -114,6 +112,8 @@ public class Program
         app.UseAuthorization();
 
         app.MapControllers();
+
+        // app.UseDebugRequestHeadersMiddleware();
 
         app.Run();
     }

@@ -1,21 +1,17 @@
-﻿using HyperTamagotchi_MVC.Filters;
-using HyperTamagotchi_MVC.Services;
+﻿using HyperTamagotchi_MVC.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HyperTamagotchi_MVC.Controllers;
 
-[AuthorizeByRole("Admin")]
-public class ShoppingItemsController : Controller
-{
-    private readonly ApiServices _api;
-    public ShoppingItemsController(ApiServices api)
-    {
-        _api = api;
-    }
 
+public class ShoppingItemsController(ApiServices api) : Controller
+{
+    private readonly ApiServices _api = api;
 
     public async Task<IActionResult> Index()
     {
+        _api.EnsureJwtTokenIsAddedToRequest();
+
         return View(await _api.GetAllShoppingItemsAsync());
     }
 
@@ -27,7 +23,7 @@ public class ShoppingItemsController : Controller
             return NotFound();
         }
 
-        return View(await _api.GetShoppingItem(id));
+        return View(await _api.GetShoppingItemByIdAsync(id));
     }
 
     //// GET: ShoppingItems/Create

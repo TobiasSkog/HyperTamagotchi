@@ -9,6 +9,7 @@ public partial class ApiServices
     [ValidateAntiForgeryToken]
     public async Task<bool> LoginAsync(string username, string password, bool rememberMe)
     {
+        var _client = _httpClientFactory.CreateClient("API Tamagotchi");
         var response = await _client.PostAsJsonAsync("api/Auth/Login", new LoginRequestDto { Username = username, Password = password, RememberMe = rememberMe });
 
         if (response.IsSuccessStatusCode)
@@ -18,22 +19,23 @@ public partial class ApiServices
 
             if (loginResponse != null && !string.IsNullOrEmpty(loginResponse.AccessToken))
             {
-                var cookieOptions = new CookieOptions
-                {
-                    HttpOnly = true,
-                    Expires = rememberMe ? DateTime.Now.AddDays(30) : DateTime.Now.AddMinutes(30)
-                };
-
-                _contextAccessor.HttpContext!.Response.Cookies.Append("jwtToken", loginResponse.AccessToken, cookieOptions);
 
                 var principal = _jwtValidator.ValidateToken(loginResponse.AccessToken);
 
-                if (principal != null)
+                if (principal == null)
                 {
-                    _contextAccessor.HttpContext.User = principal;
+                    return false;
                 }
 
-                AddJwtTokenToRequest();
+                _contextAccessor.HttpContext.User = principal;
+
+                //var shoppingCartIdClaim = principal.Claims.FirstOrDefault(c => c.Type == CustomClaimShoppingCart.ClaimName);
+                AppendCookie("jwtToken", loginResponse.AccessToken, rememberMe);
+                AddJwtTokenToRequest(loginResponse.AccessToken);
+
+                var shoppingCart = await GetShoppingCartById();
+                var shoppingCartJson = JsonConvert.SerializeObject(shoppingCart);
+                AppendCookie("ShoppingCart", shoppingCartJson, rememberMe);
 
                 return true;
             }
@@ -41,6 +43,10 @@ public partial class ApiServices
 
         return false;
     }
+
+
+
+
     [ValidateAntiForgeryToken]
     public async Task<bool> RegisterAsync(string password, string confirmPassword, string email, string firstName, string lastName, string streetAddress, string city, string zipCode)
     {
@@ -60,8 +66,5 @@ public partial class ApiServices
         var response = await _client.PostAsJsonAsync("api/Auth/Register", payload);
         return response.IsSuccessStatusCode;
     }
-    private class ApiToken
-    {
-        public string AccessToken { get; set; }
-    }
+
 }

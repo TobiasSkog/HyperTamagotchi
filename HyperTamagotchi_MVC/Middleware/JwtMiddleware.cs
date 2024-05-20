@@ -23,7 +23,6 @@ public class JwtMiddleware(RequestDelegate next)
     }
 }
 
-// Extension method to add the middleware to the pipeline
 public static class JwtMiddlewareExtensions
 {
     public static IApplicationBuilder UseJwtMiddleware(this IApplicationBuilder builder)

@@ -3,8 +3,5 @@
 public class ShoppingCart
 {
     public int ShoppingCartId { get; set; }
-
-    public Customer Customer { get; set; }
-
-    public ICollection<ShoppingItem> Items { get; set; } = [];
+    public List<ShoppingItem> ShoppingItems { get; set; } = [];
 }
