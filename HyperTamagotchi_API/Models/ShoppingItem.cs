@@ -12,7 +12,7 @@ public class ShoppingItem
     [Required]
     [StringLength(50, MinimumLength = 1, ErrorMessage = "Item name must be between 1 and 50 characters")]
     [DisplayName("Product Name")]
-    public virtual string Name { get; set; }
+    public string Name { get; set; }
 
 
     [StringLength(100, MinimumLength = 0, ErrorMessage = "Description can maximum be of 100 characters")]

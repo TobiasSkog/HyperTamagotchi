@@ -6,10 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace HyperTamagotchi_MVC.Controllers;
 
 [AuthorizeByRole("Admin")]
-public class DiscountController(ApiServices api, ILogger<DiscountController> logger) : Controller
+public class DiscountController(ApiServices api) : Controller
 {
     private readonly ApiServices _api = api;
-    private readonly ILogger<DiscountController> _logger = logger;
 
     [HttpGet]
     public async Task<IActionResult> Index()

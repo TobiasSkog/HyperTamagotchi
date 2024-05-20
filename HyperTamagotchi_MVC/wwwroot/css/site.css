@@ -9,6 +9,7 @@ body {
   display: flex;
   flex-direction: column;
   color: #030303;
+  height: auto;
 }
 
 .header, .footer {

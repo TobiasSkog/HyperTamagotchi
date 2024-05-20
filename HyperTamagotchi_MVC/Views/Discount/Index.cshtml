@@ -1,6 +1,103 @@
 ﻿@model IEnumerable<HyperTamagotchi_MVC.Models.ShoppingItem>
 
 @{
+    ViewData["Title"] = "Discount";
+}
+
+<div class="container mt-5">
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <h1 class="text-center">Discount</h1>
+        </div>
+    </div>
+    <form asp-controller="Discount" asp-action="AddDiscountToShoppingItems" method="post">
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <input type="number" name="discountValue" class="form-control" min="0" max="100" placeholder="Enter discount value" />
+            </div>
+            <div class="col-md-6 text-right">
+                <button type="submit" class="btn btn-primary">Update Discounts</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-hover table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th></th>
+                            <th>Product</th>
+                            <th>@Html.DisplayNameFor(model => model.Name)</th>
+                            <th>@Html.DisplayNameFor(model => model.Description)</th>
+                            <th>@Html.DisplayNameFor(model => model.Stock)</th>
+                            <th>@Html.DisplayNameFor(model => model.Price)</th>
+                            <th>@Html.DisplayNameFor(model => model.CurrencyType)</th>
+                            <th>@Html.DisplayNameFor(model => model.Discount)</th>
+                            <th>Discounted Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            string discountValue = item.Discount == 1 ? "No discount" : $"Discount {HyperTamagotchi_MVC.Helpers.DiscountConversionHelper.ConvertFromShoppingItemToDiscountDisplayDiscount(item.Discount)}%";
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="selectedShoppingItems" value="@item.ShoppingItemId" />
+                                </td>
+                                <td>
+                                    <img src="@item.ImagePath" alt="Image of the product" width="90" class="img-thumbnail" />
+                                </td>
+                                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Stock)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                                <td>@Html.DisplayFor(modelItem => item.CurrencyType)</td>
+                                <td>@Html.DisplayFor(modelItem => discountValue)</td>
+                                <td>
+                                    @if (item.Discount != 1)
+                                    {
+                                        @((float)Math.Round(item.Price * item.Discount, 2)) @item.CurrencyType
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+</div>
+           
+
+
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white; /* White background for tables */
+        border: 1px solid #FFA500; /* Orange border */
+    }
+
+    th, td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #FFA500; /* Orange border for rows */
+    }
+
+    th {
+        background-color: #FFD700; /* Gold background for header */
+        color: white;
+    }
+
+    td img {
+        border-radius: 5px;
+    }
+</style>
+
+@*
+BACKUP    
+@model IEnumerable<HyperTamagotchi_MVC.Models.ShoppingItem>
+
+@{
     ViewData["Title"] = "Index";
 }
 
@@ -74,3 +171,4 @@
 
 </form>
 
+ *@

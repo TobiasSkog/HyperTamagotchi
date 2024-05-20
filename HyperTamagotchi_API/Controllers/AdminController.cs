@@ -1,28 +1,34 @@
-﻿using HyperTamagotchi_API.Data;
+﻿using AutoMapper;
+using HyperTamagotchi_API.Data;
 using HyperTamagotchi_API.Filters;
 using HyperTamagotchi_API.Models;
+using HyperTamagotchi_API.Models.DTO;
+using HyperTamagotchi_API.Models.TamagotchiProperties;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace HyperTamagotchi_API.Controllers;
 
+//// api/Admin
 [Route("api/[controller]")]
 [ApiController]
 [AuthorizeByRole("Admin")]
-public class AdminController(ApplicationDbContext context) : ControllerBase
+public class AdminController(ApplicationDbContext context, IMapper mapper) : ControllerBase
 {
     private readonly ApplicationDbContext _context = context;
+    private readonly IMapper _mapper = mapper;
 
+    //// POST: api/Admin/ShoppingItems/AddDiscountToShoppingItems/{discountUpdateModel}
     [HttpPost]
     [Route("AddDiscountToShoppingItems")]
-
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> AddDiscountToShoppingItems([FromBody] DiscountUpdateModel discountUpdateModel)
     {
 
         if (discountUpdateModel.SelectedShoppingItems == null || discountUpdateModel.SelectedShoppingItems.Count <= 0 ||
             (discountUpdateModel.DiscountPercentage == null && discountUpdateModel.DiscountPercentage >= 0 && discountUpdateModel.DiscountPercentage <= 100))
         {
-            return NotFound();
+            return BadRequest();
         }
         var foundShoppingItems = await _context.ShoppingItems
             .Where(si => discountUpdateModel.SelectedShoppingItems.Contains(si.ShoppingItemId))
@@ -39,280 +45,110 @@ public class AdminController(ApplicationDbContext context) : ControllerBase
         return Ok();
     }
 
-    //// GET: ShoppingItems/Create
-    //public IActionResult Create()
-    //{
-    //    ShoppingItem shoppingItem = new();
-    //    return View(shoppingItem);
-    //}
+    //// POST: api/Admin/ShoppingItems/CreateShoppingItem/{shoppingItemDto}
+    [HttpPost]
+    [Route("CreateShoppingItem")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create([FromBody] ShoppingItemDto shoppingItemDto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
 
-    //// POST: ShoppingItems/Create
-    //// To protect from overposting attacks, enable the specific properties you want to bind to.
-    //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    //[HttpPost]
-    //[ValidateAntiForgeryToken]
-    //public async Task<IActionResult> Create([Bind("ShoppingItemId,Name,Description,Stock,Price,CurrencyType,Discount,ImagePath,Quantity")] ShoppingItem shoppingItem)
-    //{
-    //    if (ModelState.IsValid)
-    //    {
-    //        // Update to a real Image Path based on our project folders and that the user only enters the image name in the input
-    //        string realImagePath = @"/Assets/Img/" + shoppingItem.ImagePath;
-    //        shoppingItem.ImagePath = realImagePath;
-    //        _context.Add(shoppingItem);
-    //        await _context.SaveChangesAsync();
-    //        return RedirectToAction(nameof(Index));
-    //    }
-    //    return View(shoppingItem);
-    //}
+        // Update to a real Image Path based on our project folders and that the user only enters the image name in the input
+        var shoppingItem = _mapper.Map<ShoppingItem>(shoppingItemDto);
+        shoppingItem.ImagePath = Path.Combine("/Assets/ShoppingItem/", shoppingItem.ImagePath);
 
-    //public IActionResult CreateTamagotchi()
-    //{
-    //    Tamagotchi tamagotchi = new();
+        _context.Add(shoppingItem);
+        await _context.SaveChangesAsync();
 
-    //    ViewData["Colors"] = Enum.GetValues(typeof(TamagotchiColor))
-    //        .Cast<TamagotchiColor>()
-    //        .Select(tc => new SelectListItem
-    //        {
-    //            Value = ((byte)tc).ToString(),
-    //            Text = tc.ToString()
-    //        })
-    //        .ToList();
-    //    ViewData["Moods"] = Enum.GetValues(typeof(TamagotchiMood))
-    //        .Cast<TamagotchiMood>()
-    //        .Select(tc => new SelectListItem
-    //        {
-    //            Value = ((byte)tc).ToString(),
-    //            Text = tc.ToString()
-    //        })
-    //        .ToList();
-    //    ViewData["Stages"] = Enum.GetValues(typeof(TamagotchiStage))
-    //        .Cast<TamagotchiStage>()
-    //        .Select(tc => new SelectListItem
-    //        {
-    //            Value = ((byte)tc).ToString(),
-    //            Text = tc.ToString()
-    //        })
-    //        .ToList();
-    //    ViewData["Types"] = Enum.GetValues(typeof(TamagotchiType))
-    //        .Cast<TamagotchiType>()
-    //        .Select(tc => new SelectListItem
-    //        {
-    //            Value = ((byte)tc).ToString(),
-    //            Text = tc.ToString()
-    //        })
-    //        .ToList();
+        return Ok("Shopping Item Created Successfully.");
+    }
 
-    //    return View(tamagotchi);
-    //}
+    //// POST: api/Admin/ShoppingItems/CreateTamagotchi/{tamagotchiDto}
+    [HttpPost]
+    [Route("CreateTamagotchi")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> CreateTamagotchi([FromBody] TamagotchiDto tamagotchiDto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
 
-    //// POST: ShoppingItems/CreateTamagotchi
-    //// To protect from overposting attacks, enable the specific properties you want to bind to.
-    //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    //[HttpPost]
-    //[ValidateAntiForgeryToken]
-    //public async Task<IActionResult> CreateTamagotchi([Bind("TamagotchiColor,TamagotchiType,Mood,TamagotchiStage,Experience,ShoppingItemId,Name,Description,Stock,Price,CurrencyType,Discount,ImagePath,Quantity")] Tamagotchi tamagotchi)
-    //{
-    //    if (ModelState.IsValid)
-    //    {
-    //        // Update to a real Image Path based on our project folders and that the user only enters the image name in the input
-    //        string realImagePath = @"/Assets/Tamagotchi/" + tamagotchi.ImagePath;
-    //        tamagotchi.ImagePath = realImagePath;
+        // Update to a real Image Path based on our project folders and that the user only enters the image name in the input
+        var tamagotchi = _mapper.Map<Tamagotchi>(tamagotchiDto);
+        tamagotchi.ImagePath = Path.Combine("/Assets/Tamagotchi/", tamagotchi.ImagePath);
 
-    //        // Update the experiences points on the Tamagotchi based on what stage it is when it's created
-    //        switch (tamagotchi.TamagotchiStage)
-    //        {
-    //            case TamagotchiStage.Egg:
-    //                tamagotchi.Experience = 0;
-    //                break;
-    //            case TamagotchiStage.Child:
-    //                tamagotchi.Experience = 50;
-    //                break;
-    //            case TamagotchiStage.Adult:
-    //                tamagotchi.Experience = 100;
-    //                break;
-    //        }
+        // Update the experiences points on the Tamagotchi based on what stage it is when it's created
+        switch (tamagotchi.TamagotchiStage)
+        {
+            case TamagotchiStage.Egg:
+                tamagotchi.Experience = 0;
+                break;
+            case TamagotchiStage.Child:
+                tamagotchi.Experience = 50;
+                break;
+            case TamagotchiStage.Adult:
+                tamagotchi.Experience = 100;
+                break;
+        }
 
-    //        _context.Add(tamagotchi);
-    //        await _context.SaveChangesAsync();
-    //        return RedirectToAction(nameof(Index));
-    //    }
+        _context.Add(tamagotchi);
+        await _context.SaveChangesAsync();
 
-    //    return View(tamagotchi);
-    //}
+        return Ok("Tamagotchi Created Successfully.");
+    }
 
-    //// GET: ShoppingItems/Edit/5
-    //public async Task<IActionResult> Edit(int? id)
-    //{
-    //    if (id == null)
-    //    {
-    //        return NotFound();
-    //    }
+    //// POST: api/Admin/ShoppingItems/EditShoppingItem/{shoppingItem}
+    [HttpPost]
+    [Route("EditShoppingItem")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit([FromBody] ShoppingItem shoppingItem)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
 
-    //    var shoppingItem = await _context.ShoppingItems.FindAsync(id);
-    //    if (shoppingItem == null)
-    //    {
-    //        return NotFound();
-    //    }
+        _context.Update(shoppingItem);
+        await _context.SaveChangesAsync();
 
-    //    if (shoppingItem is Tamagotchi)
-    //    {
-    //        return RedirectToAction("EditTamagotchi", shoppingItem);
-    //    }
+        return Ok("Shopping Item Updated Successfully.");
+    }
 
-    //    return View(shoppingItem);
-    //}
+    //// POST: api/Admin/ShoppingItems/EditTamagotchi/{tamagotchi}
+    [HttpPost]
+    [Route("EditTamagotchi")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditTamagotchi([FromBody] Tamagotchi tamagotchi)
+    {
+        if (tamagotchi == null)
+        {
+            return BadRequest();
+        }
 
-    //// POST: ShoppingItems/Edit/5
-    //// To protect from overposting attacks, enable the specific properties you want to bind to.
-    //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    //[HttpPost]
-    //[ValidateAntiForgeryToken]
-    //public async Task<IActionResult> Edit(int id, [Bind("ShoppingItemId,Name,Description,Stock,Price,CurrencyType,Discount,ImagePath,Quantity")] ShoppingItem shoppingItem)
-    //{
-    //    if (id != shoppingItem.ShoppingItemId)
-    //    {
-    //        return NotFound();
-    //    }
+        _context.Update(tamagotchi);
 
-    //    if (ModelState.IsValid)
-    //    {
-    //        try
-    //        {
-    //            _context.Update(shoppingItem);
-    //            await _context.SaveChangesAsync();
-    //        }
-    //        catch (DbUpdateConcurrencyException)
-    //        {
-    //            if (!ShoppingItemExists(shoppingItem.ShoppingItemId))
-    //            {
-    //                return NotFound();
-    //            }
-    //            else
-    //            {
-    //                throw;
-    //            }
-    //        }
-    //        return RedirectToAction(nameof(Index));
-    //    }
-    //    return View(shoppingItem);
-    //}
+        await _context.SaveChangesAsync();
 
-    //public async Task<IActionResult> EditTamagotchi(ShoppingItem shoppingItem)
-    //{
-    //    if (shoppingItem == null)
-    //    {
-    //        return NotFound();
-    //    }
-    //    Tamagotchi tamagotchi = await _context.Tamagotchis.FindAsync(shoppingItem.ShoppingItemId);
+        return Ok("Tamagotchi Updated Successfully.");
+    }
 
-    //    if (tamagotchi == null)
-    //    {
-    //        return NotFound();
-    //    }
+    //// POST: api/Admin/ShoppingItems/Delete/{id}
+    [HttpPost, ActionName("Delete")]
+    [Route("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var shoppingItem = await _context.ShoppingItems.FindAsync(id);
+        if (shoppingItem != null)
+        {
+            _context.ShoppingItems.Remove(shoppingItem);
+        }
 
-    //    ViewData["Colors"] = Enum.GetValues(typeof(TamagotchiColor))
-    //        .Cast<TamagotchiColor>()
-    //        .Select(tc => new SelectListItem
-    //        {
-    //            Value = ((byte)tc).ToString(),
-    //            Text = tc.ToString()
-    //        })
-    //        .ToList();
-    //    ViewData["Moods"] = Enum.GetValues(typeof(TamagotchiMood))
-    //        .Cast<TamagotchiMood>()
-    //        .Select(tc => new SelectListItem
-    //        {
-    //            Value = ((byte)tc).ToString(),
-    //            Text = tc.ToString()
-    //        })
-    //        .ToList();
-    //    ViewData["Stages"] = Enum.GetValues(typeof(TamagotchiStage))
-    //        .Cast<TamagotchiStage>()
-    //        .Select(tc => new SelectListItem
-    //        {
-    //            Value = ((byte)tc).ToString(),
-    //            Text = tc.ToString()
-    //        })
-    //        .ToList();
-    //    ViewData["Types"] = Enum.GetValues(typeof(TamagotchiType))
-    //        .Cast<TamagotchiType>()
-    //        .Select(tc => new SelectListItem
-    //        {
-    //            Value = ((byte)tc).ToString(),
-    //            Text = tc.ToString()
-    //        })
-    //        .ToList();
-
-    //    return View(tamagotchi);
-    //}
-    //[HttpPost]
-    //[ValidateAntiForgeryToken]
-    //public async Task<IActionResult> EditTamagotchi(int ShoppingItemId, [Bind("TamagotchiColor,TamagotchiType,Mood,TamagotchiStage,Experience,ShoppingItemId,Name,Description,Stock,Price,CurrencyType,Discount,ImagePath,Quantity")] Tamagotchi tamagotchi)
-    //{
-    //    if (ShoppingItemId != tamagotchi.ShoppingItemId)
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    if (ModelState.IsValid)
-    //    {
-    //        try
-    //        {
-    //            _context.Update(tamagotchi);
-    //            await _context.SaveChangesAsync();
-    //        }
-    //        catch (DbUpdateConcurrencyException)
-    //        {
-    //            if (!ShoppingItemExists(tamagotchi.ShoppingItemId))
-    //            {
-    //                return NotFound();
-    //            }
-    //            else
-    //            {
-    //                throw;
-    //            }
-    //        }
-    //        return RedirectToAction(nameof(Index));
-    //    }
-    //    return View(tamagotchi);
-    //}
-
-    //// GET: ShoppingItems/Delete/5
-    //public async Task<IActionResult> Delete(int? id)
-    //{
-    //    if (id == null)
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    var shoppingItem = await _context.ShoppingItems
-    //        .FirstOrDefaultAsync(m => m.ShoppingItemId == id);
-    //    if (shoppingItem == null)
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    return View(shoppingItem);
-    //}
-
-    //// POST: ShoppingItems/Delete/5
-    //[HttpPost, ActionName("Delete")]
-    //[ValidateAntiForgeryToken]
-    //public async Task<IActionResult> DeleteConfirmed(int id)
-    //{
-    //    var shoppingItem = await _context.ShoppingItems.FindAsync(id);
-    //    if (shoppingItem != null)
-    //    {
-    //        _context.ShoppingItems.Remove(shoppingItem);
-    //    }
-
-    //    await _context.SaveChangesAsync();
-    //    return RedirectToAction(nameof(Index));
-    //}
-
-    //private bool ShoppingItemExists(int id)
-    //{
-    //    return _context.ShoppingItems.Any(e => e.ShoppingItemId == id);
-    //}
-
+        await _context.SaveChangesAsync();
+        return Ok("Item Deleted Successfully.");
+    }
 }

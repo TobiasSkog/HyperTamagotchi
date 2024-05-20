@@ -23,7 +23,8 @@ public class Program
         builder.Services.AddControllers();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddAutoMapper(typeof(ShoppingCartProfile));
+
+        builder.Services.AddAutoMapper(typeof(TamagotchiApiMappingProfile));
 
         builder.Services.AddSwaggerGen(options =>
         {
