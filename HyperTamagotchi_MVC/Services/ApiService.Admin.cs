@@ -1,4 +1,6 @@
-﻿using HyperTamagotchi_API.Models.DTO;
+﻿using HyperTamagotchi_MVC.Filters;
+using HyperTamagotchi_MVC.Models;
+using HyperTamagotchi_MVC.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HyperTamagotchi_MVC.Services;
@@ -6,6 +8,7 @@ namespace HyperTamagotchi_MVC.Services;
 public partial class ApiServices
 {
     [HttpPost]
+    [AuthorizeByRole("Admin")]
     public async Task<bool> UpdateDiscountToShoppingItems(List<int> selectedShoppingItems, float discountPercentage)
     {
         EnsureJwtTokenIsAddedToRequest();
@@ -21,6 +24,7 @@ public partial class ApiServices
     }
 
     [HttpPost]
+    [AuthorizeByRole("Admin")]
     public async Task<bool> CreateShoppingItemAsync(ShoppingItemDto dto)
     {
         EnsureJwtTokenIsAddedToRequest();
@@ -30,11 +34,39 @@ public partial class ApiServices
     }
 
     [HttpPost]
+    [AuthorizeByRole("Admin")]
     public async Task<bool> CreateTamagotchiAsync(TamagotchiDto dto)
     {
         EnsureJwtTokenIsAddedToRequest();
 
         var response = await _client.PostAsJsonAsync($"api/Admin/CreateTamagotchi", dto);
+        return response.IsSuccessStatusCode;
+    }
+
+    [HttpPost]
+    [AuthorizeByRole("Admin")]
+    public async Task<bool> EditShoppingItem(ShoppingItem item)
+    {
+        EnsureJwtTokenIsAddedToRequest();
+        var response = await _client.PostAsJsonAsync($"api/Admin/EditShoppingItem", item);
+        return response.IsSuccessStatusCode;
+
+    }
+    [HttpPost]
+    [AuthorizeByRole("Admin")]
+    public async Task<bool> EditTamagotchi(Tamagotchi item)
+    {
+        EnsureJwtTokenIsAddedToRequest();
+        var response = await _client.PostAsJsonAsync($"api/Admin/EditTamagotchi", item);
+        return response.IsSuccessStatusCode;
+    }
+
+    [HttpDelete]
+    [AuthorizeByRole("Admin")]
+    public async Task<bool> Delete(int id)
+    {
+        EnsureJwtTokenIsAddedToRequest();
+        var response = await _client.DeleteAsync($"api/Admin/Delete{id}");
         return response.IsSuccessStatusCode;
     }
 }

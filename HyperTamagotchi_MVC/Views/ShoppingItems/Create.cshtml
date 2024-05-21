@@ -1,4 +1,4 @@
-﻿@model HyperTamagotchi_MVC.Models.ShoppingItem
+﻿@model HyperTamagotchi_MVC.Models.DTO.ShoppingItemDto
 
 @{
     ViewData["Title"] = "Create";
@@ -6,11 +6,11 @@
 
 <h1>Create</h1>
 
-<h4>ShoppingItem</h4>
+<h4>Shopping Item</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-controller="ShopingItems" asp-action="Create">
+        <form asp-controller="ShoppingItems" asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -32,7 +32,7 @@
                 <input asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            @* <div class="form-group">
                 <label asp-for="CurrencyType" class="control-label"></label>
                 <input asp-for="CurrencyType" class="form-control" readonly value="@Model.CurrencyType" />
                 <span asp-validation-for="CurrencyType" class="text-danger"></span>
@@ -41,21 +41,24 @@
                 <label asp-for="Discount" class="control-label"></label>
                 <input asp-for="Discount" class="form-control" readonly value="@Model.Discount"/>
                 <span asp-validation-for="Discount" class="text-danger"></span>
-            </div>
+            </div> *@
             <div class="form-group">
                 <label asp-for="ImagePath" class="control-label"></label>
                 <input asp-for="ImagePath" class="form-control" />
                 <span asp-validation-for="ImagePath" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary mt-2" />
+                <div class="d-flex justify-content-between">
+                    <input type="submit" value="Create" class="btn btn-primary mt-2" />
+                    <a asp-action="Index" class="btn btn-primary mt-2">Back to List</a>
+                </div>
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    
 </div>
 
 @section Scripts {

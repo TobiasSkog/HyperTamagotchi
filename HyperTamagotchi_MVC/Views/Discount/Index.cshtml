@@ -55,7 +55,7 @@
                                 <td>
                                     @if (item.Discount != 1)
                                     {
-                                        @((float)Math.Round(item.Price * item.Discount, 2)) @item.CurrencyType
+                                        @(((float)Math.Round(item.Price * item.Discount, 2)) + " " + item.CurrencyType)
                                     }
                                 </td>
                             </tr>
@@ -70,26 +70,9 @@
 
 
 <style>
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        background-color: white; /* White background for tables */
-        border: 1px solid #FFA500; /* Orange border */
-    }
-
-    th, td {
-        padding: 10px;
-        text-align: left;
-        border-bottom: 1px solid #FFA500; /* Orange border for rows */
-    }
-
-    th {
-        background-color: #FFD700; /* Gold background for header */
-        color: white;
-    }
 
     td img {
-        border-radius: 5px;
+        border-radius: 5px !important;
     }
 </style>
 

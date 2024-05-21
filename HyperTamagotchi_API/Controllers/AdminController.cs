@@ -21,7 +21,6 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
     //// POST: api/Admin/ShoppingItems/AddDiscountToShoppingItems/{discountUpdateModel}
     [HttpPost]
     [Route("AddDiscountToShoppingItems")]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> AddDiscountToShoppingItems([FromBody] DiscountUpdateModel discountUpdateModel)
     {
 
@@ -48,7 +47,6 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
     //// POST: api/Admin/ShoppingItems/CreateShoppingItem/{shoppingItemDto}
     [HttpPost]
     [Route("CreateShoppingItem")]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([FromBody] ShoppingItemDto shoppingItemDto)
     {
         if (!ModelState.IsValid)
@@ -69,7 +67,6 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
     //// POST: api/Admin/ShoppingItems/CreateTamagotchi/{tamagotchiDto}
     [HttpPost]
     [Route("CreateTamagotchi")]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> CreateTamagotchi([FromBody] TamagotchiDto tamagotchiDto)
     {
         if (!ModelState.IsValid)
@@ -104,7 +101,6 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
     //// POST: api/Admin/ShoppingItems/EditShoppingItem/{shoppingItem}
     [HttpPost]
     [Route("EditShoppingItem")]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit([FromBody] ShoppingItem shoppingItem)
     {
         if (!ModelState.IsValid)
@@ -121,7 +117,6 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
     //// POST: api/Admin/ShoppingItems/EditTamagotchi/{tamagotchi}
     [HttpPost]
     [Route("EditTamagotchi")]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> EditTamagotchi([FromBody] Tamagotchi tamagotchi)
     {
         if (tamagotchi == null)
@@ -137,18 +132,37 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
     }
 
     //// POST: api/Admin/ShoppingItems/Delete/{id}
-    [HttpPost, ActionName("Delete")]
-    [Route("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int id)
+    [HttpDelete]
+    [Route("Delete{id}")]
+    public async Task<IActionResult> Delete(int id)
     {
         var shoppingItem = await _context.ShoppingItems.FindAsync(id);
         if (shoppingItem != null)
         {
             _context.ShoppingItems.Remove(shoppingItem);
+            await _context.SaveChangesAsync();
+            return Ok("Item Deleted Successfully.");
         }
 
-        await _context.SaveChangesAsync();
-        return Ok("Item Deleted Successfully.");
+        return NotFound("Item not found.");
     }
+
+
+    // DELETE: api/Orders/5
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteOrder(int id)
+    {
+        var order = await _context.Orders.FindAsync(id);
+        if (order == null)
+        {
+            return NotFound();
+        }
+
+        _context.Orders.Remove(order);
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
+
+
 }

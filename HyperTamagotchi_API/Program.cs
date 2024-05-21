@@ -59,7 +59,7 @@ public class Program
 
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(
-                builder.Configuration.GetConnectionString("DefaultConnection")));
+                builder.Configuration.GetConnectionString("AzureConnection")));
 
         builder.Services.AddScoped<IJwtService, JwtService>();
 
@@ -108,6 +108,9 @@ public class Program
         });
 
         builder.Services.AddAuthorization();
+
+
+
 
         var app = builder.Build();
 

@@ -56,8 +56,8 @@
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="ShoppingItemId" />
+        <input hidden name="id" value="@Model.ShoppingItemId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="Index" class="btn btn-primary mt-2">Back to List</a>
     </form>
 </div>

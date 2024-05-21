@@ -7,10 +7,10 @@ using System.Security.Claims;
 using System.Text;
 namespace HyperTamagotchi_API.Repositories;
 
-public class JwtService(IConfiguration configuration, ILogger<JwtService> logger) : IJwtService
+public class JwtService(IConfiguration configuration) : IJwtService
 {
     private readonly IConfiguration _configuration = configuration;
-    private readonly ILogger<JwtService> _logger = logger;
+
 
     private TokenValidationParameters GetTokenValidation()
     {
@@ -80,7 +80,58 @@ public class JwtService(IConfiguration configuration, ILogger<JwtService> logger
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
+    public async Task<bool> ValidateRefreshToken(Customer customer, string refreshToken)
+    {
+        if (customer == null)
+        {
+            return false;
+        }
 
+        return refreshToken == customer.RefreshToken;
+    }
+
+
+    public string GenerateJwtToken(IEnumerable<Claim> claims)
+    {
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        var token = new JwtSecurityToken(_configuration["Jwt:Issuer"],
+            _configuration["Jwt:Audience"],
+            claims,
+            expires: DateTime.Now.AddMinutes(30),
+            signingCredentials: creds);
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    public string GenerateRefreshToken()
+    {
+        return Guid.NewGuid().ToString();
+    }
+
+    public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+    {
+        var tokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateAudience = false,
+            ValidateIssuer = false,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"])),
+            ValidateLifetime = false
+        };
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
+
+        var jwtSecurityToken = securityToken as JwtSecurityToken;
+        if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+        {
+            throw new SecurityTokenException("Invalid token");
+        }
+
+        return principal;
+    }
     private class CustomClaimShoppingCart(string shoppingCartId)
     {
         public string ClaimName { get; set; } = "ShoppingCartId";

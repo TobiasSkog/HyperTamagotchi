@@ -53,6 +53,11 @@ public class Program
         builder.Services.AddScoped<ApiServices>();
         builder.Services.AddScoped<IJwtTokenValidator, JwtTokenValidator>();
 
+        builder.Services.AddAntiforgery(options =>
+        {
+            options.HeaderName = "X-XSRF-TOKEN";
+        });
+
         var app = builder.Build();
 
         if (app.Environment.IsDevelopment())

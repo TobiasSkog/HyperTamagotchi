@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using HyperTamagotchi_API.Data;
+using HyperTamagotchi_API.Filters;
 using HyperTamagotchi_API.Models;
 using HyperTamagotchi_API.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
@@ -82,6 +83,7 @@ namespace HyperTamagotchi_API.Controllers
 
         // DELETE: api/ShoppingCarts/5
         [HttpDelete("{id}")]
+        [AuthorizeByRole("Admin")]
         public async Task<IActionResult> DeleteShoppingCart(int id)
         {
             var shoppingCart = await _context.ShoppingCarts.FindAsync(id);

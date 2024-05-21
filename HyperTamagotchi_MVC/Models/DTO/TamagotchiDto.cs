@@ -1,6 +1,6 @@
 ﻿using HyperTamagotchi_MVC.Models.TamagotchiProperties;
 
-namespace HyperTamagotchi_API.Models.DTO;
+namespace HyperTamagotchi_MVC.Models.DTO;
 
 public class TamagotchiDto
 {
