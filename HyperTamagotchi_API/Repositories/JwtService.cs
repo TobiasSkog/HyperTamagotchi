@@ -80,7 +80,7 @@ public class JwtService(IConfiguration configuration) : IJwtService
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
-    public async Task<bool> ValidateRefreshToken(Customer customer, string refreshToken)
+    public bool ValidateRefreshToken(Customer customer, string refreshToken)
     {
         if (customer == null)
         {

@@ -5,59 +5,46 @@
 @if (User.IsInRole("Customer") && shoppingCart != null)
 {  
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="shoppingCartDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <a class="nav-link dropdown-toggle" href="#" id="shoppingCartDropdown" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
             @await Html.PartialAsync("_PartialShoppingCartIcon", hasItems)
-            <span class="badge bg-secondary">@shoppingCart.ShoppingItems.Sum(si => si.Quantity)</span>
+            <span class="badge bg-secondary total-quantity">@shoppingCart.ShoppingItems.Sum(si => si.Quantity)</span>
         </a>
         <ul class="dropdown-menu dropdown-menu-end text-center" aria-labelledby="shoppingCartDropdown">
             @if (hasItems)
             {
-            @foreach (var item in shoppingCart.ShoppingItems)
-            {
+                @foreach (var item in shoppingCart.ShoppingItems)
+                {
+                    <li>
+                         <div class="dropdown-item">
+                                <span class="item-name">@item.Name - <span class="item-price" data-price="@(Math.Round((item.Price * item.Discount), 2))">@(Math.Round((item.Price * item.Discount), 2))</span> @item.CurrencyType</span>
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <button class="btn btn-primary decrease-quantity" data-item-id="@item.ShoppingItemId">-</button>
+                                    <input class="form-control text-center item-quantity" data-item-id="@item.ShoppingItemId" value="@(shoppingCart.ShoppingItems.Where(si => si.ShoppingItemId == item.ShoppingItemId).Sum(si => si.Quantity))" />
+                                    <button class="btn btn-primary increase-quantity" data-item-id="@item.ShoppingItemId">+</button>
+                                </div>
+                            </div>
+                    </li>
+                }
+                <li><hr class="dropdown-divider" /></li>
+
                 <li>
-                    <div class="dropdown-item">
-                        <span>@item.Name - @(item.Price * item.Quantity) @item.CurrencyType</span>
-                        <div class="d-flex justify-content-center align-items-center">
-                            <form asp-controller="Home" asp-action="DecreaseQuantity" method="post">
-                                <input type="hidden" name="shoppingItemId" value="@item.ShoppingItemId" />
-                                 <button type="button submit" class="btn btn-outline-secondary">-</button>
-                            </form>
-                                <form asp-controller="Home" asp-action="AdjustQuantity" method="post">
-                                <input type="hidden" name="shoppingItemId" value="@item.ShoppingItemId" />
-                                <input type="text" name="amount" class="form-control text-center" value="@(shoppingCart.ShoppingItems.Where(si => si.ShoppingItemId == item.ShoppingItemId).Sum(si => si.Quantity))" />
-                            </form>
-                            <form asp-controller="Home" asp-action="IncreaseQuantity" method="post">
-                                <input type="hidden" name="shoppingItemId" value="@item.ShoppingItemId" />
-                                <button type="button submit" class="btn btn-outline-secondary">+</button>
-                            </form>
-                        </div>
+                    <div class="dropdown-item">                         
+                        <span class="text-dark text-center total-price">Total: @(shoppingCart.ShoppingItems.Sum(si => Math.Round((float)si.Quantity * si.Price * si.Discount, 2))) SEK</span>                       
                     </div>
                 </li>
-            }
-            <li>
-                    <hr class="w-75 dropdown-divider" />
-
-                @* Need to update the SEK here and the CURRENCYTYPE in the loop to a user specified currency type and get the correct value with the API *@
-               
-                    <span class="text-dark text-center"> <i class="bi bi-cash"></i> Total: @(shoppingCart.ShoppingItems.Sum(si => si.Quantity * si.Price * si.Discount)) SEK</span>
-                    <form asp-controller="Home" asp-action="EmptyCart" method="post">                        
-                        <button type="button submit" class="btn btn-outline-secondary">Empty Cart</button>
-                    </form>
-
-                    <hr class="dropdown-divider" />
+                <li>
+                    <div class="dropdown-item">
+                        @* <button class="btn btn-warning empty-cart-button">Empty Cart</button> *@
+                        <form asp-controller="Home" asp-action="EmptyCart" method="post">
+                            <button type="button submit" class="btn btn-outline-secondary">Empty Cart</button>
+                        </form>
+                    </div>
                 </li>
-                }
+                <li><hr class="dropdown-divider" /></li>
+            }
             <li>
                 <a class="nav-link text-dark" asp-area="" asp-controller="CustomerCart" asp-action="Index"><i class="bi bi-cart-fill"></i> View Cart</a>
             </li>
         </ul>
     </li>
 }
-
-@*
-<div class="input-group input-group-sm mt-1">
-    <button class="btn btn-outline-secondary" type="button">-</button>
-    <input type="text" class="form-control" value="@item.Quantity">
-    <button class="btn btn-outline-secondary" type="button">+</button>
-</div>
-*@

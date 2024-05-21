@@ -18,7 +18,7 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
     private readonly ApplicationDbContext _context = context;
     private readonly IMapper _mapper = mapper;
 
-    //// POST: api/Admin/ShoppingItems/AddDiscountToShoppingItems/{discountUpdateModel}
+    //// POST: api/Admin/AddDiscountToShoppingItems/{discountUpdateModel}
     [HttpPost]
     [Route("AddDiscountToShoppingItems")]
     public async Task<IActionResult> AddDiscountToShoppingItems([FromBody] DiscountUpdateModel discountUpdateModel)
@@ -44,7 +44,7 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
         return Ok();
     }
 
-    //// POST: api/Admin/ShoppingItems/CreateShoppingItem/{shoppingItemDto}
+    //// POST: api/Admin/CreateShoppingItem/{shoppingItemDto}
     [HttpPost]
     [Route("CreateShoppingItem")]
     public async Task<IActionResult> Create([FromBody] ShoppingItemDto shoppingItemDto)
@@ -64,7 +64,7 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
         return Ok("Shopping Item Created Successfully.");
     }
 
-    //// POST: api/Admin/ShoppingItems/CreateTamagotchi/{tamagotchiDto}
+    //// POST: api/Admin/CreateTamagotchi/{tamagotchiDto}
     [HttpPost]
     [Route("CreateTamagotchi")]
     public async Task<IActionResult> CreateTamagotchi([FromBody] TamagotchiDto tamagotchiDto)
@@ -98,7 +98,7 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
         return Ok("Tamagotchi Created Successfully.");
     }
 
-    //// POST: api/Admin/ShoppingItems/EditShoppingItem/{shoppingItem}
+    //// POST: api/Admin/EditShoppingItem/{shoppingItem}
     [HttpPost]
     [Route("EditShoppingItem")]
     public async Task<IActionResult> Edit([FromBody] ShoppingItem shoppingItem)
@@ -114,7 +114,7 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
         return Ok("Shopping Item Updated Successfully.");
     }
 
-    //// POST: api/Admin/ShoppingItems/EditTamagotchi/{tamagotchi}
+    //// POST: api/Admin/EditTamagotchi/{tamagotchi}
     [HttpPost]
     [Route("EditTamagotchi")]
     public async Task<IActionResult> EditTamagotchi([FromBody] Tamagotchi tamagotchi)
@@ -131,10 +131,10 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
         return Ok("Tamagotchi Updated Successfully.");
     }
 
-    //// POST: api/Admin/ShoppingItems/Delete/{id}
+    //// POST: api/Admin/DeleteItem/{id}
     [HttpDelete]
     [Route("Delete{id}")]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> DeleteItem(int id)
     {
         var shoppingItem = await _context.ShoppingItems.FindAsync(id);
         if (shoppingItem != null)
@@ -147,7 +147,48 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
         return NotFound("Item not found.");
     }
 
+    [HttpGet]
+    [Route("GetAllOrders")]
+    public async Task<IEnumerable<OrderDto>> GetAllOrders()
+    {
 
+        var orders = await _context.Orders.ToListAsync();
+        var ordersDto = _mapper.Map<IEnumerable<OrderDto>>(orders);
+        return ordersDto;
+
+    }
+    [HttpGet]
+    [Route("GetItemToEdit/{id}")]
+    public async Task<IActionResult> GetItemToEdit(int id)
+    {
+        var item = await _context.ShoppingItems.FindAsync(id);
+
+        if (item == null)
+        {
+            return NotFound();
+        }
+        if (item is Tamagotchi tamagotchi)
+        {
+            return Ok(new { Type = ItemType.Tamagotchi, Data = tamagotchi });
+        }
+        else
+        {
+            return Ok(new { Type = ItemType.ShoppingItem, Data = item });
+        }
+    }
+    public enum ItemType
+    {
+        Tamagotchi,
+        ShoppingItem
+    }
+    [HttpGet]
+    [Route("GetOrder{id}")]
+    public async Task<ActionResult<OrderDto>> GetOrder(int id)
+    {
+        var order = await _context.Orders.FindAsync(id);
+        var orderDto = _mapper.Map<OrderDto>(order);
+        return orderDto;
+    }
     // DELETE: api/Orders/5
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteOrder(int id)
@@ -163,6 +204,4 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
 
         return NoContent();
     }
-
-
 }

@@ -26,7 +26,7 @@ public class HomeController(ApiServices api) : BaseController(api)
         var shoppingCart = GetShoppingCartFromCookie();
         var shoppingItem = await _api.GetShoppingItemByIdAsync(id);
 
-        shoppingItem.Quantity ??= 1;
+        shoppingItem.Quantity = 1;
 
         shoppingCart.ShoppingItems.Add(shoppingItem);
 
@@ -39,122 +39,54 @@ public class HomeController(ApiServices api) : BaseController(api)
 
     [HttpPost]
     [AuthorizeByRole("Admin", "Customer")]
-    public async Task<IActionResult> IncreaseQuantity(int? shoppingItemId)
+    public async Task<IActionResult> AdjustQuantity(int? shoppingItemId, int amount)
     {
         if (shoppingItemId == null)
         {
-            return NotFound();
+            return Json(new { success = false, message = "Invalid shopping item ID." });
         }
 
         var shoppingCart = GetShoppingCartFromCookie();
         if (shoppingCart == null)
         {
-            return NotFound();
+            return Json(new { success = false, message = "Shopping cart not found." });
         }
 
-        var shoppingItemToUpdate = shoppingCart.ShoppingItems.FirstOrDefault(item => item.ShoppingItemId == shoppingItemId);
-
-        shoppingItemToUpdate ??= await _api.GetShoppingItemByIdAsync(shoppingItemId);
-
-        shoppingItemToUpdate.Quantity ??= (byte)0;
-
-
-
-        if (shoppingItemToUpdate.Quantity < 255)
+        var itemToUpdate = shoppingCart.ShoppingItems.FirstOrDefault(item => item.ShoppingItemId == shoppingItemId);
+        itemToUpdate ??= await _api.GetShoppingItemByIdAsync(shoppingItemId);
+        if (itemToUpdate == null)
         {
-            shoppingItemToUpdate.Quantity++;
-        }
-        else
-        {
-            shoppingItemToUpdate.Quantity = 255;
+            return Json(new { success = false, message = "Item not found." });
         }
 
+        if (amount <= 0)
+        {
+            RemoveItemFromCart(shoppingCart, itemToUpdate);
+            return Json(new { success = true, quantity = 0 });
+        }
+
+        byte stock = itemToUpdate.Stock > 0 ? itemToUpdate.Stock : (byte)0;
+        byte adjustedAmount = (byte)Math.Min(amount, Math.Min(byte.MaxValue, stock));
+
+        if (adjustedAmount == 0)
+        {
+            RemoveItemFromCart(shoppingCart, itemToUpdate);
+            return Json(new { success = true, quantity = 0, totalQuantity = shoppingCart.ShoppingItems.Sum(si => si.Quantity), totalPrice = shoppingCart.ShoppingItems.Sum(si => Math.Round((float)si.Quantity * si.Price * si.Discount, 2)) });
+        }
+
+        itemToUpdate.Quantity = adjustedAmount;
 
         _api.UpdateShopingCartCookie(shoppingCart);
         SetShoppingCartInViewBag(shoppingCart);
 
-
-
-        return RedirectToAction("Index");
+        //return Json(new { success = true, quantity = adjustedAmount });
+        return Json(new { success = true, quantity = adjustedAmount, totalQuantity = shoppingCart.ShoppingItems.Sum(si => si.Quantity), totalPrice = shoppingCart.ShoppingItems.Sum(si => Math.Round((float)si.Quantity * si.Price * si.Discount, 2)) });
     }
-    [HttpPost]
-    [AuthorizeByRole("Admin", "Customer")]
-    public async Task<IActionResult> DecreaseQuantity(int? shoppingItemId)
+    private void RemoveItemFromCart(ShoppingCart shoppingCart, ShoppingItem itemToRemove)
     {
-        if (shoppingItemId == null)
-        {
-            return NotFound();
-        }
-
-        var shoppingCart = GetShoppingCartFromCookie();
-        if (shoppingCart == null)
-        {
-            return NotFound();
-        }
-
-        var shoppingItemToUpdate = shoppingCart.ShoppingItems.FirstOrDefault(item => item.ShoppingItemId == shoppingItemId);
-
-        shoppingItemToUpdate ??= await _api.GetShoppingItemByIdAsync(shoppingItemId);
-
-        shoppingItemToUpdate.Quantity ??= (byte)1;
-
-        if (shoppingItemToUpdate.Quantity > 1)
-        {
-            shoppingItemToUpdate.Quantity--;
-        }
-        else
-        {
-            shoppingCart.ShoppingItems.RemoveAll(item => item.ShoppingItemId == shoppingItemId);
-        }
-
+        shoppingCart.ShoppingItems.RemoveAll(item => item.ShoppingItemId == itemToRemove.ShoppingItemId);
         _api.UpdateShopingCartCookie(shoppingCart);
         SetShoppingCartInViewBag(shoppingCart);
-
-        return RedirectToAction("Index");
-    }
-    [HttpPost]
-    [AuthorizeByRole("Admin", "Customer")]
-    public async Task<IActionResult> AdjustQuantity(int? shoppingItemId, int? amount)
-    {
-        if (shoppingItemId == null || amount == null)
-        {
-            return NotFound();
-        }
-        if (amount > 255)
-        {
-            amount = (byte)255;
-        }
-        if (amount < 0)
-        {
-            amount = (byte)0;
-        }
-        var shoppingCart = GetShoppingCartFromCookie();
-        if (shoppingCart == null)
-        {
-            return NotFound();
-        }
-
-        var shoppingItemToUpdate = shoppingCart.ShoppingItems.FirstOrDefault(item => item.ShoppingItemId == shoppingItemId);
-
-        shoppingItemToUpdate ??= await _api.GetShoppingItemByIdAsync(shoppingItemId);
-
-        shoppingItemToUpdate.Quantity ??= (byte)1;
-
-
-        shoppingItemToUpdate.Quantity = (byte)amount;
-        if (shoppingItemToUpdate.Quantity <= 0)
-        {
-            shoppingCart.ShoppingItems.RemoveAll(item => item.ShoppingItemId == shoppingItemId);
-        }
-        if (shoppingItemToUpdate.Quantity > 255)
-        {
-            shoppingItemToUpdate.Quantity = 255;
-        }
-
-        _api.UpdateShopingCartCookie(shoppingCart);
-        SetShoppingCartInViewBag(shoppingCart);
-
-        return RedirectToAction("Index");
     }
     [HttpPost]
     [AuthorizeByRole("Customer")]
@@ -163,7 +95,7 @@ public class HomeController(ApiServices api) : BaseController(api)
         var shoppingCart = GetShoppingCartFromCookie();
         if (shoppingCart == null)
         {
-            return NotFound();
+            return RedirectToAction("Index");
         }
 
         shoppingCart.ShoppingItems.Clear();
@@ -179,4 +111,64 @@ public class HomeController(ApiServices api) : BaseController(api)
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+
+
 }
+
+
+//[HttpPost]
+//[AuthorizeByRole("Admin", "Customer")]
+//public async Task<IActionResult> IncreaseQuantity(int? shoppingItemId)
+//{
+//    if (shoppingItemId == null)
+//    {
+//        return NotFound();
+//    }
+//    var shoppingCart = GetShoppingCartFromCookie();
+//    if (shoppingCart == null)
+//    {
+//        return NotFound();
+//    }
+//    var itemToUpdate = shoppingCart.ShoppingItems.FirstOrDefault(item => item.ShoppingItemId == shoppingItemId);
+//    itemToUpdate ??= await _api.GetShoppingItemByIdAsync(shoppingItemId);
+//    itemToUpdate.Quantity ??= 1;
+//    if (itemToUpdate.Quantity < 255 && itemToUpdate.Quantity < itemToUpdate.Stock)
+//    {
+//        itemToUpdate.Quantity++;
+//    }
+//    else if (itemToUpdate.Quantity >= 255 || itemToUpdate.Quantity >= itemToUpdate.Stock)
+//    {
+//        itemToUpdate.Quantity = Math.Min((byte)255, itemToUpdate.Stock);
+//    }
+//    _api.UpdateShopingCartCookie(shoppingCart);
+//    SetShoppingCartInViewBag(shoppingCart);
+//    return RedirectToAction("Index");
+//}
+//[HttpPost]
+//[AuthorizeByRole("Admin", "Customer")]
+//public async Task<IActionResult> DecreaseQuantity(int? shoppingItemId)
+//{
+//    if (shoppingItemId == null)
+//    {
+//        return NotFound();
+//    }
+//    var shoppingCart = GetShoppingCartFromCookie();
+//    if (shoppingCart == null)
+//    {
+//        return NotFound();
+//    }
+//    var shoppingItemToUpdate = shoppingCart.ShoppingItems.FirstOrDefault(item => item.ShoppingItemId == shoppingItemId);
+//    shoppingItemToUpdate ??= await _api.GetShoppingItemByIdAsync(shoppingItemId);
+//    shoppingItemToUpdate.Quantity ??= 1;
+//    if (shoppingItemToUpdate.Quantity > 1)
+//    {
+//        shoppingItemToUpdate.Quantity--;
+//    }
+//    else
+//    {
+//        shoppingCart.ShoppingItems.RemoveAll(item => item.ShoppingItemId == shoppingItemId);
+//    }
+//    _api.UpdateShopingCartCookie(shoppingCart);
+//    SetShoppingCartInViewBag(shoppingCart);
+//    return RedirectToAction("Index");
+//}
