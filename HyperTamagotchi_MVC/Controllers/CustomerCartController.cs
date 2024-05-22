@@ -1,34 +1,23 @@
 ﻿using HyperTamagotchi_MVC.Models;
-using HyperTamagotchi.Common.DTO;
 using HyperTamagotchi_MVC.Models.DTO;
 using HyperTamagotchi_MVC.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Data;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Cors.Infrastructure;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 
 namespace HyperTamagotchi_MVC.Controllers
 {
-    public class CustomerCartController : Controller
+    public class CustomerCartController(ApiServices api) : Controller
     {
-        private readonly ApiServices _api;
-
-        public CustomerCartController(ApiServices api)
-        {
-            _api = api;
-        }
+        private readonly ApiServices _api = api;
 
         private ShoppingCart GetShoppingCartFromCookie()
         {
             var cookie = Request.Cookies["ShoppingCart"];
             if (string.IsNullOrEmpty(cookie))
             {
-                return new ShoppingCart { ShoppingItems = new List<ShoppingItem>() };
+                return new ShoppingCart { ShoppingItems = [] };
             }
             return JsonConvert.DeserializeObject<ShoppingCart>(cookie);
         }
@@ -49,11 +38,22 @@ namespace HyperTamagotchi_MVC.Controllers
             ViewBag.ShoppingCart = shoppingCart;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            //var email =  User.FindFirst(ClaimTypes.Email)?.Value;
+            var address = await _api.GetAddressByIdAsync(User.Claims.FirstOrDefault(c => c.Type == "AddressId").Value);
+
+            ViewData["Customer"] = new
+            {
+                FullName = User.Claims.FirstOrDefault(c => c.Type == "FullName"),
+                Email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email),
+                Address = address
+            };
+
             var shoppingCart = GetShoppingCartFromCookie();
             SetShoppingCartInViewBag(shoppingCart);
             return View(shoppingCart);
+
         }
 
         [HttpPost]
@@ -69,20 +69,19 @@ namespace HyperTamagotchi_MVC.Controllers
             try
             {
                 var user = await _api.GetUserByEmailAsync(email);
-                var userId = user?.Id;
 
-                if (string.IsNullOrEmpty(userId))
+                if (string.IsNullOrEmpty(user.Id))
                 {
                     return Unauthorized();
                 }
 
                 var checkoutModel = new CheckoutModel
                 {
-                    CustomerId = userId,
+                    CustomerId = user.Id,
                     Items = model.ShoppingItems.Select(item => new CheckoutItemDto
                     {
                         ShoppingItemId = item.ShoppingItemId,
-                        Quantity = (int)item.Quantity
+                        Quantity = item.Quantity!
                     }).ToList()
                 };
 
@@ -96,7 +95,7 @@ namespace HyperTamagotchi_MVC.Controllers
                     Items = model.ShoppingItems
                 };
 
-                UpdateShoppingCartCookie(model);
+                //UpdateShoppingCartCookie(model);
 
 
                 return View("OrderConfirmation", viewModel);

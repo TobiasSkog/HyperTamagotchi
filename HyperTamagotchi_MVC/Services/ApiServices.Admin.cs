@@ -113,25 +113,23 @@ public partial class ApiServices
         return response.IsSuccessStatusCode;
     }
 
-    [HttpPost]
+    [HttpGet]
     [AuthorizeByRole("Admin")]
-    public async Task<IEnumerable<Order>> GetAllOrdersAsync()
+    public async Task<List<Order>> GetAllOrdersAsync()
     {
         EnsureJwtTokenIsAddedToRequest();
-
-        return await _client.GetFromJsonAsync<IEnumerable<Order>>("api/Admin/GetAllOrders");
-
-        //var response = await _client.GetAsync($"api/Admin/GetAllOrders");
-
+        await Console.Out.WriteLineAsync("popo");
+        var response = await _client.GetAsync("api/Admin/GetAllOrders");
         //if (!response.IsSuccessStatusCode)
         //{
         //    return [];
         //}
+        var jsonResponse = await response.Content.ReadAsStringAsync();
 
-        //var jsonResponse = await response.Content.ReadAsStringAsync();
-        //var orders = JsonConvert.DeserializeObject<IEnumerable<Order>>(jsonResponse);
 
-        //return orders;
+
+        var orders = JsonConvert.DeserializeObject<List<Order>>(jsonResponse);
+        return orders;
     }
 
     [HttpPost]

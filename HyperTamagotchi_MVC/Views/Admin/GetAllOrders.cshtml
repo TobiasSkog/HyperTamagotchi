@@ -29,7 +29,7 @@
                         {
                             <tr>
                                 <td>@Html.DisplayFor(modelItem => order.OrderId)</td>
-                                <td>@Html.DisplayFor(modelItem => order.Customer.FirstName + " " + order.Customer.LastName)</td>
+                                @* <td>@Html.DisplayFor(modelItem => order.Customer.FirstName + " " + order.Customer.LastName)</td> *@
                                 <td>@Html.DisplayFor(modelItem => order.OrderDate)</td>
                                 <td>@Html.DisplayFor(modelItem => order.ShippingDate)</td>
                                 <td>@Html.DisplayFor(modelItem => order.ExpectedDate)</td>

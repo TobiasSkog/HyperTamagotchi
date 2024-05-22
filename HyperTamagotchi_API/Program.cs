@@ -21,6 +21,8 @@ public class Program
             .AddDefaultTokenProviders();
 
         builder.Services.AddControllers();
+
+
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddEndpointsApiExplorer();
 
@@ -108,9 +110,6 @@ public class Program
         });
 
         builder.Services.AddAuthorization();
-
-
-
 
         var app = builder.Build();
 

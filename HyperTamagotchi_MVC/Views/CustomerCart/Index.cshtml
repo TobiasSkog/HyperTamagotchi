@@ -1,7 +1,7 @@
 ﻿@model HyperTamagotchi_MVC.Models.ShoppingCart
 
 @{
-    var customer = ViewBag.Customer as Customer;
+    var customer = ViewBag.Customer;
 }
 
 <div class="container my-4">
@@ -13,9 +13,10 @@
                     <h4 class="card-title mb-0">Customer Items</h4>
                 </div>
                 <div class="card-body">
+                        <form asp-action="Checkout" method="post">
+                        <input type="hidden" name="ShoppingCartId" value="@Model.ShoppingCartId" />
                     @if (Model.ShoppingItems.Any())
                     {
-                        <form asp-action="Checkout" method="post">
                             <table class="table table-bordered table-secondary text-center align-middle">
                                 <thead>
                                     <tr>
@@ -55,12 +56,12 @@
                                 <p class="mb-1"><strong>Total:</strong> @(Model.ShoppingItems.Sum(i => i.Price * i.Quantity) + 2.00) @Model.ShoppingItems.First().CurrencyType</p>
                                 <button type="submit" class="btn btn-primary">Confirm and Pay</button>
                             </div>
-                        </form>
-                    }
+                    }                        
                     else
                     {
                         <p>Your cart is empty.</p>
                     }
+                    </form>
                 </div>
             </div>
         </div>
@@ -73,8 +74,8 @@
                 <div class="card-body">
                     @if (customer != null)
                     {
-                        <p><strong>Customer Name:</strong> @customer.FirstName @customer.LastName</p>
-                        <p><strong>Email:</strong> @customer.Email</p>
+                        <p><strong>Customer Name:</strong> @customer.FullName</p>
+                        <p><strong>Email:</strong> @customer.Email.Value</p>
                         <p><strong>Customer Address:</strong> @customer.Address.StreetAddress, @customer.Address.City, @customer.Address.ZipCode</p>
                     }
                     <div class="text-center">

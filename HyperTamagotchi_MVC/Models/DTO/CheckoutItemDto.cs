@@ -3,6 +3,6 @@
     public class CheckoutItemDto
     {
         public int ShoppingItemId { get; set; }
-        public int Quantity { get; set; }
+        public byte? Quantity { get; set; }
     }
 }

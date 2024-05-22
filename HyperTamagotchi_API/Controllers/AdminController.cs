@@ -7,6 +7,7 @@ using HyperTamagotchi_API.Models.DTO;
 using HyperTamagotchi_API.Models.TamagotchiProperties;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace HyperTamagotchi_API.Controllers;
 
@@ -171,20 +172,63 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
 
     [HttpGet]
     [Route("GetAllOrders")]
-    public async Task<IEnumerable<OrderDto>> GetAllOrders()
+    public async Task<ActionResult<List<OrderDto>>> GetAllOrders()
     {
 
-        var orders = await _context.Orders.ToListAsync();
-        var ordersDto = _mapper.Map<IEnumerable<OrderDto>>(orders);
-        return ordersDto;
+        var orders = await _context.Orders
+            .Include(o => o.Customer)
+            .Include(o => o.Items)
+                .ThenInclude(i => i.ShoppingItem)
+            .ToListAsync();
+        List<OrderDto> ordersDto = [];
+        foreach (var order in orders)
+        {
+            ordersDto.Add(new OrderDto
+            {
+                OrderId = order.OrderId,
+                Customer = new
+                (
+                    id: order.Customer.Id,
+                    firstName: order.Customer.FirstName,
+                    lastName: order.Customer.LastName,
+                    email: order.Customer.Email!,
+                    addressId: order.Customer.AddressId,
+                    shoppingCartId: order.Customer.ShoppingCartId
+                ),
+                OrderDate = order.OrderDate,
+                ShippingDate = order.ShippingDate,
+                ExpectedDate = order.ExpectedDate,
+                Items = order.Items.Select(i => new ShoppingItem
+                {
+                    ShoppingItemId = i.ShoppingItem.ShoppingItemId,
+                    Name = i.ShoppingItem.Name,
+                    Description = i.ShoppingItem.Description,
+                    Stock = i.ShoppingItem.Stock,
+                    Price = i.ShoppingItem.Price,
+                    CurrencyType = i.ShoppingItem.CurrencyType,
+                    Discount = i.ShoppingItem.Discount,
+                    ImagePath = i.ShoppingItem.ImagePath,
+                    Quantity = i.ShoppingItem.Quantity
+                }).ToList()
+            });
+        }
+        var jsonResponse = JsonConvert.SerializeObject(ordersDto, new JsonSerializerSettings
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        });
+        Console.WriteLine(jsonResponse);
 
+        return Ok(jsonResponse);
     }
 
     [HttpGet]
     [Route("GetSpecificOrder/{id}")]
     public async Task<OrderDto> GetSpecificOrder(int id)
     {
-        var order = await _context.Orders.FindAsync(id);
+        var order = await _context.Orders
+            .Include(o => o.Customer)
+            .Include(o => o.Items)
+            .FirstOrDefaultAsync(o => o.OrderId == id);
         var orderDto = _mapper.Map<OrderDto>(order);
 
         return orderDto;

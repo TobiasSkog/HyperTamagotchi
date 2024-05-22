@@ -94,16 +94,11 @@ body {
 .navbar{
     height: 50px !important;
 }
-.logo-container{
-    position: absolute;
-    top:10px;
-    left:10px;
-    z-index:100;
-}
 .logo-img{
-    height:150px;
-    border-radius:50%;
-    clip:rect(0px, 70px, 70px, 0) !important;
+    height:50px;
+    border-radius:15%;    
+    margin:0;
+    padding:0;
     box-shadow:0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .navbar .container-fluid{
