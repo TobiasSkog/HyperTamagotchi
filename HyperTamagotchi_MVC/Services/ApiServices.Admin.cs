@@ -58,6 +58,7 @@ public partial class ApiServices
         {
             SelectedShoppingItems = selectedShoppingItems,
             DiscountValue = discountPercentage
+
         };
 
         var response = await _client.PostAsJsonAsync($"api/Admin/AddDiscountToShoppingItems", dto);
@@ -89,7 +90,6 @@ public partial class ApiServices
     public async Task<bool> EditShoppingItem(ShoppingItem item)
     {
         EnsureJwtTokenIsAddedToRequest();
-
         var response = await _client.PostAsJsonAsync($"api/Admin/EditShoppingItem", item);
         return response.IsSuccessStatusCode;
 
@@ -99,7 +99,6 @@ public partial class ApiServices
     public async Task<bool> EditTamagotchi(Tamagotchi item)
     {
         EnsureJwtTokenIsAddedToRequest();
-
         var response = await _client.PostAsJsonAsync($"api/Admin/EditTamagotchi", item);
         return response.IsSuccessStatusCode;
     }
@@ -143,6 +142,7 @@ public partial class ApiServices
 
         return await _client.GetFromJsonAsync<Order>($"api/Admin/GetSpecificOrder/{id}");
     }
+
 }
 
 
