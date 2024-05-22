@@ -22,25 +22,52 @@
         @foreach (var item in Model)
         {
             <div class="col-md-4 mb-4">
-                <div class="card h-100">
+                <div class="card h-100 d-flex flex-column">
                     <img src="@item.ImagePath" class="card-img-top img-small-centered" alt="@item.Name" />
-                    <div class="card-body text-center">
-                        <h5 class="card-title">@item.Name</h5>
-                        <p class="card-text">@item.Description</p>
-                        <p class="card-text badge bg-secondary">Stock: @item.Stock</p> <!-- Will have to adjust placement etc..-->
-                        <p class="card-text badge bg-primary">@((float)Math.Round((item.Price * item.Discount), 2)) @item.CurrencyType</p>
+                    <div class="card-body text-center d-flex flex-column justify-content-between">
+                        <div>
+                            <h5 class="card-title">@item.Name</h5>
+                            <p class="card-text">@item.Description</p>
+                        </div>
+                        <div class="no-gutters cart-container">
+                            <div class="d-flex justify-content-between align-items-center my-2">
+                                <span class="badge bg-secondary stock-badge">Stock: @item.Stock</span>
+                                <span class="badge bg-primary">Price: @((float)Math.Round((item.Price * item.Discount), 2)) @item.CurrencyType</span>
+                            </div>
                         @if (shoppingCart != null && HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
                         {
                             if (!shoppingCart.ShoppingItems.Any(si => si.ShoppingItemId == item.ShoppingItemId))
                             {
                                 <form asp-action="AddToCart" method="post">
-                                    <input type="hidden" name="id" value="@item.ShoppingItemId" />
-                                    <button type="submit" class="btn btn-primary">Add to cart</button>
+                                   
+                                        <input type="hidden" name="id" value="@item.ShoppingItemId" />
+                                        <button type="submit" class="btn btn-primary cart-button">Add to cart</button>
                                 </form>
                             }
                             else
                             {
-                                <div class="row no-gutters justify-content-center">
+                                <div class="no-gutters cart-controll">
+                                    <button class="btn btn-primary decrease-quantity" data-item-id="@item.ShoppingItemId">-</button>
+                                    <input class="form-control text-center item-quantity" data-item-id="@item.ShoppingItemId" value="@(shoppingCart.ShoppingItems.Where(si => si.ShoppingItemId == item.ShoppingItemId).Sum(si => si.Quantity))" />
+                                    <button class="btn btn-primary increase-quantity" data-item-id="@item.ShoppingItemId">+</button>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                                <a asp-controller="Account" asp-action="Login" class="btn btn-primary cart-button">Add to cart</a>
+                        }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+@*
+                                <div class="row no-gutters justify-content-center cart-controll">
                                     <div class="col-auto">
                                         <button class="btn btn-primary decrease-quantity" data-item-id="@item.ShoppingItemId">-</button>
                                     </div>
@@ -51,28 +78,7 @@
                                         <button class="btn btn-primary increase-quantity" data-item-id="@item.ShoppingItemId">+</button>
                                     </div>
                                 </div>
-                            }
-                        }
-                        else
-                        {
-                            <a asp-controller="Account" asp-action="Login" class="btn btn-primary">Add to cart</a>
-                        }
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
-</div>
-
-<style>
-    .img-small-centered {
-        max-width: 150px; /* Maximal bredd */
-        max-height: 150px; /* Maximal höjd */
-        display: block; /* Göra bilderna till blockelement för att kunna använda margin:auto */
-        margin: auto; /* Centrera bilderna horisontellt */
-    }
-</style>
-
+                                *@
 
 @* <div class="row no-gutters justify-content-center">
                                     <div class="col-auto">

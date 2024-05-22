@@ -55,9 +55,11 @@
         </dd>
     </dl>
     
-    <form asp-action="Delete">
-        <input hidden name="id" value="@Model.ShoppingItemId" />
-        <button type="submit" value="Delete" class="btn btn-danger mt-2" /> |
-        <a asp-action="Index" class="btn btn-primary mt-2">Back to List</a>
+    <form asp-action="Delete" class="d-flex flex-column">
+        <div class="d-flex flex-row">
+            <input hidden name="id" value="@Model.ShoppingItemId" />
+            <button asp-action="Delete" class="btn btn-danger mt-2" >Delete</button>
+            <button asp-action="Index" class="btn btn-primary mt-2">Back to List</button>
+        </div>
     </form>
 </div>

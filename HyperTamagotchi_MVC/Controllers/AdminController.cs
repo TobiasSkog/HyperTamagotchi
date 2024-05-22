@@ -21,6 +21,24 @@ public class AdminController(ApiServices api) : Controller
     }
 
     [HttpGet]
+    public async Task<IActionResult> GetAllOrders()
+    {
+        return View(await _api.GetAllOrdersAsync());
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> OrderDetails(int id)
+    {
+        var order = await _api.GetOrderByIdAsync(id);
+        if (order == null)
+        {
+            return NotFound();
+        }
+
+        return View(order);
+    }
+
+    [HttpGet]
     public async Task<IActionResult> Discount()
     {
         return View(await _api.GetAllShoppingItemsAsync());
@@ -29,18 +47,17 @@ public class AdminController(ApiServices api) : Controller
     [HttpPost]
     public async Task<IActionResult> Discount(List<int> selectedShoppingItems, float? discountValue)
     {
-        _api.EnsureJwtTokenIsAddedToRequest();
 
         if (selectedShoppingItems == null || selectedShoppingItems.Count <= 0 || discountValue == null)
         {
             ModelState.AddModelError(string.Empty, "Invalid input.");
-            return RedirectToAction("Index");
+            return RedirectToAction("Discount");
         }
 
         if (selectedShoppingItems == null || selectedShoppingItems.Count <= 0)
         {
             ModelState.AddModelError(string.Empty, "No selected items.");
-            return RedirectToAction("Index");
+            return RedirectToAction("Discount");
         }
 
         float discountPercentage = DiscountConversionHelper.ConvertFromUserInputToShoppingItem((float)discountValue);
@@ -51,7 +68,7 @@ public class AdminController(ApiServices api) : Controller
         if (!success)
         {
             ModelState.AddModelError(string.Empty, "Failed to update discount.");
-            return RedirectToAction("Index");
+            return RedirectToAction("Discount");
         }
 
         return RedirectToAction("Discount");
@@ -68,11 +85,7 @@ public class AdminController(ApiServices api) : Controller
 
         return View(await _api.GetShoppingItemByIdAsync(id));
     }
-    [HttpGet]
-    public async Task<IActionResult> GetAllOrders()
-    {
-        return View(await _api.GetAllOrders());
-    }
+
     public IActionResult AccessDenied()
     {
         return View();
@@ -248,6 +261,7 @@ public class AdminController(ApiServices api) : Controller
         }
 
         var item = await _api.GetShoppingItemByIdAsync(id);
+
         return View(item);
     }
 

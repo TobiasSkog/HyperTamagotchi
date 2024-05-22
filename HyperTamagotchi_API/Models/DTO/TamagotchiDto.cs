@@ -8,7 +8,7 @@ public class TamagotchiDto
     public string Description { get; set; }
     public byte Stock { get; set; }
     public float Price { get; set; }
-    public string ImagePath { get; set; }
+    public string? ImagePath { get; set; }
     public TamagotchiColor TamagotchiColor { get; set; }
     public TamagotchiType TamagotchiType { get; set; }
     public TamagotchiMood Mood { get; set; }

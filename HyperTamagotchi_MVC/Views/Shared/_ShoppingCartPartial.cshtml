@@ -1,21 +1,21 @@
 ﻿@{
     var shoppingCart = ViewBag.ShoppingCart as ShoppingCart;
-    bool hasItems = shoppingCart?.ShoppingItems.Count > 0;
+    //bool hasItems = shoppingCart?.ShoppingItems.Count > 0;
 }
 @if (User.IsInRole("Customer") && shoppingCart != null)
 {  
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="shoppingCartDropdown" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-            @await Html.PartialAsync("_PartialShoppingCartIcon", hasItems)
+            @await Html.PartialAsync("_PartialShoppingCartIcon", shoppingCart.ShoppingItems.Any())
             <span class="badge bg-secondary total-quantity">@shoppingCart.ShoppingItems.Sum(si => si.Quantity)</span>
         </a>
         <ul class="dropdown-menu dropdown-menu-end text-center" aria-labelledby="shoppingCartDropdown">
-            @if (hasItems)
+            @if (shoppingCart.ShoppingItems.Any())
             {
                 @foreach (var item in shoppingCart.ShoppingItems)
                 {
                     <li>
-                         <div class="dropdown-item">
+                         <div class="dropdown-item cart-item">
                                 <span class="item-name">@item.Name - <span class="item-price" data-price="@(Math.Round((item.Price * item.Discount), 2))">@(Math.Round((item.Price * item.Discount), 2))</span> @item.CurrencyType</span>
                                 <div class="d-flex justify-content-center align-items-center">
                                     <button class="btn btn-primary decrease-quantity" data-item-id="@item.ShoppingItemId">-</button>
@@ -25,22 +25,23 @@
                             </div>
                     </li>
                 }
+                <div class="cart-has-items m-0">
                 <li><hr class="dropdown-divider" /></li>
-
-                <li>
-                    <div class="dropdown-item">                         
-                        <span class="text-dark text-center total-price">Total: @(shoppingCart.ShoppingItems.Sum(si => Math.Round((float)si.Quantity * si.Price * si.Discount, 2))) SEK</span>                       
-                    </div>
-                </li>
-                <li>
-                    <div class="dropdown-item">
-                        @* <button class="btn btn-warning empty-cart-button">Empty Cart</button> *@
-                        <form asp-controller="Home" asp-action="EmptyCart" method="post">
-                            <button type="button submit" class="btn btn-outline-secondary">Empty Cart</button>
-                        </form>
-                    </div>
-                </li>
+                    <li>
+                        <div class="dropdown-item">                         
+                            <span class="text-dark text-center total-price">Total: @(shoppingCart.ShoppingItems.Sum(si => Math.Round((float)si.Quantity * si.Price * si.Discount, 2))) SEK</span>                       
+                        </div>
+                    </li>
+                    <li>
+                        <div class="dropdown-item">
+                            @* <button class="btn btn-warning empty-cart-button">Empty Cart</button> *@
+                            <form asp-controller="Home" asp-action="EmptyCart" method="post">
+                                <button type="button submit" class="btn btn-outline-secondary">Empty Cart</button>
+                            </form>
+                        </div>
+                    </li>
                 <li><hr class="dropdown-divider" /></li>
+                </div>
             }
             <li>
                 <a class="nav-link text-dark" asp-area="" asp-controller="CustomerCart" asp-action="Index"><i class="bi bi-cart-fill"></i> View Cart</a>

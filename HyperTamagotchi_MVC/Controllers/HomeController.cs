@@ -62,7 +62,7 @@ public class HomeController(ApiServices api) : BaseController(api)
         if (amount <= 0)
         {
             RemoveItemFromCart(shoppingCart, itemToUpdate);
-            return Json(new { success = true, quantity = 0 });
+            return Json(new { success = true, quantity = 0, totalQuantity = shoppingCart.ShoppingItems.Sum(si => si.Quantity), shouldRemove = true });
         }
 
         byte stock = itemToUpdate.Stock > 0 ? itemToUpdate.Stock : (byte)0;
@@ -71,7 +71,7 @@ public class HomeController(ApiServices api) : BaseController(api)
         if (adjustedAmount == 0)
         {
             RemoveItemFromCart(shoppingCart, itemToUpdate);
-            return Json(new { success = true, quantity = 0, totalQuantity = shoppingCart.ShoppingItems.Sum(si => si.Quantity), totalPrice = shoppingCart.ShoppingItems.Sum(si => Math.Round((float)si.Quantity * si.Price * si.Discount, 2)) });
+            return Json(new { success = true, quantity = 0, totalQuantity = shoppingCart.ShoppingItems.Sum(si => si.Quantity), shouldRemove = true });
         }
 
         itemToUpdate.Quantity = adjustedAmount;

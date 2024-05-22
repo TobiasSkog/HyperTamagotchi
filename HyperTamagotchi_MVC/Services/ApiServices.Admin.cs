@@ -57,7 +57,7 @@ public partial class ApiServices
         var dto = new
         {
             SelectedShoppingItems = selectedShoppingItems,
-            DiscountPercentage = discountPercentage
+            DiscountValue = discountPercentage
         };
 
         var response = await _client.PostAsJsonAsync($"api/Admin/AddDiscountToShoppingItems", dto);
@@ -110,27 +110,38 @@ public partial class ApiServices
     {
         EnsureJwtTokenIsAddedToRequest();
 
-        var response = await _client.DeleteAsync($"api/Admin/DeleteItem{id}");
+        var response = await _client.DeleteAsync($"api/Admin/Delete/{id}");
         return response.IsSuccessStatusCode;
     }
 
     [HttpPost]
     [AuthorizeByRole("Admin")]
-    public async Task<IEnumerable<Order>> GetAllOrders()
+    public async Task<IEnumerable<Order>> GetAllOrdersAsync()
     {
         EnsureJwtTokenIsAddedToRequest();
 
-        var response = await _client.GetAsync($"api/Admin/GetAllOrders");
+        return await _client.GetFromJsonAsync<IEnumerable<Order>>("api/Admin/GetAllOrders");
 
-        if (!response.IsSuccessStatusCode)
-        {
-            return [];
-        }
+        //var response = await _client.GetAsync($"api/Admin/GetAllOrders");
 
-        var jsonResponse = await response.Content.ReadAsStringAsync();
-        var orders = JsonConvert.DeserializeObject<IEnumerable<Order>>(jsonResponse);
+        //if (!response.IsSuccessStatusCode)
+        //{
+        //    return [];
+        //}
 
-        return orders;
+        //var jsonResponse = await response.Content.ReadAsStringAsync();
+        //var orders = JsonConvert.DeserializeObject<IEnumerable<Order>>(jsonResponse);
+
+        //return orders;
+    }
+
+    [HttpPost]
+    [AuthorizeByRole("Admin")]
+    public async Task<Order> GetOrderByIdAsync(int id)
+    {
+        EnsureJwtTokenIsAddedToRequest();
+
+        return await _client.GetFromJsonAsync<Order>($"api/Admin/GetSpecificOrder/{id}");
     }
 }
 
