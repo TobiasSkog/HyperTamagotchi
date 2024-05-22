@@ -1,7 +1,7 @@
-﻿@{
-    ViewData["Title"] = "Cart";
-    var shoppingCart = ViewBag.ShoppingCart as ShoppingCart;
-    Layout = "~/Views/Shared/_Layout.cshtml";
+﻿@model HyperTamagotchi_MVC.Models.ShoppingCart
+
+@{
+    var customer = ViewBag.Customer as Customer;
 }
 
 <div class="container my-4">
@@ -13,63 +13,70 @@
                     <h4 class="card-title mb-0">Customer Items</h4>
                 </div>
                 <div class="card-body">
-                    <table class="table table-bordered table-secondary">
-                        <thead>
-                            <tr>
-                                <th>Image</th>
-                                <th>Product</th>
-                                <th>Color</th>
-                                <th>Quantity</th>
-                                <th>Total Cost</th>
-                                <th>Remove</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Cart items will be dynamically loaded depending on what items is in the cart for the custoemr will be added alter-->
-                            <tr>
-                                <td><img src="~/Assets/Items/Bed.png" alt="Rainbow Tamagotchi" class="img-thumbnail" width="40"></td>
-                                <td>Rainbow Tamagotchi & Case</td>
-                                <td>S</td>
-                                <td><input type="number" class="form-control" value="1" min="1"></td>
-                                <td>$15.49</td>
-                                <td><button class="btn btn-primary btn-sm">Remove</button></td>
-                            </tr>
-                            <tr>
-                                <td><img src="~/Assets/Items/Toy_Set.png" alt="Glowing Necklace" class="img-thumbnail" width="40"></td>
-                                <td>Glowing Necklace</td>
-                                <td>1 pc</td>
-                                <td><input type="number" class="form-control" value="1" min="1"></td>
-                                <td>$12.39</td>
-                                <td><button class="btn btn-primary btn-sm">Remove</button></td>
-                            </tr>
-                            <tr>
-                                <td><img src="~/Assets/Tamagotchi/Farmer/Farmer_Adult_Red.png" alt="Tamagotchi Charm" class="img-thumbnail" width="40"></td>
-                                <td>Tamagotchi Charm</td>
-                                <td>1 pc</td>
-                                <td><input type="number" class="form-control" value="1" min="1"></td>
-                                <td>$7.29</td>
-                                <td><button class="btn btn-primary btn-sm">Remove</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class="text-end">
-                        <p class="mb-1"><strong>Subtotal:</strong> $35.17</p>
-                        <p class="mb-1"><strong>Shipping:</strong> $2.00</p>
-                        <p class="mb-1"><strong>Total:</strong> $37.17</p>
-                        <button class="btn btn-primary">Confirm and Pay</button>
-                    </div>
+                    @if (Model.ShoppingItems.Any())
+                    {
+                        <form asp-action="Checkout" method="post">
+                            <table class="table table-bordered table-secondary text-center align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Product</th>
+                                        <th>Quantity</th>
+                                        <th>Total Cost</th>
+                                        <th>Remove</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < Model.ShoppingItems.Count; i++)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <img src="@Model.ShoppingItems[i].ImagePath" alt="@Model.ShoppingItems[i].Name" class="img-thumbnail" width="80" height="80">
+                                            </td>
+                                            <td>@Model.ShoppingItems[i].Name</td>
+                                            <td class="text-start">
+                                                <input type="hidden" name="ShoppingItems[@i].ShoppingItemId" value="@Model.ShoppingItems[i].ShoppingItemId" />
+                                                <input type="hidden" name="ShoppingItems[@i].Name" value="@Model.ShoppingItems[i].Name" />
+                                                <input type="hidden" name="ShoppingItems[@i].Price" value="@Model.ShoppingItems[i].Price" />
+                                                <input type="hidden" name="ShoppingItems[@i].CurrencyType" value="@Model.ShoppingItems[i].CurrencyType" />
+                                                <input type="number" name="ShoppingItems[@i].Quantity" value="@Model.ShoppingItems[i].Quantity" min="1" max="255" class="form-control text-center" />
+                                            </td>
+                                            <td>@(Model.ShoppingItems[i].Price * Model.ShoppingItems[i].Quantity) @Model.ShoppingItems[i].CurrencyType</td>
+                                            <td>
+                                                <button type="button" class="btn btn-primary btn-sm" onclick="removeItem(@Model.ShoppingItems[i].ShoppingItemId)">Remove</button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <div class="text-end">
+                                <p class="mb-1"><strong>Subtotal:</strong> @(Model.ShoppingItems.Sum(i => i.Price * i.Quantity)) @Model.ShoppingItems.First().CurrencyType</p>
+                                <p class="mb-1"><strong>Shipping:</strong> $2.00</p>
+                                <p class="mb-1"><strong>Total:</strong> @(Model.ShoppingItems.Sum(i => i.Price * i.Quantity) + 2.00) @Model.ShoppingItems.First().CurrencyType</p>
+                                <button type="submit" class="btn btn-primary">Confirm and Pay</button>
+                            </div>
+                        </form>
+                    }
+                    else
+                    {
+                        <p>Your cart is empty.</p>
+                    }
                 </div>
             </div>
         </div>
-        <!-- Customer Info Section will be fild with the customers informnation later-->
+        <!-- Customer Info Section -->
         <div class="col-lg-4 mb-3">
             <div class="card bg-primary text-white">
                 <div class="card-header bg-primary text-white">
                     <h4 class="card-title mb-0">Customer Info</h4>
                 </div>
                 <div class="card-body">
-                    <p><strong>Customer Name:</strong> Hans Myren Olsson</p>
-                    <p><strong>Customer Address:</strong> Fagerlandsvägen 35, Bjästa, 89331</p>
+                    @if (customer != null)
+                    {
+                        <p><strong>Customer Name:</strong> @customer.FirstName @customer.LastName</p>
+                        <p><strong>Email:</strong> @customer.Email</p>
+                        <p><strong>Customer Address:</strong> @customer.Address.StreetAddress, @customer.Address.City, @customer.Address.ZipCode</p>
+                    }
                     <div class="text-center">
                         <img src="~/Assets/Img/logo.png" alt="Tamworld Logo" class="img-fluid" style="max-width: 300px;">
                     </div>
@@ -78,4 +85,3 @@
         </div>
     </div>
 </div>
-

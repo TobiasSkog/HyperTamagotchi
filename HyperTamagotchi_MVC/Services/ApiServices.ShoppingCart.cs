@@ -5,7 +5,7 @@ namespace HyperTamagotchi_MVC.Services;
 
 public partial class ApiServices
 {
-    private async Task<ShoppingCart> GetShoppingCartById()
+    public async Task<ShoppingCart> GetShoppingCartById()
     {
 
         var shoppingCartIdClaim = _contextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == CustomClaimShoppingCart.ClaimName);
@@ -25,11 +25,8 @@ public partial class ApiServices
         }
 
         var jsonShoppingCart = await response.Content.ReadAsStringAsync();
-
         var shoppingCart = JsonConvert.DeserializeObject<ShoppingCart>(jsonShoppingCart);
 
         return shoppingCart!;
     }
-
-
 }

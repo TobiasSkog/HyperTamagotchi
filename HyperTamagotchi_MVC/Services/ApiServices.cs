@@ -46,7 +46,6 @@ public partial class ApiServices(IHttpClientFactory httpClientFactory, IHttpCont
 
         AppendCookie("ShoppingCart", shoppingCartJson, rememberMe);
     }
-
     private class CustomClaimShoppingCart(string shoppingCartId)
     {
         public static string ClaimName { get; set; } = "ShoppingCartId";

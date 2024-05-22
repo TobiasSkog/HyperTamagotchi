@@ -1,0 +1,33 @@
+﻿@model HyperTamagotchi_MVC.Models.OrderConfirmationViewModel
+
+@{
+    ViewBag.Title = "Order Confirmation";
+}
+
+<h2>Order Confirmation</h2>
+
+<p>Thank you for your order!</p>
+<p>Order ID: @Model.OrderId</p>
+<p>Customer Email: @Model.CustomerEmail</p>
+<p>Order Date: @Model.OrderDate</p>
+
+<h3>Items in your order:</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Item Name</th>
+            <th>Quantity</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Quantity</td>
+                <td>@item.Price</td>
+            </tr>
+        }
+    </tbody>
+</table>

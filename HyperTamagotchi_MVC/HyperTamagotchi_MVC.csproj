@@ -28,4 +28,8 @@
     <Folder Include="wwwroot\Assets\a\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\HyperTamagotchi_API\HyperTamagotchi_API.csproj" />
+  </ItemGroup>
+
 </Project>
