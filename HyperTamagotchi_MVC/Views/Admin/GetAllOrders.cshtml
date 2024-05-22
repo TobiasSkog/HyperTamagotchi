@@ -1,0 +1,51 @@
+﻿@model IEnumerable<HyperTamagotchi_MVC.Models.Order>
+@{
+    ViewData["Title"] = "Admin Panel - Orders";
+}
+
+<div class="container mt-5">
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <h1 class="text-center">Admin Panel - Orders</h1>
+        </div>
+    </div>
+    <form asp-controller="Account" asp-action="GetAllOrders" method="post">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-hover table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th></th>
+                            <th>@Html.DisplayNameFor(model => model.OrderId)</th>
+                            <th>@Html.DisplayNameFor(model => model.Customer)</th>
+                            <th>@Html.DisplayNameFor(model => model.OrderDate)</th>
+                            <th>@Html.DisplayNameFor(model => model.ShippingDate)</th>
+                            <th>@Html.DisplayNameFor(model => model.ExpectedDate)</th>
+                            <th>@Html.DisplayNameFor(model => model.Items)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => order.OrderId)</td>
+                                <td>@Html.DisplayFor(modelItem => order.Customer.FirstName + " " + order.Customer.LastName)</td>
+                                <td>@Html.DisplayFor(modelItem => order.OrderDate)</td>
+                                <td>@Html.DisplayFor(modelItem => order.ShippingDate)</td>
+                                <td>@Html.DisplayFor(modelItem => order.ExpectedDate)</td>
+                                <td>
+                                    @foreach (var item in order.Items)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                        @Html.DisplayFor(modelItem => item.Price)
+                                        @Html.DisplayFor(modelItem => item.Quantity)
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+</div>

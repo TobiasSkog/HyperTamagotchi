@@ -134,7 +134,7 @@ public class AuthController(
         }
 
         // Validate the refresh token
-        var validRefreshToken = await _jwtService.ValidateRefreshToken(user, tokenRequest.RefreshToken);
+        var validRefreshToken = _jwtService.ValidateRefreshToken(user, tokenRequest.RefreshToken);
         if (!validRefreshToken)
         {
             return BadRequest("Invalid refresh token");

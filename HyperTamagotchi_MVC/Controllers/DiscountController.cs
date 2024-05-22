@@ -13,15 +13,12 @@ public class DiscountController(ApiServices api) : Controller
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        _api.EnsureJwtTokenIsAddedToRequest();
-
         return View(await _api.GetAllShoppingItemsAsync());
     }
 
     [HttpPost]
     public async Task<IActionResult> AddDiscountToShoppingItems(List<int> selectedShoppingItems, float? discountValue)
     {
-        _api.EnsureJwtTokenIsAddedToRequest();
 
         if (selectedShoppingItems == null || selectedShoppingItems.Count <= 0 || discountValue == null)
         {

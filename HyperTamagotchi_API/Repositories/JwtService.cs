@@ -56,12 +56,13 @@ public class JwtService(IConfiguration configuration) : IJwtService
 
         if (user is Customer customer)
         {
-            string shoppingCartId = customer.ShoppingCartId.ToString();
-
-            CustomClaimShoppingCart customClaimShoppingCart = new(shoppingCartId);
+            CustomClaimShoppingCart customClaimShoppingCart = new(customer.ShoppingCartId.ToString());
+            CustomClaimFullName customClaimFullName = new(customer.FirstName, customer.LastName);
+            CustomClaimAddressId customClaimAddressId = new(customer.AddressId.ToString());
 
             claims.Add(new Claim(customClaimShoppingCart.ClaimName, customClaimShoppingCart.ClaimValue));
-
+            claims.Add(new(customClaimFullName.ClaimName, customClaimFullName.ClaimValue));
+            claims.Add(new(customClaimAddressId.ClaimName, customClaimAddressId.ClaimValue));
         }
 
         foreach (var role in roles)
@@ -80,7 +81,7 @@ public class JwtService(IConfiguration configuration) : IJwtService
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
-    public async Task<bool> ValidateRefreshToken(Customer customer, string refreshToken)
+    public bool ValidateRefreshToken(Customer customer, string refreshToken)
     {
         if (customer == null)
         {
@@ -141,6 +142,16 @@ public class JwtService(IConfiguration configuration) : IJwtService
     {
         public string ClaimName { get; set; } = "RememberMe";
         public string ClaimValue { get; set; } = RememberMe;
+    }
+    private class CustomClaimFullName(string firstName, string lastName)
+    {
+        public string ClaimName { get; set; } = "FullName";
+        public string ClaimValue { get; set; } = firstName + " " + lastName;
+    }
+    private class CustomClaimAddressId(string addressId)
+    {
+        public string ClaimName { get; set; } = "AddressId";
+        public string ClaimValue { get; set; } = addressId;
     }
 }
 

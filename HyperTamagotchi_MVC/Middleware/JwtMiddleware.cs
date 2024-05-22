@@ -47,18 +47,6 @@ public class JwtMiddleware(RequestDelegate next, IHttpClientFactory httpClientFa
         }
 
         await _next(context);
-        //var token = context.Request.Cookies["jwtToken"];
-
-        //if (!string.IsNullOrEmpty(token))
-        //{
-        //    var principal = tokenValidator.ValidateToken(token);
-        //    if (principal != null)
-        //    {
-        //        context.User = principal;
-        //    }
-        //}
-
-        //await _next(context);
     }
     private class TokenResponse
     {

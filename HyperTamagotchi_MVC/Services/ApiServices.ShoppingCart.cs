@@ -28,6 +28,7 @@ public partial class ApiServices
         }
 
         var jsonShoppingCart = await response.Content.ReadAsStringAsync();
+
         var shoppingCart = JsonConvert.DeserializeObject<ShoppingCart>(jsonShoppingCart);
 
         return shoppingCart!;

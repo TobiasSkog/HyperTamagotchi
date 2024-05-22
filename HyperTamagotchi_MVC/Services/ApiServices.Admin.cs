@@ -2,11 +2,52 @@
 using HyperTamagotchi_MVC.Models;
 using HyperTamagotchi_MVC.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace HyperTamagotchi_MVC.Services;
-
 public partial class ApiServices
 {
+    [HttpGet]
+    [AuthorizeByRole("Admin")]
+    public async Task<object?> GetItemToEditAsync(int? id)
+    {
+        EnsureJwtTokenIsAddedToRequest();
+
+        var response = await _client.GetAsync($"api/Admin/GetItemToEdit/{id}");
+
+        if (!response.IsSuccessStatusCode)
+        {
+            return default;
+        }
+
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+
+        var result = JsonConvert.DeserializeObject<EditItemResponse>(jsonResponse);
+        if (result == null)
+        {
+            return default;
+        }
+
+        return result.Type switch
+        {
+            ItemType.Tamagotchi => JsonConvert.DeserializeObject<Tamagotchi>(result.Data),
+            ItemType.ShoppingItem => JsonConvert.DeserializeObject<ShoppingItem>(result.Data),
+            _ => null
+        };
+    }
+
+
+    [HttpPost]
+    [AuthorizeByRole("Admin")]
+    public async Task<Tamagotchi> GetTamagotchiByIdAsync(int? id)
+    {
+        EnsureJwtTokenIsAddedToRequest();
+
+        var response = await _client.GetAsync($"api/Admin/GetTamagotchi/{id}");
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+        var tamagotchi = JsonConvert.DeserializeObject<Tamagotchi>(jsonResponse);
+        return tamagotchi!;
+    }
     [HttpPost]
     [AuthorizeByRole("Admin")]
     public async Task<bool> UpdateDiscountToShoppingItems(List<int> selectedShoppingItems, float discountPercentage)
@@ -16,7 +57,8 @@ public partial class ApiServices
         var dto = new
         {
             SelectedShoppingItems = selectedShoppingItems,
-            DiscountPercentage = discountPercentage
+            DiscountValue = discountPercentage
+
         };
 
         var response = await _client.PostAsJsonAsync($"api/Admin/AddDiscountToShoppingItems", dto);
@@ -66,9 +108,41 @@ public partial class ApiServices
     public async Task<bool> Delete(int id)
     {
         EnsureJwtTokenIsAddedToRequest();
-        var response = await _client.DeleteAsync($"api/Admin/Delete{id}");
+
+        var response = await _client.DeleteAsync($"api/Admin/Delete/{id}");
         return response.IsSuccessStatusCode;
     }
+
+    [HttpPost]
+    [AuthorizeByRole("Admin")]
+    public async Task<IEnumerable<Order>> GetAllOrdersAsync()
+    {
+        EnsureJwtTokenIsAddedToRequest();
+
+        return await _client.GetFromJsonAsync<IEnumerable<Order>>("api/Admin/GetAllOrders");
+
+        //var response = await _client.GetAsync($"api/Admin/GetAllOrders");
+
+        //if (!response.IsSuccessStatusCode)
+        //{
+        //    return [];
+        //}
+
+        //var jsonResponse = await response.Content.ReadAsStringAsync();
+        //var orders = JsonConvert.DeserializeObject<IEnumerable<Order>>(jsonResponse);
+
+        //return orders;
+    }
+
+    [HttpPost]
+    [AuthorizeByRole("Admin")]
+    public async Task<Order> GetOrderByIdAsync(int id)
+    {
+        EnsureJwtTokenIsAddedToRequest();
+
+        return await _client.GetFromJsonAsync<Order>($"api/Admin/GetSpecificOrder/{id}");
+    }
+
 }
 
 

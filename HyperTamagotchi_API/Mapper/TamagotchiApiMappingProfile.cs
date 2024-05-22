@@ -12,12 +12,12 @@ public class TamagotchiApiMappingProfile : Profile
         CreateMap<ShoppingCart, ShoppingCartDto>();
         CreateMap<ShoppingItem, ShoppingItemDto>();
         CreateMap<Tamagotchi, TamagotchiDto>();
-        //CreateMap<ShoppingCart, ShoppingCartDto>();
+        CreateMap<Order, OrderDto>();
 
         // Model to DTO mapping
         CreateMap<ShoppingCartDto, ShoppingCart>();
         CreateMap<ShoppingItemDto, ShoppingItem>();
-        CreateMap<TamagotchiDto, Tamagotchi>();
+        CreateMap<OrderDto, Order>();
         //CreateMap<ShoppingCartDto, ShoppingCart>();
 
     }
