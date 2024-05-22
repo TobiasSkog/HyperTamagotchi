@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using HyperTamagotchi_API.Data;
+using HyperTamagotchi_API.Filters;
 using HyperTamagotchi_API.Models;
 using HyperTamagotchi_API.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
@@ -36,14 +37,11 @@ namespace HyperTamagotchi_API.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception (use your logging framework of choice)
-                Console.WriteLine($"An error occurred: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
         }
 
         // PUT: api/ShoppingCarts/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutShoppingCart(int id, ShoppingCart shoppingCart)
         {
@@ -74,7 +72,6 @@ namespace HyperTamagotchi_API.Controllers
         }
 
         // POST: api/ShoppingCarts
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<ShoppingCart>> PostShoppingCart(ShoppingCart shoppingCart)
         {
@@ -86,6 +83,7 @@ namespace HyperTamagotchi_API.Controllers
 
         // DELETE: api/ShoppingCarts/5
         [HttpDelete("{id}")]
+        [AuthorizeByRole("Admin")]
         public async Task<IActionResult> DeleteShoppingCart(int id)
         {
             var shoppingCart = await _context.ShoppingCarts.FindAsync(id);
@@ -99,7 +97,6 @@ namespace HyperTamagotchi_API.Controllers
 
             return NoContent();
         }
-
         private bool ShoppingCartExists(int id)
         {
             return _context.ShoppingCarts.Any(e => e.ShoppingCartId == id);

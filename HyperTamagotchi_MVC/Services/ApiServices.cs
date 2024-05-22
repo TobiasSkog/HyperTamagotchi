@@ -4,24 +4,24 @@ using Newtonsoft.Json;
 
 namespace HyperTamagotchi_MVC.Services;
 
-public partial class ApiServices(IHttpClientFactory httpClientFactory, IHttpContextAccessor contextAccessor, IJwtTokenValidator jwtValidator)
+public partial class ApiServices(IHttpClientFactory httpClientFactory, IHttpContextAccessor contextAccessor, IJwtTokenValidator jwtValidator, ILogger<ApiServices> logger)
 {
-    private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
     private readonly IHttpContextAccessor _contextAccessor = contextAccessor;
     private readonly IJwtTokenValidator _jwtValidator = jwtValidator;
     private readonly HttpClient _client = httpClientFactory.CreateClient("API Tamagotchi");
+    private readonly ILogger<ApiServices> _logger = logger;
 
     private void AddJwtTokenToRequest(string token)
     {
         _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-        //var token = _contextAccessor.HttpContext.Request.Cookies["jwtToken"];
     }
     public void EnsureJwtTokenIsAddedToRequest()
     {
-        var _client = _httpClientFactory.CreateClient("API Tamagotchi");
         if (!_client.DefaultRequestHeaders.Contains("Authorization"))
         {
             var token = _contextAccessor.HttpContext.Request.Cookies["jwtToken"];
+            token ??= _contextAccessor.HttpContext.Request.Cookies["Authorization"];
+
             if (!string.IsNullOrEmpty(token))
             {
                 AddJwtTokenToRequest(token);
@@ -34,7 +34,7 @@ public partial class ApiServices(IHttpClientFactory httpClientFactory, IHttpCont
         {
             HttpOnly = true,
             Secure = true,
-            Expires = rememberMe ? DateTime.Now.AddDays(30) : DateTime.Now.AddMinutes(30)
+            Expires = rememberMe ? DateTime.Now.AddDays(30) : DateTime.Now.AddHours(1)
         };
 
         _contextAccessor.HttpContext.Response.Cookies.Append(key, value, cookieOptions);

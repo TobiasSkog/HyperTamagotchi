@@ -1,13 +1,11 @@
-﻿using HyperTamagotchi_MVC.Data;
-using HyperTamagotchi_MVC.Filters;
+﻿using HyperTamagotchi_MVC.Filters;
+using HyperTamagotchi_MVC.Helpers;
 using HyperTamagotchi_MVC.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HyperTamagotchi_MVC.Controllers;
 
 [AuthorizeByRole("Admin")]
-//[Authorize(Roles = "Admin")]
-
 public class DiscountController(ApiServices api) : Controller
 {
     private readonly ApiServices _api = api;
@@ -23,6 +21,7 @@ public class DiscountController(ApiServices api) : Controller
     [HttpPost]
     public async Task<IActionResult> AddDiscountToShoppingItems(List<int> selectedShoppingItems, float? discountValue)
     {
+        _api.EnsureJwtTokenIsAddedToRequest();
 
         if (selectedShoppingItems == null || selectedShoppingItems.Count <= 0 || discountValue == null)
         {
@@ -38,11 +37,11 @@ public class DiscountController(ApiServices api) : Controller
 
         float discountPercentage = DiscountConversionHelper.ConvertFromUserInputToShoppingItem((float)discountValue);
 
+
         var success = await _api.UpdateDiscountToShoppingItems(selectedShoppingItems, discountPercentage);
 
         if (!success)
         {
-            await Console.Out.WriteLineAsync("Failed to update discount.");
             ModelState.AddModelError(string.Empty, "Failed to update discount.");
             return RedirectToAction("Index");
         }

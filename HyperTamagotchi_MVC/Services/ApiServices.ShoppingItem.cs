@@ -7,6 +7,8 @@ public partial class ApiServices
 {
     public async Task<IEnumerable<ShoppingItem>> GetAllShoppingItemsAsync()
     {
+        EnsureJwtTokenIsAddedToRequest();
+
         var response = await _client.GetAsync("api/ShoppingItem");
         if (!response.IsSuccessStatusCode)
         {
@@ -20,6 +22,8 @@ public partial class ApiServices
 
     public async Task<ShoppingItem> GetShoppingItemByIdAsync(int? id)
     {
+        EnsureJwtTokenIsAddedToRequest();
+
         var response = await _client.GetAsync($"api/ShoppingItem/{id}");
         if (!response.IsSuccessStatusCode)
         {

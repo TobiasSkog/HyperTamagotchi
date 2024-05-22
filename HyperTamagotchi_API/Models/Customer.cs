@@ -19,6 +19,7 @@ public class Customer : IdentityUser
     public int AddressId { get; set; }
     public Address Address { get; set; }
 
+    public string? RefreshToken { get; set; }
     public int ShoppingCartId { get; set; }
     public ShoppingCart ShoppingCart { get; set; }
 

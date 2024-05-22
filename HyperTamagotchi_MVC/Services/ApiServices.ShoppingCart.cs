@@ -1,12 +1,15 @@
 ﻿using HyperTamagotchi_MVC.Models;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace HyperTamagotchi_MVC.Services;
 
 public partial class ApiServices
 {
-    public async Task<ShoppingCart> GetShoppingCartById()
+    [HttpPost]
+    private async Task<ShoppingCart> GetShoppingCartById()
     {
+        EnsureJwtTokenIsAddedToRequest();
 
         var shoppingCartIdClaim = _contextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == CustomClaimShoppingCart.ClaimName);
 

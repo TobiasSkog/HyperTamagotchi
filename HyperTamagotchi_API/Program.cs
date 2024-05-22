@@ -1,6 +1,7 @@
 using HyperTamagotchi_API.Data;
 using HyperTamagotchi_API.Mapper;
 using HyperTamagotchi_API.Repositories;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +23,8 @@ public class Program
         builder.Services.AddControllers();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddAutoMapper(typeof(ShoppingCartProfile));
+
+        builder.Services.AddAutoMapper(typeof(TamagotchiApiMappingProfile));
 
         builder.Services.AddSwaggerGen(options =>
         {
@@ -57,11 +59,9 @@ public class Program
 
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(
-                builder.Configuration.GetConnectionString("DefaultConnection")));
+                builder.Configuration.GetConnectionString("AzureConnection")));
 
         builder.Services.AddScoped<IJwtService, JwtService>();
-
-
 
         builder.Services.AddCors(options =>
         {
@@ -69,27 +69,47 @@ public class Program
                 policy =>
                 {
                     policy
-                        .AllowAnyOrigin()
-                        .AllowAnyHeader()
-                        .AllowAnyMethod();
+                     .AllowAnyOrigin()
+                     .AllowAnyHeader()
+                     .AllowAnyMethod();
                 });
         });
 
-        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
+
+        builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
             {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                    ValidAudience = builder.Configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-                };
-            });
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                ValidAudience = builder.Configuration["Jwt:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+            };
+        })
+        .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+        {
+            options.Cookie.HttpOnly = true;
+            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            options.Cookie.SameSite = SameSiteMode.None;
+            options.Cookie.Name = "jwtToken";
+            options.ExpireTimeSpan = TimeSpan.FromHours(1);
+            options.SlidingExpiration = true;
+            options.LoginPath = "/Account/Login";
+            options.LogoutPath = "/Home/Index";
+            options.AccessDeniedPath = "/Account/AccessDenied";
+        });
+
         builder.Services.AddAuthorization();
+
+
 
 
         var app = builder.Build();
@@ -112,8 +132,6 @@ public class Program
         app.UseAuthorization();
 
         app.MapControllers();
-
-        // app.UseDebugRequestHeadersMiddleware();
 
         app.Run();
     }

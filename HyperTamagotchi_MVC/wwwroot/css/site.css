@@ -1,6 +1,7 @@
-html, body {
+html {
   height: 100%;
-  margin: 0;
+  width: auto;
+  margin: 15px;
   padding: 0;
   background-color: #FFFFFF;
 }
@@ -9,6 +10,7 @@ body {
   display: flex;
   flex-direction: column;
   color: #030303;
+  height: auto;
 }
 
 .header, .footer {

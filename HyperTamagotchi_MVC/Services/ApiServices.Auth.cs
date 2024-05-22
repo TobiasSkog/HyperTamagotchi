@@ -6,10 +6,10 @@ namespace HyperTamagotchi_MVC.Services;
 
 public partial class ApiServices
 {
+    [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<bool> LoginAsync(string username, string password, bool rememberMe)
     {
-        //var _client = _httpClientFactory.CreateClient("API Tamagotchi");
         var response = await _client.PostAsJsonAsync("api/Auth/Login", new LoginRequestDto { Username = username, Password = password, RememberMe = rememberMe });
 
         if (response.IsSuccessStatusCode)
@@ -29,7 +29,6 @@ public partial class ApiServices
 
                 _contextAccessor.HttpContext.User = principal;
 
-                //var shoppingCartIdClaim = principal.Claims.FirstOrDefault(c => c.Type == CustomClaimShoppingCart.ClaimName);
                 AppendCookie("jwtToken", loginResponse.AccessToken, rememberMe);
                 AddJwtTokenToRequest(loginResponse.AccessToken);
 
@@ -45,8 +44,7 @@ public partial class ApiServices
     }
 
 
-
-
+    [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<bool> RegisterAsync(string password, string confirmPassword, string email, string firstName, string lastName, string streetAddress, string city, string zipCode)
     {

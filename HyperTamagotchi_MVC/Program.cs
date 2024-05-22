@@ -17,12 +17,6 @@ public class Program
         builder.Services.AddHttpClient("API Tamagotchi", client =>
             client.BaseAddress = new Uri(builder.Configuration["ApiUri:Tamagotchi"]!));
 
-        // Problem currently is the Cookie-based authentication and authorization, the user login authentication and authorization works.
-        // Look into adding singleton
-        //builder.Services.AddHttpClient<ApiServices>("API Tamagotchi", client =>
-        //{
-        //    client.BaseAddress = new Uri(builder.Configuration["ApiUri:Tamagotchi"]!);
-        //}).AddHttpMessageHandler<JwtMiddleware>();
         builder.Services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -43,15 +37,26 @@ public class Program
         })
         .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
         {
+            options.Cookie.HttpOnly = true;
+            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            options.Cookie.SameSite = SameSiteMode.None;
+            options.Cookie.Name = "jwtToken";
+            options.ExpireTimeSpan = TimeSpan.FromHours(1);
+            options.SlidingExpiration = true;
             options.LoginPath = "/Account/Login";
+            options.LogoutPath = "/Home/Index";
             options.AccessDeniedPath = "/Account/AccessDenied";
-            options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
         });
 
         builder.Services.AddAuthorization();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddScoped<ApiServices>();
         builder.Services.AddScoped<IJwtTokenValidator, JwtTokenValidator>();
+
+        builder.Services.AddAntiforgery(options =>
+        {
+            options.HeaderName = "X-XSRF-TOKEN";
+        });
 
         var app = builder.Build();
 

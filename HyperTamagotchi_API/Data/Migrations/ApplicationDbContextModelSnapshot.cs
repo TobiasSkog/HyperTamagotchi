@@ -397,13 +397,13 @@ namespace HyperTamagotchi_API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "067028e6-3218-4632-9086-6e5a3eac11a3",
+                            Id = "b2b87818-8027-4da0-afe5-ad5712d0d65a",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "0793c5be-2c8a-4aee-abe9-97127838911f",
+                            Id = "0a02ad2d-9ab6-45c9-938a-4607226f7342",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         });
@@ -572,13 +572,13 @@ namespace HyperTamagotchi_API.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "43218869-d83d-4e9c-b19e-c1adc1da1453",
-                            RoleId = "067028e6-3218-4632-9086-6e5a3eac11a3"
+                            UserId = "04b60415-7244-4bd2-9870-7f1efca14e71",
+                            RoleId = "b2b87818-8027-4da0-afe5-ad5712d0d65a"
                         },
                         new
                         {
-                            UserId = "fdd69357-45d0-4f57-a4ed-555d7e5df98b",
-                            RoleId = "0793c5be-2c8a-4aee-abe9-97127838911f"
+                            UserId = "12f8e39b-32ad-408f-bda7-8c234fd54cf6",
+                            RoleId = "0a02ad2d-9ab6-45c9-938a-4607226f7342"
                         });
                 });
 
@@ -935,6 +935,9 @@ namespace HyperTamagotchi_API.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("ShoppingCartId")
                         .HasColumnType("int");
 
@@ -947,18 +950,18 @@ namespace HyperTamagotchi_API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "43218869-d83d-4e9c-b19e-c1adc1da1453",
+                            Id = "04b60415-7244-4bd2-9870-7f1efca14e71",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3d6ca0b4-edbc-42bd-a5eb-a01dd832c53c",
+                            ConcurrencyStamp = "605d459a-888e-4daf-a4cd-6087554fe07f",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = true,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAENuyISfxmJLMxvqV4oWfz/Hs1eJE7P0yGv54CmTSS30UgPpSUUWmsl5WqpysUn/fpw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEN68ZWryxfY44dlBMdEwJyq+jJYWH1RjRUMlkTFFumnw3U+WemCLRctElbxY9nIP+A==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "5ba17ede-a0a4-4a0f-bd86-2ec376d8dddd",
+                            SecurityStamp = "641ccecc-d89b-4f80-b627-1eba30c8ed85",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com",
                             AddressId = 1,
@@ -968,18 +971,18 @@ namespace HyperTamagotchi_API.Migrations
                         },
                         new
                         {
-                            Id = "fdd69357-45d0-4f57-a4ed-555d7e5df98b",
+                            Id = "12f8e39b-32ad-408f-bda7-8c234fd54cf6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "466aa377-7c7c-474e-b394-3f606f12b945",
+                            ConcurrencyStamp = "6587afcf-0493-4873-b6ff-74c97c25afa5",
                             Email = "tobias@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = true,
                             NormalizedEmail = "TOBIAS@GMAIL.COM",
                             NormalizedUserName = "TOBIAS@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAELNbfVTKMC+jO+jAaptTrU4T8ueshg7WUx4zG4073CxpgZ+fZjiNccWN5s2H9KvZpA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEN7FqRHULNbj83m6dHDELuUxFKR9Yh2FzFQgHJQvj1yqLEXmTWqDSxgHwGAii/sZ2Q==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "8b374c31-14de-4361-8f2f-767d0e11f586",
+                            SecurityStamp = "d97f3945-2e7d-48fe-b83f-fdfd76ec6e54",
                             TwoFactorEnabled = false,
                             UserName = "tobias@gmail.com",
                             AddressId = 2,

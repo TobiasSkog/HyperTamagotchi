@@ -4,6 +4,7 @@ using HyperTamagotchi_API.Models.DTO;
 using HyperTamagotchi_API.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HyperTamagotchi_API.Controllers;
 
@@ -61,6 +62,7 @@ public class AuthController(
         return BadRequest("Customer registration failed.");
 
     }
+
     //Post: /api/Auth/Login
     [HttpPost]
     [Route("Login")]
@@ -111,5 +113,54 @@ public class AuthController(
         };
 
         return Ok(response);
+    }
+
+    //Post: /api/Auth/Refresh/{tokenRequest}
+    [HttpPost]
+    [Route("Refresh")]
+    public async Task<IActionResult> RefreshToken([FromBody] TokenRequest tokenRequest)
+    {
+        var principal = _jwtService.GetPrincipalFromExpiredToken(tokenRequest.Token);
+        if (principal == null)
+        {
+            return BadRequest("Invalid token.");
+        }
+
+        Customer? user = await _userManager.FindByEmailAsync(principal.Identity.Name) as Customer;
+
+        if (user == null)
+        {
+            return BadRequest("Invalid email.");
+        }
+
+        // Validate the refresh token
+        var validRefreshToken = await _jwtService.ValidateRefreshToken(user, tokenRequest.RefreshToken);
+        if (!validRefreshToken)
+        {
+            return BadRequest("Invalid refresh token");
+        }
+
+        var newJwtToken = _jwtService.GenerateJwtToken(principal.Claims);
+        var newRefreshToken = _jwtService.GenerateRefreshToken();
+
+        // Save the new refresh token
+        SaveRefreshToken(user.Id, newRefreshToken);
+
+        return Ok(new
+        {
+            token = newJwtToken,
+            refreshToken = newRefreshToken
+        });
+    }
+    private async void SaveRefreshToken(string userId, string refreshToken)
+    {
+        var customer = await _context.Customer.FirstOrDefaultAsync(c => c.Id == userId);
+        if (customer == null)
+        {
+            return;
+        }
+        customer.RefreshToken = refreshToken;
+        _context.Update(customer);
+        await _context.SaveChangesAsync();
     }
 }

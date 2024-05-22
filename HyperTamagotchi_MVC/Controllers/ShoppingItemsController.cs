@@ -1,8 +1,14 @@
-﻿using HyperTamagotchi_MVC.Services;
+﻿using HyperTamagotchi_MVC.Filters;
+using HyperTamagotchi_MVC.Models;
+using HyperTamagotchi_MVC.Models.DTO;
+using HyperTamagotchi_MVC.Models.TamagotchiProperties;
+using HyperTamagotchi_MVC.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace HyperTamagotchi_MVC.Controllers;
 
+[AuthorizeByRole("Admin")]
 
 public class ShoppingItemsController(ApiServices api) : Controller
 {
@@ -10,8 +16,6 @@ public class ShoppingItemsController(ApiServices api) : Controller
 
     public async Task<IActionResult> Index()
     {
-        _api.EnsureJwtTokenIsAddedToRequest();
-
         return View(await _api.GetAllShoppingItemsAsync());
     }
 
@@ -26,279 +30,171 @@ public class ShoppingItemsController(ApiServices api) : Controller
         return View(await _api.GetShoppingItemByIdAsync(id));
     }
 
-    //// GET: ShoppingItems/Create
-    //public IActionResult Create()
-    //{
-    //    ShoppingItem shoppingItem = new();
-    //    return View(shoppingItem);
-    //}
+    [HttpGet]
+    public IActionResult Create()
+    {
+        return View(new ShoppingItemDto());
+    }
 
-    //// POST: ShoppingItems/Create
-    //// To protect from overposting attacks, enable the specific properties you want to bind to.
-    //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    //[HttpPost]
-    //[ValidateAntiForgeryToken]
-    //public async Task<IActionResult> Create([Bind("ShoppingItemId,Name,Description,Stock,Price,CurrencyType,Discount,ImagePath,Quantity")] ShoppingItem shoppingItem)
-    //{
-    //    if (ModelState.IsValid)
-    //    {
-    //        // Update to a real Image Path based on our project folders and that the user only enters the image name in the input
-    //        string realImagePath = @"/Assets/Img/" + shoppingItem.ImagePath;
-    //        shoppingItem.ImagePath = realImagePath;
-    //        _context.Add(shoppingItem);
-    //        await _context.SaveChangesAsync();
-    //        return RedirectToAction(nameof(Index));
-    //    }
-    //    return View(shoppingItem);
-    //}
+    [HttpPost]
+    public async Task<IActionResult> Create(ShoppingItemDto dto)
+    {
 
-    //public IActionResult CreateTamagotchi()
-    //{
-    //    Tamagotchi tamagotchi = new();
+        var result = await _api.CreateShoppingItemAsync(dto);
 
-    //    ViewData["Colors"] = Enum.GetValues(typeof(TamagotchiColor))
-    //        .Cast<TamagotchiColor>()
-    //        .Select(tc => new SelectListItem
-    //        {
-    //            Value = ((byte)tc).ToString(),
-    //            Text = tc.ToString()
-    //        })
-    //        .ToList();
-    //    ViewData["Moods"] = Enum.GetValues(typeof(TamagotchiMood))
-    //        .Cast<TamagotchiMood>()
-    //        .Select(tc => new SelectListItem
-    //        {
-    //            Value = ((byte)tc).ToString(),
-    //            Text = tc.ToString()
-    //        })
-    //        .ToList();
-    //    ViewData["Stages"] = Enum.GetValues(typeof(TamagotchiStage))
-    //        .Cast<TamagotchiStage>()
-    //        .Select(tc => new SelectListItem
-    //        {
-    //            Value = ((byte)tc).ToString(),
-    //            Text = tc.ToString()
-    //        })
-    //        .ToList();
-    //    ViewData["Types"] = Enum.GetValues(typeof(TamagotchiType))
-    //        .Cast<TamagotchiType>()
-    //        .Select(tc => new SelectListItem
-    //        {
-    //            Value = ((byte)tc).ToString(),
-    //            Text = tc.ToString()
-    //        })
-    //        .ToList();
+        if (!result)
+        {
+            ModelState.AddModelError(string.Empty, "Something Went Wrong.");
+        }
 
-    //    return View(tamagotchi);
-    //}
+        return RedirectToAction("Index");
+    }
 
-    //// POST: ShoppingItems/CreateTamagotchi
-    //// To protect from overposting attacks, enable the specific properties you want to bind to.
-    //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    //[HttpPost]
-    //[ValidateAntiForgeryToken]
-    //public async Task<IActionResult> CreateTamagotchi([Bind("TamagotchiColor,TamagotchiType,Mood,TamagotchiStage,Experience,ShoppingItemId,Name,Description,Stock,Price,CurrencyType,Discount,ImagePath,Quantity")] Tamagotchi tamagotchi)
-    //{
-    //    if (ModelState.IsValid)
-    //    {
-    //        // Update to a real Image Path based on our project folders and that the user only enters the image name in the input
-    //        string realImagePath = @"/Assets/Tamagotchi/" + tamagotchi.ImagePath;
-    //        tamagotchi.ImagePath = realImagePath;
 
-    //        // Update the experiences points on the Tamagotchi based on what stage it is when it's created
-    //        switch (tamagotchi.TamagotchiStage)
-    //        {
-    //            case TamagotchiStage.Egg:
-    //                tamagotchi.Experience = 0;
-    //                break;
-    //            case TamagotchiStage.Child:
-    //                tamagotchi.Experience = 50;
-    //                break;
-    //            case TamagotchiStage.Adult:
-    //                tamagotchi.Experience = 100;
-    //                break;
-    //        }
+    [HttpGet]
+    public IActionResult CreateTamagotchi()
+    {
+        ViewData["Colors"] = Enum.GetValues(typeof(TamagotchiColor))
+        .Cast<TamagotchiColor>()
+        .Select(tc => new SelectListItem
+        {
+            Value = ((byte)tc).ToString(),
+            Text = tc.ToString()
+        })
+        .ToList();
+        ViewData["Moods"] = Enum.GetValues(typeof(TamagotchiMood))
+            .Cast<TamagotchiMood>()
+            .Select(tc => new SelectListItem
+            {
+                Value = ((byte)tc).ToString(),
+                Text = tc.ToString()
+            })
+            .ToList();
+        ViewData["Stages"] = Enum.GetValues(typeof(TamagotchiStage))
+            .Cast<TamagotchiStage>()
+            .Select(tc => new SelectListItem
+            {
+                Value = ((byte)tc).ToString(),
+                Text = tc.ToString()
+            })
+            .ToList();
+        ViewData["Types"] = Enum.GetValues(typeof(TamagotchiType))
+            .Cast<TamagotchiType>()
+            .Select(tc => new SelectListItem
+            {
+                Value = ((byte)tc).ToString(),
+                Text = tc.ToString()
+            })
+            .ToList();
+        return View(new Tamagotchi());
+    }
 
-    //        _context.Add(tamagotchi);
-    //        await _context.SaveChangesAsync();
-    //        return RedirectToAction(nameof(Index));
-    //    }
+    [HttpPost]
+    public async Task<IActionResult> CreateTamagotchi(TamagotchiDto dto)
+    {
+        var result = await _api.CreateTamagotchiAsync(dto);
 
-    //    return View(tamagotchi);
-    //}
+        if (!result)
+        {
+            ModelState.AddModelError(string.Empty, "Something Went Wrong.");
+        }
 
-    //// GET: ShoppingItems/Edit/5
-    //public async Task<IActionResult> Edit(int? id)
-    //{
-    //    if (id == null)
-    //    {
-    //        return NotFound();
-    //    }
+        return RedirectToAction("Index");
+    }
 
-    //    var shoppingItem = await _context.ShoppingItems.FindAsync(id);
-    //    if (shoppingItem == null)
-    //    {
-    //        return NotFound();
-    //    }
+    [HttpGet]
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if (id == null)
+        {
+            return NotFound();
+        }
 
-    //    if (shoppingItem is Tamagotchi)
-    //    {
-    //        return RedirectToAction("EditTamagotchi", shoppingItem);
-    //    }
+        var item = await _api.GetShoppingItemByIdAsync(id);
 
-    //    return View(shoppingItem);
-    //}
+        if (item is Tamagotchi tamagotchi)
+        {
+            ViewData["Colors"] = Enum.GetValues(typeof(TamagotchiColor))
+                .Cast<TamagotchiColor>()
+                .Select(tc => new SelectListItem
+                {
+                    Value = ((byte)tc).ToString(),
+                    Text = tc.ToString()
+                })
+                .ToList();
+            ViewData["Moods"] = Enum.GetValues(typeof(TamagotchiMood))
+                .Cast<TamagotchiMood>()
+                .Select(tc => new SelectListItem
+                {
+                    Value = ((byte)tc).ToString(),
+                    Text = tc.ToString()
+                })
+                .ToList();
+            ViewData["Stages"] = Enum.GetValues(typeof(TamagotchiStage))
+                .Cast<TamagotchiStage>()
+                .Select(tc => new SelectListItem
+                {
+                    Value = ((byte)tc).ToString(),
+                    Text = tc.ToString()
+                })
+                .ToList();
+            ViewData["Types"] = Enum.GetValues(typeof(TamagotchiType))
+                .Cast<TamagotchiType>()
+                .Select(tc => new SelectListItem
+                {
+                    Value = ((byte)tc).ToString(),
+                    Text = tc.ToString()
+                })
+                .ToList();
+            return View("EditTamagotchi", tamagotchi);
+        }
 
-    //// POST: ShoppingItems/Edit/5
-    //// To protect from overposting attacks, enable the specific properties you want to bind to.
-    //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    //[HttpPost]
-    //[ValidateAntiForgeryToken]
-    //public async Task<IActionResult> Edit(int id, [Bind("ShoppingItemId,Name,Description,Stock,Price,CurrencyType,Discount,ImagePath,Quantity")] ShoppingItem shoppingItem)
-    //{
-    //    if (id != shoppingItem.ShoppingItemId)
-    //    {
-    //        return NotFound();
-    //    }
+        return View("Edit", item);
+    }
+    [HttpPost]
+    public async Task<IActionResult> Edit(ShoppingItem item)
+    {
+        bool result;
+        if (item is Tamagotchi tamagotchi)
+        {
+            result = await _api.EditTamagotchi(tamagotchi);
+        }
+        else
+        {
+            result = await _api.EditShoppingItem(item);
+        }
 
-    //    if (ModelState.IsValid)
-    //    {
-    //        try
-    //        {
-    //            _context.Update(shoppingItem);
-    //            await _context.SaveChangesAsync();
-    //        }
-    //        catch (DbUpdateConcurrencyException)
-    //        {
-    //            if (!ShoppingItemExists(shoppingItem.ShoppingItemId))
-    //            {
-    //                return NotFound();
-    //            }
-    //            else
-    //            {
-    //                throw;
-    //            }
-    //        }
-    //        return RedirectToAction(nameof(Index));
-    //    }
-    //    return View(shoppingItem);
-    //}
+        if (!result)
+        {
+            ModelState.AddModelError(string.Empty, "Something Went Wrong.");
+        }
 
-    //public async Task<IActionResult> EditTamagotchi(ShoppingItem shoppingItem)
-    //{
-    //    if (shoppingItem == null)
-    //    {
-    //        return NotFound();
-    //    }
-    //    Tamagotchi tamagotchi = await _context.Tamagotchis.FindAsync(shoppingItem.ShoppingItemId);
+        return RedirectToAction("Index");
+    }
 
-    //    if (tamagotchi == null)
-    //    {
-    //        return NotFound();
-    //    }
+    [HttpGet]
+    public async Task<IActionResult> Delete(int? id)
+    {
+        if (id == null)
+        {
+            return NotFound();
+        }
 
-    //    ViewData["Colors"] = Enum.GetValues(typeof(TamagotchiColor))
-    //        .Cast<TamagotchiColor>()
-    //        .Select(tc => new SelectListItem
-    //        {
-    //            Value = ((byte)tc).ToString(),
-    //            Text = tc.ToString()
-    //        })
-    //        .ToList();
-    //    ViewData["Moods"] = Enum.GetValues(typeof(TamagotchiMood))
-    //        .Cast<TamagotchiMood>()
-    //        .Select(tc => new SelectListItem
-    //        {
-    //            Value = ((byte)tc).ToString(),
-    //            Text = tc.ToString()
-    //        })
-    //        .ToList();
-    //    ViewData["Stages"] = Enum.GetValues(typeof(TamagotchiStage))
-    //        .Cast<TamagotchiStage>()
-    //        .Select(tc => new SelectListItem
-    //        {
-    //            Value = ((byte)tc).ToString(),
-    //            Text = tc.ToString()
-    //        })
-    //        .ToList();
-    //    ViewData["Types"] = Enum.GetValues(typeof(TamagotchiType))
-    //        .Cast<TamagotchiType>()
-    //        .Select(tc => new SelectListItem
-    //        {
-    //            Value = ((byte)tc).ToString(),
-    //            Text = tc.ToString()
-    //        })
-    //        .ToList();
+        var item = await _api.GetShoppingItemByIdAsync(id);
+        return View(item);
+    }
 
-    //    return View(tamagotchi);
-    //}
-    //[HttpPost]
-    //[ValidateAntiForgeryToken]
-    //public async Task<IActionResult> EditTamagotchi(int ShoppingItemId, [Bind("TamagotchiColor,TamagotchiType,Mood,TamagotchiStage,Experience,ShoppingItemId,Name,Description,Stock,Price,CurrencyType,Discount,ImagePath,Quantity")] Tamagotchi tamagotchi)
-    //{
-    //    if (ShoppingItemId != tamagotchi.ShoppingItemId)
-    //    {
-    //        return NotFound();
-    //    }
+    [HttpPost]
+    public async Task<IActionResult> Delete(int id)
+    {
 
-    //    if (ModelState.IsValid)
-    //    {
-    //        try
-    //        {
-    //            _context.Update(tamagotchi);
-    //            await _context.SaveChangesAsync();
-    //        }
-    //        catch (DbUpdateConcurrencyException)
-    //        {
-    //            if (!ShoppingItemExists(tamagotchi.ShoppingItemId))
-    //            {
-    //                return NotFound();
-    //            }
-    //            else
-    //            {
-    //                throw;
-    //            }
-    //        }
-    //        return RedirectToAction(nameof(Index));
-    //    }
-    //    return View(tamagotchi);
-    //}
+        var result = await _api.Delete(id);
 
-    //// GET: ShoppingItems/Delete/5
-    //public async Task<IActionResult> Delete(int? id)
-    //{
-    //    if (id == null)
-    //    {
-    //        return NotFound();
-    //    }
+        if (!result)
+        {
+            ModelState.AddModelError(string.Empty, "Something Went Wrong.");
+        }
 
-    //    var shoppingItem = await _context.ShoppingItems
-    //        .FirstOrDefaultAsync(m => m.ShoppingItemId == id);
-    //    if (shoppingItem == null)
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    return View(shoppingItem);
-    //}
-
-    //// POST: ShoppingItems/Delete/5
-    //[HttpPost, ActionName("Delete")]
-    //[ValidateAntiForgeryToken]
-    //public async Task<IActionResult> DeleteConfirmed(int id)
-    //{
-    //    var shoppingItem = await _context.ShoppingItems.FindAsync(id);
-    //    if (shoppingItem != null)
-    //    {
-    //        _context.ShoppingItems.Remove(shoppingItem);
-    //    }
-
-    //    await _context.SaveChangesAsync();
-    //    return RedirectToAction(nameof(Index));
-    //}
-
-    //private bool ShoppingItemExists(int id)
-    //{
-    //    return _context.ShoppingItems.Any(e => e.ShoppingItemId == id);
-    //}
+        return RedirectToAction("Index");
+    }
 }

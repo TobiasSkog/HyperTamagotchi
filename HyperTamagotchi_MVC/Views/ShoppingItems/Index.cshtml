@@ -1,78 +1,68 @@
 ﻿@model IEnumerable<HyperTamagotchi_MVC.Models.ShoppingItem>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Admin Panel";
 }
 
-<h1>Index</h1>
+<div class="container mt-5">
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <h1 class="text-center">Admin Panel</h1>
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <a class="btn btn-primary" asp-controller="ShoppingItems" asp-action="Create">Create New Item</a>
+            <a class="btn btn-primary" asp-controller="ShoppingItems" asp-action="CreateTamagotchi">Create New Tamagotchi</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-hover table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Product</th>
+                        <th>@Html.DisplayNameFor(model => model.Name)</th>
+                        <th>@Html.DisplayNameFor(model => model.Description)</th>
+                        <th>@Html.DisplayNameFor(model => model.Stock)</th>
+                        <th>@Html.DisplayNameFor(model => model.Price)</th>
+                        <th>@Html.DisplayNameFor(model => model.CurrencyType)</th>
+                        <th>@Html.DisplayNameFor(model => model.Discount)</th>
+                        <th>@Html.DisplayNameFor(model => model.ImagePath)</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <img src="@item.ImagePath" alt="Image of the product" width="90" class="img-thumbnail" />
+                            </td>
+                            <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Stock)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                            <td>@Html.DisplayFor(modelItem => item.CurrencyType)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Discount)</td>
+                            <td>@Html.DisplayFor(modelItem => item.ImagePath)</td>
+                            <td >
+                                <a class="btn btn-primary btn-sm align-content-center" style="width: 100%; margin: 2px 0px 2px 0px;" asp-controller="ShoppingItems" asp-action="Edit" asp-route-id="@item.ShoppingItemId">Edit</a>
+                                <a class="btn btn-primary btn-sm align-content-center" style="width: 100%; margin: 2px 0px 2px 0px;" asp-controller="ShoppingItems" asp-action="Details" asp-route-id="@item.ShoppingItemId">Details</a>
+                                <a class="btn btn-primary btn-sm align-content-center" style="width: 100%; margin: 2px 0px 2px 0px;" asp-controller="ShoppingItems" asp-action="Delete" asp-route-id="@item.ShoppingItemId">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-<p>
-    <a asp-action="Create">Create New Shop Item</a>
-    <a asp-action="CreateTamagotchi">Create New Tamagotchi</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Product Image
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Stock)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CurrencyType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Discount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImagePath)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                <img src="@item.ImagePath" alt="Image of the product" width="90"/>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Stock)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CurrencyType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Discount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImagePath)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ShoppingItemId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ShoppingItemId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ShoppingItemId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<style>
+
+
+    td img {
+        border-radius: 5px !important;
+    }
+</style>
