@@ -23,7 +23,8 @@ public class AdminController(ApiServices api) : Controller
     [HttpGet]
     public async Task<IActionResult> GetAllOrders()
     {
-        return View(await _api.GetAllOrdersAsync());
+        var orders = await _api.GetAllOrdersAsync();
+        return View(orders);
     }
 
     [HttpGet]
