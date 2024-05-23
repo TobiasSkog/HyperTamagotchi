@@ -12,7 +12,7 @@ public class OrderDto
 
     public DateTime? ExpectedDate { get; set; }
 
-    public ICollection<ShoppingItem> Items { get; set; } = [];
+    public List<ShoppingItemDto> Items { get; set; } = [];
 }
 
 public class OrderDtoCheckout
