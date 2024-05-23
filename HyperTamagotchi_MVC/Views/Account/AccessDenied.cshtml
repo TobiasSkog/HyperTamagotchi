@@ -2,7 +2,20 @@
     ViewData["Title"] = "Access denied";
 }
 
-<header>
-    <h1 class="text-danger">@ViewData["Title"]</h1>
-    <p class="text-danger">You do not have access to this resource.</p>
-</header>
+<div class="container my-4 text-center">
+    <header>
+        <h1 class="text-danger">@ViewData["Title"]</h1>
+        <div class="my-4">
+            <img src="~/Assets/Img/AccessDenied.png" alt="Access Denied" class="img-fluid access-denied-image">
+        </div>
+    </header>
+</div>
+
+<style>
+    .access-denied-image {
+        max-height: 800px;
+        max-width: 800px;
+        object-fit: cover;
+    }
+</style>
+

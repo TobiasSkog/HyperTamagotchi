@@ -4,30 +4,87 @@
     ViewBag.Title = "Order Confirmation";
 }
 
-<h2>Order Confirmation</h2>
+<div class="container my-4">
+    <div class="text-center">
+        <h2 class="my-4 text-success"><i class="fas fa-check-circle"></i> Thank you for shopping!</h2>
+        <p>Your order number is <strong>@Model.OrderId</strong></p>
+    </div>
+    <div class="row">
+        <div class="col-md-4 text-center">
+            <img src="~/Assets/Img/logo.png" alt="Thank you image" class="img-fluid my-4 rounded-circle custom-image">
+        </div>
+        <div class="col-md-8">
+            <div class="card bg-secondary my-4">
+                <div class="card-body">
+                    <h3>What's next?</h3>
+                    <ul>
+                        <li>We will not be sending an email confirmation because we hate that, You will instead receive a hand written letter usually takes 5-7 bussiness years</li>
+                        <li>The order will be processed even if your Payment did not succeeded because we are apperantly a non-profit organization now</li>
+                        <li>In case of problems with the payment, you will not receive a new link to renew the payment because we dont want any money</li>
+                        <li>Please do not contact us because we have no contact page or any email associated with the company, and there has never been any problems with the orders</li>
+                        <li>Thanks for ordering from TamWorld hope you have a horrible rest of your day and life : )</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card bg-secondary my-4">
+        <div class="card-header bg-secondary">
+            <h3>Order Details</h3>
+        </div>
+        <div class="card-body">
+            <p><strong>Customer Email:</strong> @Model.CustomerEmail</p>
+            <p><strong>Order Date:</strong> @Model.OrderDate</p>
 
-<p>Thank you for your order!</p>
-<p>Order ID: @Model.OrderId</p>
-<p>Customer Email: @Model.CustomerEmail</p>
-<p>Order Date: @Model.OrderDate</p>
+            <h4>Items in your order:</h4>
+            <table class="table table-secondary">
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Quantity</th>
+                        <th>Price each</th>
+                        <th>Price Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr>
+                            <td>@item.Name</td>
+                            <td>@item.Quantity</td>
+                            <td>@item.Price SEK</td>
+                            <td>@(item.Quantity * item.Price) SEK</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-<h3>Items in your order:</h3>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Item Name</th>
-            <th>Quantity</th>
-            <th>Price</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Items)
-        {
-            <tr>
-                <td>@item.Name</td>
-                <td>@item.Quantity</td>
-                <td>@item.Price</td>
-            </tr>
-        }
-    </tbody>
-</table>
+<style>
+    .text-success {
+        color: #F99E2F !important;
+    }
+
+    .h3 {
+        color: #F99E2F !important;
+    }
+
+    .th {
+        color: #F99E2F !important
+        
+    }
+
+    .fa-check-circle {
+        font-size: 2rem;
+    }
+
+    .rounded-circle.custom-image {
+        width: 250px; 
+        height: 250px; 
+        object-fit: cover;
+    }
+</style>
+
+        

@@ -66,4 +66,9 @@ public class AccountController(ApiServices api) : Controller
 
         return RedirectToAction("Index", "Home");
     }
+    [HttpGet]
+    public IActionResult AccessDenied()
+    {
+        return View();
+    }
 }
