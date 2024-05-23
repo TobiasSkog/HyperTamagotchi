@@ -22,7 +22,7 @@ public class ShoppingItem
     [Required]
     [Range(0, 256, ErrorMessage = "Stock must be between 0 and 256")]
     [DisplayName("Amount In Stock")]
-    public byte Stock { get; set; }
+    public byte? Stock { get; set; }
 
 
     [Required]
