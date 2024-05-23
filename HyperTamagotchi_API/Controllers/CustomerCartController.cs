@@ -21,7 +21,7 @@ public class CustomerCartController(ApplicationDbContext context, TimeDelivery t
         try
         {
             var shoppingCart = await _context.ShoppingCarts
-                                             .Include(sc => sc.Items)
+                                             .Include(sc => sc.OrderItems)
                                              .ThenInclude(sic => sic.ShoppingItem)
                                              .FirstOrDefaultAsync(sc => sc.ShoppingCartId == shoppingCartId);
 
@@ -31,7 +31,7 @@ public class CustomerCartController(ApplicationDbContext context, TimeDelivery t
                 return NotFound("Shopping cart not found.");
             }
 
-            var cartItem = shoppingCart.Items.FirstOrDefault(ci => ci.ShoppingItemId == itemId);
+            var cartItem = shoppingCart.OrderItems.FirstOrDefault(ci => ci.ShoppingItemId == itemId);
             if (cartItem == null)
             {
                 //_logger.LogError($"Item with ID {itemId} not found in cart.");
@@ -85,6 +85,9 @@ public class CustomerCartController(ApplicationDbContext context, TimeDelivery t
             return NotFound("Customer not found.");
         }
 
+        // Newly added to handle setting the quantity on the Order correctly
+        List<ShoppingItem> orderItems = [];
+
         foreach (var item in checkoutModel.Items)
         {
             var shoppingItem = await _context.ShoppingItems.FindAsync(item.ShoppingItemId);
@@ -96,7 +99,12 @@ public class CustomerCartController(ApplicationDbContext context, TimeDelivery t
             {
                 return BadRequest($"Insufficient stock for item ID {item.ShoppingItemId}. Current stock: {shoppingItem.Stock}, requested: {item.Quantity}.");
             }
+
+            // Newly added to handle setting the quantity on the Order correctly
+            shoppingItem.Quantity = item.Quantity;
+            orderItems.Add(shoppingItem);
         }
+
         var wareHouse = await _context.Address.FirstOrDefaultAsync(a => a.AddressId == 1);
         var origin = $"{wareHouse.StreetAddress}, {wareHouse.City}, {wareHouse.ZipCode}";
         var destination = $"{customer.Address.StreetAddress}, {customer.Address.City}, {customer.Address.ZipCode}";
@@ -116,22 +124,35 @@ public class CustomerCartController(ApplicationDbContext context, TimeDelivery t
             CustomerId = checkoutModel.CustomerId,
             OrderDate = DateTime.UtcNow,
             ShippingDate = shippingDate,
-            ExpectedDate = expectedDate
+            ExpectedDate = expectedDate,
+            OrderItems = orderItems.Select(o => new OrderItem
+            {
+                ShoppingItemId = o.ShoppingItemId,
+                Quantity = o.Quantity,
+                Price = o.Price,
+                Discount = o.Discount
+            }).ToList()
         };
 
-        var shoppingItemOrders = checkoutModel.Items
-            .Select(item => new ShoppingItemOrder
-            {
-                ShoppingItemId = item.ShoppingItemId,
-                Order = order
-            }).ToList();
 
-        order.Items = shoppingItemOrders;
+
 
         foreach (var item in checkoutModel.Items)
         {
             var shoppingItem = await _context.ShoppingItems.FindAsync(item.ShoppingItemId);
-            shoppingItem.Stock -= (byte)item.Quantity;
+            if (shoppingItem != null)
+            {
+                shoppingItem.Stock -= (byte)item.Quantity;
+
+                if (shoppingItem.Stock < 0)
+                {
+                    shoppingItem.Stock = 0;
+                }
+
+                _context.Update(shoppingItem);
+                await _context.SaveChangesAsync();
+            }
+
         }
 
         _context.Orders.Add(order);
@@ -179,6 +200,14 @@ public class CustomerCartController(ApplicationDbContext context, TimeDelivery t
         return (days, extraHours);
     }
 
+    //var shoppingItemOrders = checkoutModel.OrderItems
+    //    .Select(item => new ShoppingItemOrder
+    //    {
+    //        ShoppingItemId = item.ShoppingItemId,
+    //        Order = order
+    //    }).ToList();
+
+    //order.OrderItems = shoppingItemOrders;
     [HttpGet]
     [Route("GetAddress/{id}")]
     public async Task<ActionResult<Address>> GetAddress(int id)

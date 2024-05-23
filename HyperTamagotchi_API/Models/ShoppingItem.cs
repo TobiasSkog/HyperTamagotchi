@@ -24,7 +24,6 @@ public class ShoppingItem
     [DisplayName("Amount In Stock")]
     public byte? Stock { get; set; }
 
-
     [Required]
     public float Price { get; set; }
 
@@ -47,6 +46,7 @@ public class ShoppingItem
     public byte? Quantity { get; set; }
     public ICollection<ShoppingItemShoppingCart> Items { get; set; } = [];
 
-    // Navigation to order
-    public ICollection<ShoppingItemOrder> Orders { get; set; } = [];
 }
+
+// Navigation to order
+//public ICollection<ShoppingItemOrder> Orders { get; set; } = [];

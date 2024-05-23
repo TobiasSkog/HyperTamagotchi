@@ -148,7 +148,25 @@ public class Program
         app.UseAuthorization();
 
         app.MapControllers();
-
+        //await ControllDatabaseForData(app);
         app.Run();
     }
+
+    //static async Task ControllDatabaseForData(WebApplication app)
+    //{
+    //    using (var scope = app.Services.CreateScope())
+    //    {
+    //        var services = scope.ServiceProvider;
+    //        try
+    //        {
+    //            var context = services.GetRequiredService<ApplicationDbContext>();
+    //            await context.SeedDataAsync(services);
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            var logger = services.GetRequiredService<ILogger<Program>>();
+    //            logger.LogError(ex, "An error occured creating the DB.");
+    //        }
+    //    }
+    //}
 }

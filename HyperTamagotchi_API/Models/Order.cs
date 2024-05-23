@@ -16,5 +16,5 @@ public class Order
 
     public DateTime? ExpectedDate { get; set; }
 
-    public ICollection<ShoppingItemOrder> Items { get; set; } = [];
+    public ICollection<OrderItem> OrderItems { get; set; } = [];
 }

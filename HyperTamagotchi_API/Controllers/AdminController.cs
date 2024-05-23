@@ -175,8 +175,7 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
     {
         var orders = await _context.Orders
             .Include(o => o.Customer)
-            .Include(o => o.Items)
-                .ThenInclude(o => o.ShoppingItem)
+            .Include(o => o.OrderItems)
             .OrderByDescending(o => o.OrderDate)
             .Select(o => new OrderDto
             {
@@ -194,25 +193,30 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
                 OrderDate = o.OrderDate,
                 ShippingDate = o.ShippingDate,
                 ExpectedDate = o.ExpectedDate,
-                Items = o.Items.Select(i => new ShoppingItemDto
-                {
-                    ShoppingItemId = i.ShoppingItem.ShoppingItemId,
-                    Name = i.ShoppingItem.Name,
-                    Description = i.ShoppingItem.Description,
-                    Stock = (byte)i.ShoppingItem.Stock,
-                    Price = i.ShoppingItem.Price,
-                    CurrencyType = i.ShoppingItem.CurrencyType,
-                    Discount = i.ShoppingItem.Discount,
-                    ImagePath = i.ShoppingItem.ImagePath,
-                    Quantity = i.ShoppingItem.Quantity
-                }).ToList()
+                Items = o.OrderItems
+                    .Join(
+                        _context.ShoppingItems,
+                        orderItem => orderItem.OrderItemId,
+                        shoppingItem => shoppingItem.ShoppingItemId,
+                        (orderItem, shoppingItem) => new ShoppingItemDto
+                        {
+                            ShoppingItemId = orderItem.OrderItemId,
+                            Name = shoppingItem.Name,
+                            Description = shoppingItem.Description,
+                            Stock = (byte)shoppingItem.Stock,
+                            Price = orderItem.Price,
+                            CurrencyType = shoppingItem.CurrencyType,
+                            Discount = orderItem.Discount,
+                            ImagePath = shoppingItem.ImagePath,
+                            Quantity = orderItem.Quantity
+                        }).ToList()
             })
             .ToListAsync();
         return Ok(orders);
 
         //var orders2 = await _context.Orders
         //    .Include(o => o.Customer)
-        //    .Include(o => o.Items)
+        //    .Include(o => o.OrderItems)
         //        .ThenInclude(i => i.ShoppingItem)
         //    .ToListAsync();
         //List<OrderDto> ordersDto = [];
@@ -234,7 +238,7 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
         //        OrderDate = order.OrderDate,
         //        ShippingDate = order.ShippingDate,
         //        ExpectedDate = order.ExpectedDate,
-        //        Items = order.Items.Select(i => new ShoppingItemDto
+        //        OrderItems = order.OrderItems.Select(i => new ShoppingItemDto
         //        {
         //            ShoppingItemId = i.ShoppingItem.ShoppingItemId,
         //            Name = i.ShoppingItem.Name,
@@ -263,7 +267,7 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
     //    var order = await _context.Orders
     //        .Where(o => o.OrderId == id)
     //        .Include(o => o.Customer)
-    //        .Include(o => o.Items)
+    //        .Include(o => o.OrderItems)
     //            .ThenInclude(o => o.ShoppingItem)
     //        .Select(o => new OrderDto
     //        {
@@ -281,7 +285,7 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
     //            OrderDate = o.OrderDate,
     //            ShippingDate = o.ShippingDate,
     //            ExpectedDate = o.ExpectedDate,
-    //            Items = o.Items.Select(i => new ShoppingItemDto
+    //            OrderItems = o.OrderItems.Select(i => new ShoppingItemDto
     //            {
     //                ShoppingItemId = i.ShoppingItem.ShoppingItemId,
     //                Name = i.ShoppingItem.Name,
@@ -299,7 +303,7 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
 
     //    //var order = await _context.Orders
     //    //    .Include(o => o.Customer)
-    //    //    .Include(o => o.Items)
+    //    //    .Include(o => o.OrderItems)
     //    //        .ThenInclude(i => i.ShoppingItem)
     //    //    .FirstOrDefaultAsync(o => o.OrderId == id);
     //    //var orderDto = new OrderDto
@@ -318,7 +322,7 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
     //    //    OrderDate = order.OrderDate,
     //    //    ShippingDate = order.ShippingDate,
     //    //    ExpectedDate = order.ExpectedDate,
-    //    //    Items = order.Items.Select(i => new ShoppingItemDto
+    //    //    OrderItems = order.OrderItems.Select(i => new ShoppingItemDto
     //    //    {
     //    //        ShoppingItemId = i.ShoppingItem.ShoppingItemId,
     //    //        Name = i.ShoppingItem.Name,

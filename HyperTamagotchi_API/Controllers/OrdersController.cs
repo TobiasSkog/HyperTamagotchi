@@ -24,8 +24,7 @@ namespace HyperTamagotchi_API.Controllers
             var orders = await _context.Orders
             .Where(o => o.Customer.Email == email)
             .Include(o => o.Customer)
-            .Include(o => o.Items)
-                .ThenInclude(i => i.ShoppingItem)
+            .Include(o => o.OrderItems)
             .OrderByDescending(o => o.OrderDate)
             .Select(o => new OrderDto
             {
@@ -43,58 +42,27 @@ namespace HyperTamagotchi_API.Controllers
                 OrderDate = o.OrderDate,
                 ShippingDate = o.ShippingDate,
                 ExpectedDate = o.ExpectedDate,
-                Items = o.Items.Select(i => new ShoppingItemDto
-                {
-                    ShoppingItemId = i.ShoppingItem.ShoppingItemId,
-                    Name = i.ShoppingItem.Name,
-                    Description = i.ShoppingItem.Description,
-                    Stock = (byte)i.ShoppingItem.Stock,
-                    Price = i.ShoppingItem.Price,
-                    CurrencyType = i.ShoppingItem.CurrencyType,
-                    Discount = i.ShoppingItem.Discount,
-                    ImagePath = i.ShoppingItem.ImagePath,
-                    Quantity = i.ShoppingItem.Quantity
-                }).ToList()
+                Items = o.OrderItems
+                    .Join(
+                        _context.ShoppingItems,
+                        orderItem => orderItem.OrderItemId,
+                        shoppingItem => shoppingItem.ShoppingItemId,
+                        (orderItem, shoppingItem) => new ShoppingItemDto
+                        {
+                            ShoppingItemId = orderItem.OrderItemId,
+                            Name = shoppingItem.Name,
+                            Description = shoppingItem.Description,
+                            Stock = (byte)shoppingItem.Stock,
+                            Price = orderItem.Price,
+                            CurrencyType = shoppingItem.CurrencyType,
+                            Discount = orderItem.Discount,
+                            ImagePath = shoppingItem.ImagePath,
+                            Quantity = orderItem.Quantity
+                        }).ToList()
             })
             .ToListAsync();
 
             return Ok(orders);
-
-            //List<OrderDto> ordersDto = [];
-            //foreach (var order in orders)
-            //{
-            //    ordersDto.Add(new OrderDto
-            //    {
-            //        OrderId = order.OrderId,
-            //        Customer = new CustomerDto
-            //        {
-            //            Id = order.Customer.Id,
-            //            FirstName = order.Customer.FirstName,
-            //            LastName = order.Customer.LastName,
-            //            FullName = (order.Customer.FirstName + " " + order.Customer.LastName),
-            //            Email = order.Customer.Email!,
-            //            AddressId = order.Customer.AddressId,
-            //            ShoppingCartId = order.Customer.ShoppingCartId
-            //        },
-            //        OrderDate = order.OrderDate,
-            //        ShippingDate = order.ShippingDate,
-            //        ExpectedDate = order.ExpectedDate,
-            //        Items = order.Items.Select(i => new ShoppingItemDto
-            //        {
-            //            ShoppingItemId = i.ShoppingItem.ShoppingItemId,
-            //            Name = i.ShoppingItem.Name,
-            //            Description = i.ShoppingItem.Description,
-            //            Stock = (byte)i.ShoppingItem.Stock,
-            //            Price = i.ShoppingItem.Price,
-            //            CurrencyType = i.ShoppingItem.CurrencyType,
-            //            Discount = i.ShoppingItem.Discount,
-            //            ImagePath = i.ShoppingItem.ImagePath,
-            //            Quantity = i.ShoppingItem.Quantity
-            //        }).ToList()
-            //    });
-            //}
-
-            //return Ok(ordersDto);
         }
 
         // GET: api/Orders/5
@@ -105,8 +73,7 @@ namespace HyperTamagotchi_API.Controllers
             var order = await _context.Orders
             .Where(o => o.OrderId == id)
             .Include(o => o.Customer)
-            .Include(o => o.Items)
-                .ThenInclude(o => o.ShoppingItem)
+            .Include(o => o.OrderItems)
             .OrderByDescending(o => o.OrderDate)
             .Select(o => new OrderDto
             {
@@ -124,62 +91,26 @@ namespace HyperTamagotchi_API.Controllers
                 OrderDate = o.OrderDate,
                 ShippingDate = o.ShippingDate,
                 ExpectedDate = o.ExpectedDate,
-                Items = o.Items.Select(i => new ShoppingItemDto
-                {
-                    ShoppingItemId = i.ShoppingItem.ShoppingItemId,
-                    Name = i.ShoppingItem.Name,
-                    Description = i.ShoppingItem.Description,
-                    Stock = (byte)i.ShoppingItem.Stock,
-                    Price = i.ShoppingItem.Price,
-                    CurrencyType = i.ShoppingItem.CurrencyType,
-                    Discount = i.ShoppingItem.Discount,
-                    ImagePath = i.ShoppingItem.ImagePath,
-                    Quantity = i.ShoppingItem.Quantity
-                }).ToList()
+                Items = o.OrderItems
+                    .Join(
+                        _context.ShoppingItems,
+                        orderItem => orderItem.OrderItemId,
+                        shoppingItem => shoppingItem.ShoppingItemId,
+                        (orderItem, shoppingItem) => new ShoppingItemDto
+                        {
+                            ShoppingItemId = orderItem.OrderItemId,
+                            Name = shoppingItem.Name,
+                            Description = shoppingItem.Description,
+                            Stock = (byte)shoppingItem.Stock,
+                            Price = orderItem.Price,
+                            CurrencyType = shoppingItem.CurrencyType,
+                            Discount = orderItem.Discount,
+                            ImagePath = shoppingItem.ImagePath,
+                            Quantity = orderItem.Quantity
+                        }).ToList()
             })
             .FirstOrDefaultAsync();
             return Ok(order);
-            //var order = await _context.Orders
-            //.Include(o => o.Customer)
-            //.Include(o => o.Items)
-            //    .ThenInclude(i => i.ShoppingItem)
-            //.FirstOrDefaultAsync(o => o.OrderId == id);
-            //var orderDto = new OrderDto
-            //{
-            //    OrderId = order.OrderId,
-            //    Customer = new CustomerDto
-            //    {
-            //        Id = order.Customer.Id,
-            //        FirstName = order.Customer.FirstName,
-            //        LastName = order.Customer.LastName,
-            //        FullName = (order.Customer.FirstName + " " + order.Customer.LastName),
-            //        Email = order.Customer.Email!,
-            //        AddressId = order.Customer.AddressId,
-            //        ShoppingCartId = order.Customer.ShoppingCartId
-            //    },
-            //    OrderDate = order.OrderDate,
-            //    ShippingDate = order.ShippingDate,
-            //    ExpectedDate = order.ExpectedDate,
-            //    Items = order.Items.Select(i => new ShoppingItem
-            //    {
-            //        ShoppingItemId = i.ShoppingItem.ShoppingItemId,
-            //        Name = i.ShoppingItem.Name,
-            //        Description = i.ShoppingItem.Description,
-            //        Stock = i.ShoppingItem.Stock,
-            //        Price = i.ShoppingItem.Price,
-            //        CurrencyType = i.ShoppingItem.CurrencyType,
-            //        Discount = i.ShoppingItem.Discount,
-            //        ImagePath = i.ShoppingItem.ImagePath,
-            //        Quantity = i.ShoppingItem.Quantity
-            //    }).ToList()
-            //};
-
-            //var jsonResponse = JsonConvert.SerializeObject(order, new JsonSerializerSettings
-            //{
-            //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            //});
-
-            //return Ok(jsonResponse);
         }
 
         // PUT: api/Orders/5
