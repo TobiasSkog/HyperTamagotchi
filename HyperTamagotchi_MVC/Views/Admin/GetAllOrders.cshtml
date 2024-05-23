@@ -26,7 +26,7 @@
                     <tbody>
                         @foreach (var order in Model)
                         {
-                            <tr data-href="@Url.Action("OrderDetails", new {id = order.OrderId})">
+                            <tr data-href="@Url.Action("OrderDetails", "Order", new {id = order.OrderId})">
                                 <td>@Html.DisplayFor(modelItem => order.OrderId)</td>
                                 <td>@(order.Customer.FirstName + " " + order.Customer.LastName)</td>
                                 <td>@Html.DisplayFor(modelItem => order.OrderDate)</td>

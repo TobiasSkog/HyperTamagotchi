@@ -60,5 +60,12 @@
     </tbody>
 </table>
 <p>
-    <a asp-action="GetAllOrders" class="btn btn-primary">Back to List</a>
+    @if(User.IsInRole("Admin"))
+    {
+        <a asp-action="GetAllOrders" class="btn btn-primary">Back to List</a>        
+    }
+    @if (User.IsInRole("Customer"))
+    {
+        <a asp-controller="Order" asp-action="Index" class="btn btn-primary">Back to List</a>
+    }    
 </p>

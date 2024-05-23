@@ -1,17 +1,18 @@
 ﻿using HyperTamagotchi_MVC.Models;
-using Microsoft.AspNetCore.Identity;
+using HyperTamagotchi_MVC.Models.DTO;
 using Newtonsoft.Json;
+
 
 namespace HyperTamagotchi_MVC.Services;
 public partial class ApiServices
 {
-    public async Task<IdentityUser> GetUserByEmailAsync(string email)
+    public async Task<CustomerDto> GetUserIdByEmailAsync()
     {
         EnsureJwtTokenIsAddedToRequest();
 
-        var response = await _client.GetAsync($"api/CustomerCart/email/{email}");
+        var response = await _client.GetAsync($"api/Customer/Email");
         response.EnsureSuccessStatusCode();
-        var user = await response.Content.ReadFromJsonAsync<IdentityUser>();
+        var user = await response.Content.ReadFromJsonAsync<CustomerDto>();
         return user;
     }
 

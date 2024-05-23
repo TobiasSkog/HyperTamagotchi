@@ -59,16 +59,17 @@ namespace HyperTamagotchi_MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Checkout(ShoppingCart model)
         {
-            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+            //var email = User.FindFirst(ClaimTypes.Email)?.Value;
 
-            if (string.IsNullOrEmpty(email))
-            {
-                return Unauthorized();
-            }
+            //if (string.IsNullOrEmpty(email))
+            //{
+            //    return Unauthorized();
+            //}
 
             try
             {
-                var user = await _api.GetUserByEmailAsync(email);
+                // Looking into removing this unecssary step
+                var user = await _api.GetUserIdByEmailAsync();
 
                 if (string.IsNullOrEmpty(user.Id))
                 {
@@ -90,7 +91,7 @@ namespace HyperTamagotchi_MVC.Controllers
                 var viewModel = new OrderConfirmationViewModel
                 {
                     OrderId = order.OrderId,
-                    CustomerEmail = email,
+                    CustomerEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email).Value,
                     OrderDate = order.OrderDate,
                     Items = model.ShoppingItems
                 };

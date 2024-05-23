@@ -41,8 +41,15 @@
                                 <form asp-action="AddToCart" method="post">
                                    
                                         <input type="hidden" name="id" value="@item.ShoppingItemId" />
-                                        <button type="submit" class="btn btn-primary cart-button">Add to cart</button>
-                                </form>
+                                        @if(item.Stock > 0)
+                                        {
+                                            <button type="submit" class="btn btn-primary cart-button">Add to cart</button>
+                                        }
+                                        else
+                                        {
+                                            <button type="submit" class="btn btn-secondary cart-button" disabled>Add to cart</button>
+                                        }
+                                    </form>
                             }
                             else
                             {

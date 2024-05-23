@@ -1,10 +1,8 @@
 ﻿using HyperTamagotchi_API.Data;
-using HyperTamagotchi_API.Filters;
 using HyperTamagotchi_API.Models;
 using HyperTamagotchi_API.Models.DTO;
 using HyperTamagotchi_API.Models.GoogleMaps;
 using HyperTamagotchi_API.Models.ViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -52,18 +50,7 @@ public class CustomerCartController(ApplicationDbContext context, TimeDelivery t
         }
     }*/
 
-    [HttpGet("email/{email}")]
-    public async Task<IActionResult> GetUserByEmail(string email)
-    {
-        var user = await _context.Customer.FirstOrDefaultAsync(c => c.Email == email);
 
-        if (user == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(new { user.Id, user.Email });
-    }
 
     [HttpGet("item/{shoppingItemId}/stock")]
     public async Task<IActionResult> GetItemStock(int shoppingItemId)
@@ -144,7 +131,7 @@ public class CustomerCartController(ApplicationDbContext context, TimeDelivery t
         foreach (var item in checkoutModel.Items)
         {
             var shoppingItem = await _context.ShoppingItems.FindAsync(item.ShoppingItemId);
-            shoppingItem.Stock -= item.Quantity;
+            shoppingItem.Stock -= (byte)item.Quantity;
         }
 
         _context.Orders.Add(order);

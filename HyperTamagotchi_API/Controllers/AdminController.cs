@@ -7,7 +7,6 @@ using HyperTamagotchi_API.Models.DTO;
 using HyperTamagotchi_API.Models.TamagotchiProperties;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 
 namespace HyperTamagotchi_API.Controllers;
 
@@ -177,93 +176,169 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
         var orders = await _context.Orders
             .Include(o => o.Customer)
             .Include(o => o.Items)
-                .ThenInclude(i => i.ShoppingItem)
-            .ToListAsync();
-        List<OrderDto> ordersDto = [];
-        foreach (var order in orders)
-        {
-            ordersDto.Add(new OrderDto
+                .ThenInclude(o => o.ShoppingItem)
+            .OrderByDescending(o => o.OrderDate)
+            .Select(o => new OrderDto
             {
-                OrderId = order.OrderId,
-                Customer = new
-                (
-                    id: order.Customer.Id,
-                    firstName: order.Customer.FirstName,
-                    lastName: order.Customer.LastName,
-                    email: order.Customer.Email!,
-                    addressId: order.Customer.AddressId,
-                    shoppingCartId: order.Customer.ShoppingCartId
-                ),
-                OrderDate = order.OrderDate,
-                ShippingDate = order.ShippingDate,
-                ExpectedDate = order.ExpectedDate,
-                Items = order.Items.Select(i => new ShoppingItem
+                OrderId = o.OrderId,
+                Customer = new CustomerDto
+                {
+                    Id = o.Customer.Id,
+                    FirstName = o.Customer.FirstName,
+                    LastName = o.Customer.LastName,
+                    FullName = (o.Customer.FirstName + " " + o.Customer.LastName),
+                    Email = o.Customer.Email!,
+                    AddressId = o.Customer.AddressId,
+                    ShoppingCartId = o.Customer.ShoppingCartId
+                },
+                OrderDate = o.OrderDate,
+                ShippingDate = o.ShippingDate,
+                ExpectedDate = o.ExpectedDate,
+                Items = o.Items.Select(i => new ShoppingItemDto
                 {
                     ShoppingItemId = i.ShoppingItem.ShoppingItemId,
                     Name = i.ShoppingItem.Name,
                     Description = i.ShoppingItem.Description,
-                    Stock = i.ShoppingItem.Stock,
+                    Stock = (byte)i.ShoppingItem.Stock,
                     Price = i.ShoppingItem.Price,
                     CurrencyType = i.ShoppingItem.CurrencyType,
                     Discount = i.ShoppingItem.Discount,
                     ImagePath = i.ShoppingItem.ImagePath,
                     Quantity = i.ShoppingItem.Quantity
                 }).ToList()
-            });
-        }
-        var jsonResponse = JsonConvert.SerializeObject(ordersDto, new JsonSerializerSettings
-        {
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-        });
+            })
+            .ToListAsync();
+        return Ok(orders);
 
-        return Ok(jsonResponse);
+        //var orders2 = await _context.Orders
+        //    .Include(o => o.Customer)
+        //    .Include(o => o.Items)
+        //        .ThenInclude(i => i.ShoppingItem)
+        //    .ToListAsync();
+        //List<OrderDto> ordersDto = [];
+        //foreach (var order in orders)
+        //{
+        //    ordersDto.Add(new OrderDto
+        //    {
+        //        OrderId = order.OrderId,
+        //        Customer = new CustomerDto
+        //        {
+        //            Id = order.Customer.Id,
+        //            FirstName = order.Customer.FirstName,
+        //            LastName = order.Customer.LastName,
+        //            FullName = (order.Customer.FirstName + " " + order.Customer.LastName),
+        //            Email = order.Customer.Email!,
+        //            AddressId = order.Customer.AddressId,
+        //            ShoppingCartId = order.Customer.ShoppingCartId
+        //        },
+        //        OrderDate = order.OrderDate,
+        //        ShippingDate = order.ShippingDate,
+        //        ExpectedDate = order.ExpectedDate,
+        //        Items = order.Items.Select(i => new ShoppingItemDto
+        //        {
+        //            ShoppingItemId = i.ShoppingItem.ShoppingItemId,
+        //            Name = i.ShoppingItem.Name,
+        //            Description = i.ShoppingItem.Description,
+        //            Stock = (byte)i.ShoppingItem.Stock,
+        //            Price = i.ShoppingItem.Price,
+        //            CurrencyType = i.ShoppingItem.CurrencyType,
+        //            Discount = i.ShoppingItem.Discount,
+        //            ImagePath = i.ShoppingItem.ImagePath,
+        //            Quantity = i.ShoppingItem.Quantity
+        //        }).ToList()
+        //    });
+        //}
+        //var jsonResponse = JsonConvert.SerializeObject(ordersDto, new JsonSerializerSettings
+        //{
+        //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        //});
+
+        //return Ok(jsonResponse);
     }
 
-    [HttpGet]
-    [Route("GetSpecificOrder/{id}")]
-    public async Task<ActionResult<OrderDto>> GetSpecificOrder(int id)
-    {
-        var order = await _context.Orders
-            .Include(o => o.Customer)
-            .Include(o => o.Items)
-                .ThenInclude(i => i.ShoppingItem)
-            .FirstOrDefaultAsync(o => o.OrderId == id);
-        var orderDto = new OrderDto
-        {
-            OrderId = order.OrderId,
-            Customer = new
-                (
-                    id: order.Customer.Id,
-                    firstName: order.Customer.FirstName,
-                    lastName: order.Customer.LastName,
-                    email: order.Customer.Email!,
-                    addressId: order.Customer.AddressId,
-                    shoppingCartId: order.Customer.ShoppingCartId
-                ),
-            OrderDate = order.OrderDate,
-            ShippingDate = order.ShippingDate,
-            ExpectedDate = order.ExpectedDate,
-            Items = order.Items.Select(i => new ShoppingItem
-            {
-                ShoppingItemId = i.ShoppingItem.ShoppingItemId,
-                Name = i.ShoppingItem.Name,
-                Description = i.ShoppingItem.Description,
-                Stock = i.ShoppingItem.Stock,
-                Price = i.ShoppingItem.Price,
-                CurrencyType = i.ShoppingItem.CurrencyType,
-                Discount = i.ShoppingItem.Discount,
-                ImagePath = i.ShoppingItem.ImagePath,
-                Quantity = i.ShoppingItem.Quantity
-            }).ToList()
-        };
+    //[HttpGet]
+    //[Route("GetSpecificOrder/{id}")]
+    //public async Task<ActionResult<OrderDto>> GetSpecificOrder(int id)
+    //{
+    //    var order = await _context.Orders
+    //        .Where(o => o.OrderId == id)
+    //        .Include(o => o.Customer)
+    //        .Include(o => o.Items)
+    //            .ThenInclude(o => o.ShoppingItem)
+    //        .Select(o => new OrderDto
+    //        {
+    //            OrderId = o.OrderId,
+    //            Customer = new CustomerDto
+    //            {
+    //                Id = o.Customer.Id,
+    //                FirstName = o.Customer.FirstName,
+    //                LastName = o.Customer.LastName,
+    //                FullName = (o.Customer.FirstName + " " + o.Customer.LastName),
+    //                Email = o.Customer.Email!,
+    //                AddressId = o.Customer.AddressId,
+    //                ShoppingCartId = o.Customer.ShoppingCartId
+    //            },
+    //            OrderDate = o.OrderDate,
+    //            ShippingDate = o.ShippingDate,
+    //            ExpectedDate = o.ExpectedDate,
+    //            Items = o.Items.Select(i => new ShoppingItemDto
+    //            {
+    //                ShoppingItemId = i.ShoppingItem.ShoppingItemId,
+    //                Name = i.ShoppingItem.Name,
+    //                Description = i.ShoppingItem.Description,
+    //                Stock = (byte)i.ShoppingItem.Stock,
+    //                Price = i.ShoppingItem.Price,
+    //                CurrencyType = i.ShoppingItem.CurrencyType,
+    //                Discount = i.ShoppingItem.Discount,
+    //                ImagePath = i.ShoppingItem.ImagePath,
+    //                Quantity = i.ShoppingItem.Quantity
+    //            }).ToList()
+    //        })
+    //        .FirstOrDefaultAsync();
+    //    return Ok(order);
 
-        var jsonResponse = JsonConvert.SerializeObject(order, new JsonSerializerSettings
-        {
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-        });
+    //    //var order = await _context.Orders
+    //    //    .Include(o => o.Customer)
+    //    //    .Include(o => o.Items)
+    //    //        .ThenInclude(i => i.ShoppingItem)
+    //    //    .FirstOrDefaultAsync(o => o.OrderId == id);
+    //    //var orderDto = new OrderDto
+    //    //{
+    //    //    OrderId = order.OrderId,
+    //    //    Customer = new CustomerDto
+    //    //    {
+    //    //        Id = order.Customer.Id,
+    //    //        FirstName = order.Customer.FirstName,
+    //    //        LastName = order.Customer.LastName,
+    //    //        FullName = (order.Customer.FirstName + " " + order.Customer.LastName),
+    //    //        Email = order.Customer.Email!,
+    //    //        AddressId = order.Customer.AddressId,
+    //    //        ShoppingCartId = order.Customer.ShoppingCartId
+    //    //    },
+    //    //    OrderDate = order.OrderDate,
+    //    //    ShippingDate = order.ShippingDate,
+    //    //    ExpectedDate = order.ExpectedDate,
+    //    //    Items = order.Items.Select(i => new ShoppingItemDto
+    //    //    {
+    //    //        ShoppingItemId = i.ShoppingItem.ShoppingItemId,
+    //    //        Name = i.ShoppingItem.Name,
+    //    //        Description = i.ShoppingItem.Description,
+    //    //        Stock = (byte)i.ShoppingItem.Stock,
+    //    //        Price = i.ShoppingItem.Price,
+    //    //        CurrencyType = i.ShoppingItem.CurrencyType,
+    //    //        Discount = i.ShoppingItem.Discount,
+    //    //        ImagePath = i.ShoppingItem.ImagePath,
+    //    //        Quantity = i.ShoppingItem.Quantity
+    //    //    }).ToList()
+    //    //};
 
-        return Ok(jsonResponse);
-    }
+    //    //var jsonResponse = JsonConvert.SerializeObject(order, new JsonSerializerSettings
+    //    //{
+    //    //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+    //    //});
+
+    //    //return Ok(jsonResponse);
+    //}
     [HttpGet]
     [Route("GetItemToEdit/{id}")]
     public async Task<IActionResult> GetItemToEdit(int id)
@@ -288,6 +363,7 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
         Tamagotchi,
         ShoppingItem
     }
+
     [HttpGet]
     [Route("GetOrder{id}")]
     public async Task<ActionResult<OrderDto>> GetOrder(int id)

@@ -1,6 +1,6 @@
-﻿namespace HyperTamagotchi_API.Models.DTO;
+﻿namespace HyperTamagotchi_MVC.Models.DTO;
 
-public class CustomerDto()
+public class CustomerDto
 {
     public string Id { get; set; }
     public string FirstName { get; set; }

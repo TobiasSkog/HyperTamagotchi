@@ -1,32 +1,42 @@
 ﻿using HyperTamagotchi_MVC.Filters;
 using HyperTamagotchi_MVC.Models;
-using HyperTamagotchi_MVC.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace HyperTamagotchi_MVC.Services;
 
+public partial class ApiServices
 {
-    public partial class ApiServices
+    [HttpGet]
+    [AuthorizeByRole("Admin", "Customer")]
+    public async Task<List<Order>> GetCustomerOrders()
     {
-        [HttpGet]
-        [AuthorizeByRole("Customer", "Admin")]
-        public async Task<IEnumerable<OrderDTO>> GetCustomerOrders(string customerId)
+        EnsureJwtTokenIsAddedToRequest();
+
+        var response = await _client.GetAsync($"api/Orders/GetOrdersFromCustomer");
+        if (!response.IsSuccessStatusCode)
         {
-            EnsureJwtTokenIsAddedToRequest();
-
-            var response = await _client.GetAsync($"api/Orders/GetOrdersFromCustomer/{customerId}");
-
-            if (response.IsSuccessStatusCode)
-            {
-                return await response.Content.ReadFromJsonAsync<IEnumerable<OrderDTO>>();
-            }
-            else
-            {
-                return null;
-            }
+            return [];
         }
 
-      return order;
-       
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+        var orders = JsonConvert.DeserializeObject<List<Order>>(jsonResponse);
+        return orders;
+    }
+
+    [HttpGet]
+    [AuthorizeByRole("Admin", "Customer")]
+    public async Task<Order> GetOrderByIdAsync(int id)
+    {
+        EnsureJwtTokenIsAddedToRequest();
+        var response = await _client.GetAsync($"api/Orders/GetOrderById/{id}");
+        if (!response.IsSuccessStatusCode)
+        {
+            return default;
+        }
+
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+        var order = JsonConvert.DeserializeObject<Order>(jsonResponse);
+        return order;
     }
 }

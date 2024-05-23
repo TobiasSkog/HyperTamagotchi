@@ -24,7 +24,7 @@
             
             @if(User.IsInRole("Customer"))
             {
-                <li><a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Customer" asp-action="Order">Orders</a></li>
+                <li><a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Order" asp-action="Index">Orders</a></li>
             }
 
             <form asp-controller="Account" asp-action="Logout" method="post" id="logoutForm">
