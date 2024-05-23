@@ -48,6 +48,7 @@ public partial class ApiServices
         var tamagotchi = JsonConvert.DeserializeObject<Tamagotchi>(jsonResponse);
         return tamagotchi!;
     }
+
     [HttpPost]
     [AuthorizeByRole("Admin")]
     public async Task<bool> UpdateDiscountToShoppingItems(List<int> selectedShoppingItems, float discountPercentage)
@@ -58,7 +59,6 @@ public partial class ApiServices
         {
             SelectedShoppingItems = selectedShoppingItems,
             DiscountValue = discountPercentage
-
         };
 
         var response = await _client.PostAsJsonAsync($"api/Admin/AddDiscountToShoppingItems", dto);
@@ -108,7 +108,6 @@ public partial class ApiServices
     public async Task<bool> Delete(int id)
     {
         EnsureJwtTokenIsAddedToRequest();
-
         var response = await _client.DeleteAsync($"api/Admin/Delete/{id}");
         return response.IsSuccessStatusCode;
     }
@@ -140,7 +139,6 @@ public partial class ApiServices
 
         return await _client.GetFromJsonAsync<Order>($"api/Admin/GetSpecificOrder/{id}");
     }
-
 }
 
 
