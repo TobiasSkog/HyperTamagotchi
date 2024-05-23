@@ -1,5 +1,6 @@
 using HyperTamagotchi_API.Data;
 using HyperTamagotchi_API.Mapper;
+using HyperTamagotchi_API.Models.GoogleMaps;
 using HyperTamagotchi_API.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -16,11 +17,29 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        var googleMapsApiKey = builder.Configuration["ApiKey:GoogleMaps"];
+
+        builder.Services.AddHttpClient<TimeDelivery>()
+                .ConfigureHttpClient(client =>
+                {
+                    client.DefaultRequestHeaders.Add("Accept", "application/json");
+                });
+
+        builder.Services.AddTransient<TimeDelivery>(provider =>
+        {
+            var httpClient = provider.GetRequiredService<IHttpClientFactory>().CreateClient();
+            var apiKey = googleMapsApiKey;
+            var logger = provider.GetRequiredService<ILogger<TimeDelivery>>();
+            return new TimeDelivery(httpClient, apiKey, logger);
+        });
+
         builder.Services.AddIdentity<IdentityUser, IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
         builder.Services.AddControllers();
+
+
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddEndpointsApiExplorer();
 
@@ -108,9 +127,6 @@ public class Program
         });
 
         builder.Services.AddAuthorization();
-
-
-
 
         var app = builder.Build();
 

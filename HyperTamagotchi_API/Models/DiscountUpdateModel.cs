@@ -3,5 +3,5 @@
 public class DiscountUpdateModel
 {
     public List<int> SelectedShoppingItems { get; set; }
-    public float? DiscountPercentage { get; set; }
+    public float? DiscountValue { get; set; }
 }

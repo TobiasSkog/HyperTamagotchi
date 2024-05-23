@@ -42,9 +42,7 @@ body {
   padding-right: 50px;
 }
 
-.navbar-brand {
-  color: #F99E2F !important;
-}
+
 
 .btn-primary {
   color: #FFFFFF;
@@ -90,6 +88,65 @@ body {
 .no-gutters [class*=" col-"] {
     padding-right: 0;
     padding-left: 0;
+}
+
+/* Custom style for the loggo in the navbar */
+.navbar{
+    height: 50px !important;
+}
+.logo-img{
+    height:50px;
+    border-radius:15%;    
+    margin:0;
+    padding:0;
+    box-shadow:0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.navbar .container-fluid{
+    margin-left: 125px;
+}
+.navbar-brand {
+    color: #F99E2F !important;
+}
+
+/* Webshop badge stock information */
+.stock-badge {
+    background-color: rgba(108, 117, 125, 0.8); 
+}
+.card {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100%;
+}
+.cart-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;    
+    padding: 0;
+}
+.cart-button {
+    width: 100% !important;
+}
+
+.mt-auto {
+    margin-top: auto;
+}
+.cart-controll{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    flex-wrap: nowrap !important;
+}
+.img-small-centered {
+    max-width: 150px; /* Maximal bredd */
+    max-height: 150px; /* Maximal höjd */
+    display: block; /* Göra bilderna till blockelement för att kunna använda margin:auto */
+    margin: auto; /* Centrera bilderna horisontellt */
 }
 
 /*# sourceMappingURL=site.css.map */

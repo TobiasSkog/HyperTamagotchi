@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using HyperTamagotchi_API.Data;
 using HyperTamagotchi_API.Filters;
+using HyperTamagotchi_API.Helpers.ExchangeRate;
 using HyperTamagotchi_API.Models;
 using HyperTamagotchi_API.Models.DTO;
 using HyperTamagotchi_API.Models.TamagotchiProperties;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace HyperTamagotchi_API.Controllers;
 
@@ -18,16 +20,16 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
     private readonly ApplicationDbContext _context = context;
     private readonly IMapper _mapper = mapper;
 
-    //// POST: api/Admin/ShoppingItems/AddDiscountToShoppingItems/{discountUpdateModel}
+    //// POST: api/Admin/AddDiscountToShoppingItems/{discountUpdateModel}
     [HttpPost]
     [Route("AddDiscountToShoppingItems")]
     public async Task<IActionResult> AddDiscountToShoppingItems([FromBody] DiscountUpdateModel discountUpdateModel)
     {
 
         if (discountUpdateModel.SelectedShoppingItems == null || discountUpdateModel.SelectedShoppingItems.Count <= 0 ||
-            (discountUpdateModel.DiscountPercentage == null && discountUpdateModel.DiscountPercentage >= 0 && discountUpdateModel.DiscountPercentage <= 100))
+            (discountUpdateModel.DiscountValue == null && discountUpdateModel.DiscountValue >= 0 && discountUpdateModel.DiscountValue <= 100))
         {
-            return BadRequest();
+            return BadRequest("Pasta");
         }
         var foundShoppingItems = await _context.ShoppingItems
             .Where(si => discountUpdateModel.SelectedShoppingItems.Contains(si.ShoppingItemId))
@@ -35,7 +37,7 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
 
         foreach (var item in foundShoppingItems)
         {
-            item.Discount = (float)discountUpdateModel.DiscountPercentage;
+            item.Discount = (float)discountUpdateModel.DiscountValue!;
             _context.Update(item);
         }
 
@@ -44,7 +46,7 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
         return Ok();
     }
 
-    //// POST: api/Admin/ShoppingItems/CreateShoppingItem/{shoppingItemDto}
+    //// POST: api/Admin/CreateShoppingItem/{shoppingItemDto}
     [HttpPost]
     [Route("CreateShoppingItem")]
     public async Task<IActionResult> Create([FromBody] ShoppingItemDto shoppingItemDto)
@@ -64,7 +66,7 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
         return Ok("Shopping Item Created Successfully.");
     }
 
-    //// POST: api/Admin/ShoppingItems/CreateTamagotchi/{tamagotchiDto}
+    //// POST: api/Admin/CreateTamagotchi/{tamagotchiDto}
     [HttpPost]
     [Route("CreateTamagotchi")]
     public async Task<IActionResult> CreateTamagotchi([FromBody] TamagotchiDto tamagotchiDto)
@@ -75,8 +77,20 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
         }
 
         // Update to a real Image Path based on our project folders and that the user only enters the image name in the input
-        var tamagotchi = _mapper.Map<Tamagotchi>(tamagotchiDto);
-        tamagotchi.ImagePath = Path.Combine("/Assets/Tamagotchi/", tamagotchi.ImagePath);
+        Tamagotchi tamagotchi = new()
+        {
+            Name = tamagotchiDto.Name,
+            Description = tamagotchiDto.Description,
+            Stock = tamagotchiDto.Stock,
+            Price = tamagotchiDto.Price,
+            CurrencyType = CurrencyType.SEK,
+            Discount = 1.00f,
+            ImagePath = $"Assets/Tamagotchi/{tamagotchiDto.TamagotchiType}/{tamagotchiDto.TamagotchiType}_{tamagotchiDto.TamagotchiStage}_{tamagotchiDto.TamagotchiColor}.png",
+            TamagotchiColor = tamagotchiDto.TamagotchiColor,
+            TamagotchiType = tamagotchiDto.TamagotchiType,
+            Mood = tamagotchiDto.Mood,
+            TamagotchiStage = tamagotchiDto.TamagotchiStage,
+        };
 
         // Update the experiences points on the Tamagotchi based on what stage it is when it's created
         switch (tamagotchi.TamagotchiStage)
@@ -98,7 +112,7 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
         return Ok("Tamagotchi Created Successfully.");
     }
 
-    //// POST: api/Admin/ShoppingItems/EditShoppingItem/{shoppingItem}
+    //// POST: api/Admin/EditShoppingItem/{shoppingItem}
     [HttpPost]
     [Route("EditShoppingItem")]
     public async Task<IActionResult> Edit([FromBody] ShoppingItem shoppingItem)
@@ -114,7 +128,7 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
         return Ok("Shopping Item Updated Successfully.");
     }
 
-    //// POST: api/Admin/ShoppingItems/EditTamagotchi/{tamagotchi}
+    //// POST: api/Admin/EditTamagotchi/{tamagotchi}
     [HttpPost]
     [Route("EditTamagotchi")]
     public async Task<IActionResult> EditTamagotchi([FromBody] Tamagotchi tamagotchi)
@@ -131,23 +145,126 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
         return Ok("Tamagotchi Updated Successfully.");
     }
 
-    //// POST: api/Admin/ShoppingItems/Delete/{id}
+    //// POST: api/Admin/DeleteItem/{id}
     [HttpDelete]
-    [Route("Delete{id}")]
-    public async Task<IActionResult> Delete(int id)
+    [Route("Delete/{id}")]
+    public async Task<IActionResult> DeleteItem(int id)
     {
         var shoppingItem = await _context.ShoppingItems.FindAsync(id);
-        if (shoppingItem != null)
+        if (shoppingItem == null)
+        {
+            return NotFound("Item not found.");
+        }
+        if (shoppingItem is Tamagotchi)
+        {
+            var tamagotchi = await _context.Tamagotchis.FindAsync(id);
+            _context.Remove(tamagotchi!);
+            await _context.SaveChangesAsync();
+        }
+        else
         {
             _context.ShoppingItems.Remove(shoppingItem);
             await _context.SaveChangesAsync();
-            return Ok("Item Deleted Successfully.");
         }
 
-        return NotFound("Item not found.");
+        return Ok("Item Deleted Successfully.");
     }
 
+    [HttpGet]
+    [Route("GetAllOrders")]
+    public async Task<ActionResult<List<OrderDto>>> GetAllOrders()
+    {
 
+        var orders = await _context.Orders
+            .Include(o => o.Customer)
+            .Include(o => o.Items)
+                .ThenInclude(i => i.ShoppingItem)
+            .ToListAsync();
+        List<OrderDto> ordersDto = [];
+        foreach (var order in orders)
+        {
+            ordersDto.Add(new OrderDto
+            {
+                OrderId = order.OrderId,
+                Customer = new
+                (
+                    id: order.Customer.Id,
+                    firstName: order.Customer.FirstName,
+                    lastName: order.Customer.LastName,
+                    email: order.Customer.Email!,
+                    addressId: order.Customer.AddressId,
+                    shoppingCartId: order.Customer.ShoppingCartId
+                ),
+                OrderDate = order.OrderDate,
+                ShippingDate = order.ShippingDate,
+                ExpectedDate = order.ExpectedDate,
+                Items = order.Items.Select(i => new ShoppingItem
+                {
+                    ShoppingItemId = i.ShoppingItem.ShoppingItemId,
+                    Name = i.ShoppingItem.Name,
+                    Description = i.ShoppingItem.Description,
+                    Stock = i.ShoppingItem.Stock,
+                    Price = i.ShoppingItem.Price,
+                    CurrencyType = i.ShoppingItem.CurrencyType,
+                    Discount = i.ShoppingItem.Discount,
+                    ImagePath = i.ShoppingItem.ImagePath,
+                    Quantity = i.ShoppingItem.Quantity
+                }).ToList()
+            });
+        }
+        var jsonResponse = JsonConvert.SerializeObject(ordersDto, new JsonSerializerSettings
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        });
+        Console.WriteLine(jsonResponse);
+
+        return Ok(jsonResponse);
+    }
+
+    [HttpGet]
+    [Route("GetSpecificOrder/{id}")]
+    public async Task<OrderDto> GetSpecificOrder(int id)
+    {
+        var order = await _context.Orders
+            .Include(o => o.Customer)
+            .Include(o => o.Items)
+            .FirstOrDefaultAsync(o => o.OrderId == id);
+        var orderDto = _mapper.Map<OrderDto>(order);
+
+        return orderDto;
+    }
+    [HttpGet]
+    [Route("GetItemToEdit/{id}")]
+    public async Task<IActionResult> GetItemToEdit(int id)
+    {
+        var item = await _context.ShoppingItems.FindAsync(id);
+
+        if (item == null)
+        {
+            return NotFound();
+        }
+        if (item is Tamagotchi tamagotchi)
+        {
+            return Ok(new { Type = ItemType.Tamagotchi, Data = tamagotchi });
+        }
+        else
+        {
+            return Ok(new { Type = ItemType.ShoppingItem, Data = item });
+        }
+    }
+    public enum ItemType
+    {
+        Tamagotchi,
+        ShoppingItem
+    }
+    [HttpGet]
+    [Route("GetOrder{id}")]
+    public async Task<ActionResult<OrderDto>> GetOrder(int id)
+    {
+        var order = await _context.Orders.FindAsync(id);
+        var orderDto = _mapper.Map<OrderDto>(order);
+        return orderDto;
+    }
     // DELETE: api/Orders/5
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteOrder(int id)
@@ -163,6 +280,4 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
 
         return NoContent();
     }
-
-
 }

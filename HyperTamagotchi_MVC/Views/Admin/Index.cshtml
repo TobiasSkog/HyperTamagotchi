@@ -7,13 +7,13 @@
 <div class="container mt-5">
     <div class="row mb-3">
         <div class="col-md-12">
-            <h1 class="text-center">Admin Panel</h1>
+            <h1 class="text-center">Admin Panel - Item Management</h1>
         </div>
     </div>
     <div class="row mb-4">
         <div class="col-md-6">
-            <a class="btn btn-primary" asp-controller="ShoppingItems" asp-action="Create">Create New Item</a>
-            <a class="btn btn-primary" asp-controller="ShoppingItems" asp-action="CreateTamagotchi">Create New Tamagotchi</a>
+            <a class="btn btn-primary" asp-action="Create">Create New Item</a>
+            <a class="btn btn-primary" asp-action="CreateTamagotchi">Create New Tamagotchi</a>
         </div>
     </div>
     <div class="row">
@@ -47,9 +47,9 @@
                             <td>@Html.DisplayFor(modelItem => item.Discount)</td>
                             <td>@Html.DisplayFor(modelItem => item.ImagePath)</td>
                             <td >
-                                <a class="btn btn-primary btn-sm align-content-center" style="width: 100%; margin: 2px 0px 2px 0px;" asp-controller="ShoppingItems" asp-action="Edit" asp-route-id="@item.ShoppingItemId">Edit</a>
-                                <a class="btn btn-primary btn-sm align-content-center" style="width: 100%; margin: 2px 0px 2px 0px;" asp-controller="ShoppingItems" asp-action="Details" asp-route-id="@item.ShoppingItemId">Details</a>
-                                <a class="btn btn-primary btn-sm align-content-center" style="width: 100%; margin: 2px 0px 2px 0px;" asp-controller="ShoppingItems" asp-action="Delete" asp-route-id="@item.ShoppingItemId">Delete</a>
+                                <a class="btn btn-primary btn-sm align-content-center" style="width: 100%; margin: 2px 0px 2px 0px;" asp-action="Edit" asp-route-id="@item.ShoppingItemId">Edit</a>
+                                <a class="btn btn-primary btn-sm align-content-center" style="width: 100%; margin: 2px 0px 2px 0px;" asp-action="Details" asp-route-id="@item.ShoppingItemId">Details</a>
+                                <a class="btn btn-primary btn-sm align-content-center" style="width: 100%; margin: 2px 0px 2px 0px;" asp-action="Delete" asp-route-id="@item.ShoppingItemId">Delete</a>
                             </td>
                         </tr>
                     }
