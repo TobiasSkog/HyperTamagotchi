@@ -12,7 +12,7 @@ namespace HyperTamagotchi_API.Controllers
     {
         private readonly ApplicationDbContext _context = context;
 
-        // GET: api/Orders
+        // GET: api/Orders/GetOrdersFromCustomer
         [HttpGet("{customerId}")]
         [AuthorizeByRole("Customer", "Admin")]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrdersFromCustomer(string customerId)

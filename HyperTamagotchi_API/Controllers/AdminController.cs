@@ -174,7 +174,6 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
     [Route("GetAllOrders")]
     public async Task<ActionResult<List<OrderDto>>> GetAllOrders()
     {
-
         var orders = await _context.Orders
             .Include(o => o.Customer)
             .Include(o => o.Items)
@@ -216,22 +215,54 @@ public class AdminController(ApplicationDbContext context, IMapper mapper) : Con
         {
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore
         });
-        Console.WriteLine(jsonResponse);
 
         return Ok(jsonResponse);
     }
 
     [HttpGet]
     [Route("GetSpecificOrder/{id}")]
-    public async Task<OrderDto> GetSpecificOrder(int id)
+    public async Task<ActionResult<OrderDto>> GetSpecificOrder(int id)
     {
         var order = await _context.Orders
             .Include(o => o.Customer)
             .Include(o => o.Items)
+                .ThenInclude(i => i.ShoppingItem)
             .FirstOrDefaultAsync(o => o.OrderId == id);
-        var orderDto = _mapper.Map<OrderDto>(order);
+        var orderDto = new OrderDto
+        {
+            OrderId = order.OrderId,
+            Customer = new
+                (
+                    id: order.Customer.Id,
+                    firstName: order.Customer.FirstName,
+                    lastName: order.Customer.LastName,
+                    email: order.Customer.Email!,
+                    addressId: order.Customer.AddressId,
+                    shoppingCartId: order.Customer.ShoppingCartId
+                ),
+            OrderDate = order.OrderDate,
+            ShippingDate = order.ShippingDate,
+            ExpectedDate = order.ExpectedDate,
+            Items = order.Items.Select(i => new ShoppingItem
+            {
+                ShoppingItemId = i.ShoppingItem.ShoppingItemId,
+                Name = i.ShoppingItem.Name,
+                Description = i.ShoppingItem.Description,
+                Stock = i.ShoppingItem.Stock,
+                Price = i.ShoppingItem.Price,
+                CurrencyType = i.ShoppingItem.CurrencyType,
+                Discount = i.ShoppingItem.Discount,
+                ImagePath = i.ShoppingItem.ImagePath,
+                Quantity = i.ShoppingItem.Quantity
+            }).ToList()
+        };
 
-        return orderDto;
+        var jsonResponse = JsonConvert.SerializeObject(order, new JsonSerializerSettings
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        });
+
+        return Ok(jsonResponse);
     }
     [HttpGet]
     [Route("GetItemToEdit/{id}")]

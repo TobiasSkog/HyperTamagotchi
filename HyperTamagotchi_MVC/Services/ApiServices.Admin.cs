@@ -124,20 +124,19 @@ public partial class ApiServices
         //    return [];
         //}
         var jsonResponse = await response.Content.ReadAsStringAsync();
-
-
-
         var orders = JsonConvert.DeserializeObject<List<Order>>(jsonResponse);
         return orders;
     }
 
-    [HttpPost]
+    [HttpGet]
     [AuthorizeByRole("Admin")]
     public async Task<Order> GetOrderByIdAsync(int id)
     {
         EnsureJwtTokenIsAddedToRequest();
-
-        return await _client.GetFromJsonAsync<Order>($"api/Admin/GetSpecificOrder/{id}");
+        var response = await _client.GetAsync($"api/Admin/GetSpecificOrder/{id}");
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+        var order = JsonConvert.DeserializeObject<Order>(jsonResponse);
+        return order;
     }
 }
 
