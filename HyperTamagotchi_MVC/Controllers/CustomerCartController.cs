@@ -21,7 +21,13 @@ namespace HyperTamagotchi_MVC.Controllers
             }
             return JsonConvert.DeserializeObject<ShoppingCart>(cookie);
         }
-
+        private void UpdateShoppingCartCookieAfterCheckout()
+        {
+            var shoppingCart = GetShoppingCartFromCookie();
+            shoppingCart.ShoppingItems.Clear();
+            UpdateShoppingCartCookie(shoppingCart);
+            SetShoppingCartInViewBag(shoppingCart);
+        }
         private void UpdateShoppingCartCookie(ShoppingCart shoppingCart)
         {
             var shoppingCartJson = JsonConvert.SerializeObject(shoppingCart);
@@ -59,12 +65,6 @@ namespace HyperTamagotchi_MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Checkout(ShoppingCart model)
         {
-            //var email = User.FindFirst(ClaimTypes.Email)?.Value;
-
-            //if (string.IsNullOrEmpty(email))
-            //{
-            //    return Unauthorized();
-            //}
 
             try
             {
@@ -96,8 +96,7 @@ namespace HyperTamagotchi_MVC.Controllers
                     Items = model.ShoppingItems
                 };
 
-                //UpdateShoppingCartCookie(model);
-
+                UpdateShoppingCartCookieAfterCheckout();
 
                 return View("OrderConfirmation", viewModel);
             }
@@ -115,7 +114,8 @@ namespace HyperTamagotchi_MVC.Controllers
         [HttpPost]
         public IActionResult OrderConfirmation()
         {
-            Response.Cookies.Delete("ShoppingCart");
+            // UpdateShoppingCartCookieAfterCheckout();
+
             return RedirectToAction("Index", "Home");
         }
     }

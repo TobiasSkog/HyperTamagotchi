@@ -62,7 +62,7 @@
 <p>
     @if(User.IsInRole("Admin"))
     {
-        <a asp-action="GetAllOrders" class="btn btn-primary">Back to List</a>        
+        <a asp-controller="Admin" asp-action="GetAllOrders" class="btn btn-primary">Back to List</a>        
     }
     @if (User.IsInRole("Customer"))
     {
