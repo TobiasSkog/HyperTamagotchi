@@ -14,7 +14,7 @@ namespace HyperTamagotchi_MVC.Services;
         {
             EnsureJwtTokenIsAddedToRequest();
 
-            var response = await _client.GetAsync($"api/Customer/Orders?customerId={customerId}");
+            var response = await _client.GetAsync($"api/Orders/GetOrdersFromCustomer/{customerId}");
 
             if (response.IsSuccessStatusCode)
             {
