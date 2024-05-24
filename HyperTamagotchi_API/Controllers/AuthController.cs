@@ -37,6 +37,9 @@ public class AuthController(
 
         await _context.AddAsync(address);
         await _context.SaveChangesAsync();
+        var shoppingCart = new ShoppingCart();
+        await _context.AddAsync(shoppingCart);
+        await _context.SaveChangesAsync();
 
         var customer = new Customer
         {
@@ -46,7 +49,9 @@ public class AuthController(
             LastName = registerRequestDto.LastName,
             AddressId = address.AddressId,
             Address = address,
-            EmailConfirmed = true
+            EmailConfirmed = true,
+            ShoppingCart = shoppingCart,
+            ShoppingCartId = shoppingCart.ShoppingCartId
         };
 
         var identityResult = await _userManager.CreateAsync(customer, registerRequestDto.Password);
