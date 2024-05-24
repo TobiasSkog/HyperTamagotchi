@@ -18,14 +18,10 @@ public class Program
 
         var builder = WebApplication.CreateBuilder(args);
 
-        var tamagotchiUri = Environment.GetEnvironmentVariable("TamagotchiUri");
-        tamagotchiUri ??= builder.Configuration["ApiUri:Azure"];
-        var issuer = Environment.GetEnvironmentVariable("JwtIssuer");
-        issuer ??= builder.Configuration["Jwt:Issuer"];
-        var audience = Environment.GetEnvironmentVariable("JwtAudience");
-        audience ??= builder.Configuration["Jwt:Audience"];
-        var jwtkey = Environment.GetEnvironmentVariable("JwtKey");
-        jwtkey ??= builder.Configuration["Jwt:Key"];
+        var tamagotchiUri = Environment.GetEnvironmentVariable("TamagotchiUri") ?? builder.Configuration["ApiUri:Azure"];
+        var issuer = Environment.GetEnvironmentVariable("JwtIssuer") ?? builder.Configuration["Jwt:Issuer"];
+        var audience = Environment.GetEnvironmentVariable("JwtAudience") ?? builder.Configuration["Jwt:Audience"];
+        var jwtkey = Environment.GetEnvironmentVariable("JwtKey") ?? builder.Configuration["Jwt:Key"];
 
         builder.Services.AddControllersWithViews();
         builder.Services.AddHttpClient("API Tamagotchi", client =>

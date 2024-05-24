@@ -17,14 +17,10 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        var issuer = Environment.GetEnvironmentVariable("JwtIssuer");
-        issuer ??= builder.Configuration["Jwt:Issuer"];
-        var audience = Environment.GetEnvironmentVariable("JwtAudience");
-        audience ??= builder.Configuration["Jwt:Audience"];
-        var jwtkey = Environment.GetEnvironmentVariable("JwtKey");
-        jwtkey ??= builder.Configuration["Jwt:Key"];
-        var googleMapsApiKey = Environment.GetEnvironmentVariable("GoogleMapsKey");
-        googleMapsApiKey ??= builder.Configuration["ApiKey:GoogleMaps"];
+        var issuer = Environment.GetEnvironmentVariable("JwtIssuer") ?? builder.Configuration["Jwt:Issuer"];
+        var audience = Environment.GetEnvironmentVariable("JwtAudience") ?? builder.Configuration["Jwt:Audience"];
+        var jwtkey = Environment.GetEnvironmentVariable("JwtKey") ?? builder.Configuration["Jwt:Key"];
+        var googleMapsApiKey = Environment.GetEnvironmentVariable("GoogleMapsKey") ?? builder.Configuration["ApiKey:GoogleMaps"];
 
         builder.Services.AddHttpClient<TimeDelivery>()
                 .ConfigureHttpClient(client =>

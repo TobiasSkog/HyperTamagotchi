@@ -51,8 +51,8 @@ namespace HyperTamagotchi_MVC.Controllers
 
             ViewData["Customer"] = new
             {
-                FullName = User.Claims.FirstOrDefault(c => c.Type == "FullName"),
-                Email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email),
+                FullName = User.Claims.FirstOrDefault(c => c.Type == "FullName").Value,
+                Email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email).Value,
                 Address = address
             };
 
