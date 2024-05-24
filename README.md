@@ -2,6 +2,7 @@
 
 # Azure Link
 Hemsida: https://hypertamagotchimvc.azurewebsites.net/
+<br>
 API: https://hypertamagotchiapi.azurewebsites.net/
 
 ### Viktigt
