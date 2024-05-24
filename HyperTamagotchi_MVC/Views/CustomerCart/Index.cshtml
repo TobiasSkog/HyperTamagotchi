@@ -52,7 +52,7 @@
                             </table>
                             <div class="text-end">
                                 <p class="mb-1"><strong>Subtotal:</strong> @(Model.ShoppingItems.Sum(i => i.Price * i.Quantity)) @Model.ShoppingItems.First().CurrencyType</p>
-                                <p class="mb-1"><strong>Shipping:</strong> $2.00</p>
+                                <p class="mb-1"><strong>Shipping:</strong> 2.00 SEK</p>
                                 <p class="mb-1"><strong>Total:</strong> @(Model.ShoppingItems.Sum(i => i.Price * i.Quantity) + 2.00) @Model.ShoppingItems.First().CurrencyType</p>
                                 <button type="submit" class="btn btn-primary">Confirm and Pay</button>
                             </div>
