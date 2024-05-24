@@ -17,14 +17,21 @@ Eller klicka på Register för att skapa en ny användare
 <br>
 | :exclamation:  Notera!   |
 |-----------------------------------------|
-| När du skapar en ny användare måste du ange en giltig address (City, Street, Zipcode) för leverans tiden ska räknas ut korrekt (Google Distance Matrix API) |
-
+| När du skapar en ny användare måste du ange en giltig address |
+| (City, Street, Zipcode) för leverans tiden ska räknas ut korrekt |
+| (Google Distance Matrix API) |
 
 # Struktur av källkoden
-
-**Backend:**
-
-**Frontend:**
+## Backend:
+Sköter all kommunikation med Databasen. <br>
+Skapar JWT Tokens. <br>
+Sköter Authentication och Authorization. <br>
+Kommunicerar med utstående API (Google Distance Matrix API). <br>
+## Frontend:
+Tillåter användaren att navigera runt på hemsidan och pratar med databasen via vårt API. <br>
+Controllers för hjälpa navigera användaren. <br>
+Baserat på role från API så begränsas vissa views om användaren inte har en tillåten role. <br>
+Custom CSS. <br>
 
 # Färdiga användare för att testa appen
 | Email           | Lösenord | Role |
@@ -33,5 +40,3 @@ Eller klicka på Register för att skapa en ny användare
 |  daniel@gmail.com | Abc123!| Customer |
 |  carro@gmail.com | Abc123!| Customer |
 |  wille@gmail.com | Abc123!| Customer |
-
-# Bilder från appen
