@@ -13,7 +13,12 @@ API: https://hypertamagotchiapi.azurewebsites.net/
 Klicka på ![image](https://github.com/TobiasSkog/HyperTamagotchi/assets/11568812/6f627849-4bde-427d-9063-099d37d0d50a) ikonen
 Sedan på Login för att logga in med ditt konto 
 <br>
-Eller klicka på Register för att skapa en ny användare, notera när du skapar en ny användare måste du ange en giltig address (City, Street, Zipcode) för leverans tiden ska räknas ut korrekt (Google Distance Matrix API)
+Eller klicka på Register för att skapa en ny användare
+<br>
+| :exclamation:  Notera!   |
+|-----------------------------------------|
+| När du skapar en ny användare måste du ange en giltig address (City, Street, Zipcode) för leverans tiden ska räknas ut korrekt (Google Distance Matrix API) |
+
 
 # Struktur av källkoden
 
