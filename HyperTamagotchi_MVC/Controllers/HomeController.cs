@@ -1,14 +1,18 @@
 using HyperTamagotchi_MVC.Filters;
 using HyperTamagotchi_MVC.Models;
 using HyperTamagotchi_MVC.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace HyperTamagotchi_MVC.Controllers;
+
 public class HomeController(ApiServices api) : BaseController(api)
 {
+    [AllowAnonymous]
     public async Task<IActionResult> Index()
     {
+
         _api.EnsureJwtTokenIsAddedToRequest();
 
         SetShoppingCartInViewBagFromCookie();

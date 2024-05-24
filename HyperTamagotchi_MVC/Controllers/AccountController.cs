@@ -2,9 +2,11 @@
 using HyperTamagotchi_MVC.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HyperTamagotchi_MVC.Controllers;
+[AllowAnonymous]
 public class AccountController(ApiServices api) : Controller
 {
     private readonly ApiServices _api = api;

@@ -2,6 +2,7 @@
 using HyperTamagotchi_API.Models;
 using HyperTamagotchi_API.Models.DTO;
 using HyperTamagotchi_API.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,7 @@ namespace HyperTamagotchi_API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-
+[AllowAnonymous]
 public class AuthController(
     UserManager<IdentityUser> userManager,
     ApplicationDbContext context,

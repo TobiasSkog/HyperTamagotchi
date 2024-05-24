@@ -1,5 +1,6 @@
 ﻿using HyperTamagotchi_API.Data;
 using HyperTamagotchi_API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,7 @@ public class ShoppingItemController(ApplicationDbContext context) : ControllerBa
     private readonly ApplicationDbContext _context = context;
 
     [HttpGet]
+    [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<ShoppingItem>>> GetShoppingItems()
     {
         return await _context.ShoppingItems.ToListAsync();

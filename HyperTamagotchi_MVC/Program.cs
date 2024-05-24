@@ -11,11 +11,25 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        //client.BaseAddress = new Uri(builder.Configuration["ApiUri:Tamagotchi"]!));
+        //ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        //ValidAudience = builder.Configuration["Jwt:Audience"],
+        //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+
         var builder = WebApplication.CreateBuilder(args);
+
+        var tamagotchiUri = Environment.GetEnvironmentVariable("TamagotchiUri");
+        tamagotchiUri ??= builder.Configuration["ApiUri:Azure"];
+        var issuer = Environment.GetEnvironmentVariable("JwtIssuer");
+        issuer ??= builder.Configuration["Jwt:Issuer"];
+        var audience = Environment.GetEnvironmentVariable("JwtAudience");
+        audience ??= builder.Configuration["Jwt:Audience"];
+        var jwtkey = Environment.GetEnvironmentVariable("JwtKey");
+        jwtkey ??= builder.Configuration["Jwt:Key"];
 
         builder.Services.AddControllersWithViews();
         builder.Services.AddHttpClient("API Tamagotchi", client =>
-            client.BaseAddress = new Uri(builder.Configuration["ApiUri:Tamagotchi"]!));
+            client.BaseAddress = new Uri(tamagotchiUri!));
 
         builder.Services.AddAuthentication(options =>
         {
@@ -30,9 +44,10 @@ public class Program
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                ValidAudience = builder.Configuration["Jwt:Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+                ValidIssuer = issuer,
+                ValidAudience = audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtkey!))
+
             };
         })
         .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
@@ -53,10 +68,10 @@ public class Program
         builder.Services.AddScoped<ApiServices>();
         builder.Services.AddScoped<IJwtTokenValidator, JwtTokenValidator>();
 
-        builder.Services.AddAntiforgery(options =>
-        {
-            options.HeaderName = "X-XSRF-TOKEN";
-        });
+        //builder.Services.AddAntiforgery(options =>
+        //{
+        //    options.HeaderName = "X-XSRF-TOKEN";
+        //});
 
         var app = builder.Build();
 
@@ -66,8 +81,8 @@ public class Program
         }
         else
         {
-            app.UseExceptionHandler("/Home/Error");
-            app.UseHsts();
+            //app.UseExceptionHandler("/Home/Error");
+            //app.UseHsts();
         }
 
         app.UseHttpsRedirection();
@@ -80,7 +95,10 @@ public class Program
         app.MapControllerRoute(
             name: "default",
             pattern: "{controller=Home}/{action=Index}/{id?}");
-
+        Console.WriteLine(tamagotchiUri);
+        Console.WriteLine(issuer);
+        Console.WriteLine(audience);
+        Console.WriteLine(jwtkey);
         app.Run();
     }
 }

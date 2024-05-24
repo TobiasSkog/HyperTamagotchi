@@ -18,6 +18,7 @@
     @* <div class="d-flex justify-content-end mb-3">
     <a href="@Url.Action("Cart", "Shopping")" class="btn btn-secondary">View Cart</a>
     </div> *@
+    
     <div class="row">
         @foreach (var item in Model)
         {
@@ -70,40 +71,6 @@
             </div>
         }
     </div>
+   
+   
 </div>
-
-
-@*
-                                <div class="row no-gutters justify-content-center cart-controll">
-                                    <div class="col-auto">
-                                        <button class="btn btn-primary decrease-quantity" data-item-id="@item.ShoppingItemId">-</button>
-                                    </div>
-                                    <div class="col-auto">
-                                        <input class="form-control text-center item-quantity" data-item-id="@item.ShoppingItemId" value="@(shoppingCart.ShoppingItems.Where(si => si.ShoppingItemId == item.ShoppingItemId).Sum(si => si.Quantity))" />
-                                    </div>
-                                    <div class="col-auto">
-                                        <button class="btn btn-primary increase-quantity" data-item-id="@item.ShoppingItemId">+</button>
-                                    </div>
-                                </div>
-                                *@
-
-@* <div class="row no-gutters justify-content-center">
-                                    <div class="col-auto">
-                                    <form asp-action="DecreaseQuantity" method="post">
-                                        <input type="hidden" name="shoppingItemId" value="@item.ShoppingItemId" />
-                                        <button type="button submit" class="btn btn-primary">-</button>
-                                    </form>
-                                    </div>
-                                    <div class="col-auto">
-                                    <form asp-action="AdjustQuantity" method="post">
-                                        <input type="hidden" name="shoppingItemId" value="@item.ShoppingItemId" />
-                                            <input asp-for="@item.Quantity" name="amount" class="form-control text-center" value="@(shoppingCart.ShoppingItems.Where(si => si.ShoppingItemId == item.ShoppingItemId).Sum(si => si.Quantity))" />
-                                    </form>
-                                </div>
-                                    <div class="col-auto">
-                                    <form asp-action="IncreaseQuantity" method="post" >
-                                        <input type="hidden" name="shoppingItemId" value="@item.ShoppingItemId" />
-                                        <button type="submit" class="btn btn-primary">+</button>
-                                    </form>
-                                    </div>
-                                </div> *@

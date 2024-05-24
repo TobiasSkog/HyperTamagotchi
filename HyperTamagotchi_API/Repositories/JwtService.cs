@@ -9,8 +9,9 @@ namespace HyperTamagotchi_API.Repositories;
 
 public class JwtService(IConfiguration configuration) : IJwtService
 {
-    private readonly IConfiguration _configuration = configuration;
-
+    private readonly string _issuer = Environment.GetEnvironmentVariable("JwtIssuer") ?? configuration["Jwt:Issuer"];
+    private readonly string _audience = Environment.GetEnvironmentVariable("JwtAudience") ?? configuration["Jwt:Audience"];
+    private readonly string _jwtkey = Environment.GetEnvironmentVariable("JwtKey") ?? configuration["Jwt:Key"];
 
     private TokenValidationParameters GetTokenValidation()
     {
@@ -20,9 +21,9 @@ public class JwtService(IConfiguration configuration) : IJwtService
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = _configuration["Jwt:Issuer"],
-            ValidAudience = _configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!))
+            ValidIssuer = _issuer,
+            ValidAudience = _audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtkey))
         };
     }
     public ClaimsPrincipal ValidateToken(string token)
@@ -70,11 +71,11 @@ public class JwtService(IConfiguration configuration) : IJwtService
             claims.Add(new Claim(ClaimTypes.Role, role));
         }
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtkey));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         var token = new JwtSecurityToken(
-            _configuration["Jwt:Issuer"],
-            _configuration["Jwt:Audience"],
+            _issuer,
+            _audience,
             claims,
             expires: DateTime.Now.AddMinutes(30),
             signingCredentials: credentials);
@@ -94,11 +95,11 @@ public class JwtService(IConfiguration configuration) : IJwtService
 
     public string GenerateJwtToken(IEnumerable<Claim> claims)
     {
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtkey));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        var token = new JwtSecurityToken(_configuration["Jwt:Issuer"],
-            _configuration["Jwt:Audience"],
+        var token = new JwtSecurityToken(_issuer,
+            _audience,
             claims,
             expires: DateTime.Now.AddMinutes(30),
             signingCredentials: creds);
@@ -118,7 +119,7 @@ public class JwtService(IConfiguration configuration) : IJwtService
             ValidateAudience = false,
             ValidateIssuer = false,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"])),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtkey)),
             ValidateLifetime = false
         };
 

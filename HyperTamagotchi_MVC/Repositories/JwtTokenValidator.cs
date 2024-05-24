@@ -7,7 +7,9 @@ namespace HyperTamagotchi_MVC.Repositories;
 
 public class JwtTokenValidator(IConfiguration configuration) : IJwtTokenValidator
 {
-    private readonly IConfiguration _configuration = configuration;
+    private readonly string _issuer = Environment.GetEnvironmentVariable("JwtIssuer") ?? configuration["Jwt:Issuer"];
+    private readonly string _audience = Environment.GetEnvironmentVariable("JwtAudience") ?? configuration["Jwt:Audience"];
+    private readonly string _jwtkey = Environment.GetEnvironmentVariable("JwtKey") ?? configuration["Jwt:Key"];
     public ClaimsPrincipal ValidateToken(string token)
     {
         var tokenValidationParameters = new TokenValidationParameters()
@@ -16,9 +18,9 @@ public class JwtTokenValidator(IConfiguration configuration) : IJwtTokenValidato
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = _configuration["Jwt:Issuer"],
-            ValidAudience = _configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!))
+            ValidIssuer = _issuer,
+            ValidAudience = _audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtkey))
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();

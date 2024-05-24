@@ -14,7 +14,11 @@ public class CustomerController(ApplicationDbContext context) : ControllerBase
     [HttpGet("Email")]
     public async Task<ActionResult<CustomerDto>> GetUserByEmail()
     {
-        var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email).Value;
+        string email = string.Empty;
+        if (User.Identity.IsAuthenticated)
+        {
+            email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email).Value;
+        }
 
 
         var user = await _context.Customer

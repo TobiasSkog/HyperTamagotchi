@@ -8,9 +8,9 @@ namespace HyperTamagotchi_API.Middleware;
 public class JwtTokenMiddleware(RequestDelegate next, IConfiguration configuration)
 {
     private readonly RequestDelegate _next = next;
-    private readonly string _issuer = configuration["Jwt:Issuer"];
-    private readonly string _audience = configuration["Jwt:Audience"];
-    private readonly string _key = configuration["Jwt:Key"];
+    private readonly string _issuer = Environment.GetEnvironmentVariable("JwtIssuer") ?? configuration["Jwt:Issuer"];
+    private readonly string _audience = Environment.GetEnvironmentVariable("JwtAudience") ?? configuration["Jwt:Audience"];
+    private readonly string _key = Environment.GetEnvironmentVariable("JwtKey") ?? configuration["Jwt:Key"];
 
     public async Task Invoke(HttpContext context)
     {

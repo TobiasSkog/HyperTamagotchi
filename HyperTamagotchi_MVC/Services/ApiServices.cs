@@ -9,7 +9,6 @@ public partial class ApiServices(IHttpClientFactory httpClientFactory, IHttpCont
     private readonly IHttpContextAccessor _contextAccessor = contextAccessor;
     private readonly IJwtTokenValidator _jwtValidator = jwtValidator;
     private readonly HttpClient _client = httpClientFactory.CreateClient("API Tamagotchi");
-    private readonly ILogger<ApiServices> _logger = logger;
 
     private void AddJwtTokenToRequest(string token)
     {
@@ -42,7 +41,7 @@ public partial class ApiServices(IHttpClientFactory httpClientFactory, IHttpCont
     public void UpdateShopingCartCookie(ShoppingCart shoppingCart)
     {
         var shoppingCartJson = JsonConvert.SerializeObject(shoppingCart);
-        bool rememberMe = _contextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "RememberMe").Value == "TRUE" ? true : false;
+        bool rememberMe = _contextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "RememberMe").Value == "TRUE";
 
         AppendCookie("ShoppingCart", shoppingCartJson, rememberMe);
     }

@@ -111,6 +111,7 @@ namespace HyperTamagotchi_API.Controllers
             })
             .FirstOrDefaultAsync();
             return Ok(order);
+
         }
 
         // PUT: api/Orders/5

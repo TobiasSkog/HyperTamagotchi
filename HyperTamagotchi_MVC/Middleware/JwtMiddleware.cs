@@ -6,8 +6,8 @@ namespace HyperTamagotchi_MVC.Middleware;
 public class JwtMiddleware(RequestDelegate next, IHttpClientFactory httpClientFactory, IConfiguration configuration)
 {
     private readonly RequestDelegate _next = next;
-    private readonly IConfiguration _configuration = configuration;
     private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
+    private readonly string _apiuri = Environment.GetEnvironmentVariable("TamagotchiUri") ?? configuration["ApiUri:Azure"];
     public async Task Invoke(HttpContext context, IJwtTokenValidator tokenValidator)
     {
         var token = context.Request.Cookies["jwtToken"];
@@ -29,7 +29,7 @@ public class JwtMiddleware(RequestDelegate next, IHttpClientFactory httpClientFa
                 if (!string.IsNullOrEmpty(refreshToken))
                 {
                     var client = _httpClientFactory.CreateClient();
-                    var response = await client.PostAsJsonAsync($"{_configuration["ApiUri:Auth"]}/refresh", new { Token = token, RefreshToken = refreshToken });
+                    var response = await client.PostAsJsonAsync($"{_apiuri}/refresh", new { Token = token, RefreshToken = refreshToken });
                     if (response.IsSuccessStatusCode)
                     {
                         var tokens = await response.Content.ReadFromJsonAsync<TokenResponse>();

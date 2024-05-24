@@ -17,7 +17,14 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        var googleMapsApiKey = builder.Configuration["ApiKey:GoogleMaps"];
+        var issuer = Environment.GetEnvironmentVariable("JwtIssuer");
+        issuer ??= builder.Configuration["Jwt:Issuer"];
+        var audience = Environment.GetEnvironmentVariable("JwtAudience");
+        audience ??= builder.Configuration["Jwt:Audience"];
+        var jwtkey = Environment.GetEnvironmentVariable("JwtKey");
+        jwtkey ??= builder.Configuration["Jwt:Key"];
+        var googleMapsApiKey = Environment.GetEnvironmentVariable("GoogleMapsKey");
+        googleMapsApiKey ??= builder.Configuration["ApiKey:GoogleMaps"];
 
         builder.Services.AddHttpClient<TimeDelivery>()
                 .ConfigureHttpClient(client =>
@@ -84,16 +91,23 @@ public class Program
 
         builder.Services.AddCors(options =>
         {
-            options.AddPolicy(name: "Cors",
+            options.AddPolicy(name: "Tamagotchi",
                 policy =>
                 {
                     policy
-                     .AllowAnyOrigin()
-                     .AllowAnyHeader()
-                     .AllowAnyMethod();
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
                 });
-        });
 
+        });
+        //options.AddPolicy(name: "AllowSpecificOrigin",
+        //    policy =>
+        //    {
+        //        policy.WithOrigins("https://hypertamagotchimvc.azurewebsites.net")
+        //              .AllowAnyMethod()
+        //              .AllowAnyHeader();
+        //    });
 
         builder.Services.AddAuthentication(options =>
         {
@@ -108,9 +122,9 @@ public class Program
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                ValidAudience = builder.Configuration["Jwt:Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+                ValidIssuer = issuer,
+                ValidAudience = audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtkey!))
             };
         })
         .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
@@ -125,7 +139,9 @@ public class Program
             options.LogoutPath = "/Home/Index";
             options.AccessDeniedPath = "/Account/AccessDenied";
         });
-
+        //ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        //ValidAudience = builder.Configuration["Jwt:Audience"],
+        //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
         builder.Services.AddAuthorization();
 
         var app = builder.Build();
@@ -138,17 +154,16 @@ public class Program
 
         app.UseHttpsRedirection();
         app.UseRouting();
-        app.UseCors(builder => builder
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowAnyOrigin()
-        );
+        app.UseCors("Tamagotchi");
 
         app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();
         //await ControllDatabaseForData(app);
+        Console.WriteLine(issuer);
+        Console.WriteLine(audience);
+        Console.WriteLine(jwtkey);
         app.Run();
     }
 
