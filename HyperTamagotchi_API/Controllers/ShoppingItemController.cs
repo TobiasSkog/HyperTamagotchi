@@ -7,12 +7,12 @@ using Microsoft.EntityFrameworkCore;
 namespace HyperTamagotchi_API.Controllers;
 [Route("/api/[controller]")]
 [ApiController]
+[AllowAnonymous]
 public class ShoppingItemController(ApplicationDbContext context) : ControllerBase
 {
     private readonly ApplicationDbContext _context = context;
 
     [HttpGet]
-    [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<ShoppingItem>>> GetShoppingItems()
     {
         return await _context.ShoppingItems.ToListAsync();

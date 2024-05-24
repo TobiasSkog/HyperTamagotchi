@@ -1,4 +1,5 @@
 ﻿using HyperTamagotchi_API.Data;
+using HyperTamagotchi_API.Filters;
 using HyperTamagotchi_API.Models;
 using HyperTamagotchi_API.Models.DTO;
 using HyperTamagotchi_API.Models.GoogleMaps;
@@ -10,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 namespace HyperTamagotchi_API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
+[AuthorizeByRole("Admin", "Customer")]
 public class CustomerCartController(ApplicationDbContext context, TimeDelivery timeDelivery) : ControllerBase
 {
     private readonly ApplicationDbContext _context = context;

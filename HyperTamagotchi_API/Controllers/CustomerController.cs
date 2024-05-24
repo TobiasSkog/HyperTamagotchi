@@ -1,4 +1,5 @@
 ﻿using HyperTamagotchi_API.Data;
+using HyperTamagotchi_API.Filters;
 using HyperTamagotchi_API.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using System.Security.Claims;
 namespace HyperTamagotchi_API.Controllers;
 [Route("api/[controller]")]
 [ApiController]
+[AuthorizeByRole("Admin", "Customer")]
 public class CustomerController(ApplicationDbContext context) : ControllerBase
 {
     private readonly ApplicationDbContext _context = context;
