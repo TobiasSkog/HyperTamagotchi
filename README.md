@@ -22,5 +22,6 @@ API: https://hypertamagotchiapi.azurewebsites.net/
 |  daniel@gmail.com | Abc123!| Customer |
 |  carro@gmail.com | Abc123!| Customer |
 |  wille@gmail.com | Abc123!| Customer |
+|  admin@gmail.com | ???| Admin |
 
 # Bilder från appen
