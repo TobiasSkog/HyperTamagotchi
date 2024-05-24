@@ -1,7 +1,8 @@
 # Introduktion
 
 # Azure Link
-
+Hemsida: https://hypertamagotchimvc.azurewebsites.net/
+API: https://hypertamagotchiapi.azurewebsites.net/
 
 ### Viktigt
 
@@ -16,6 +17,6 @@
 # Färdiga användare för att testa appen
 | Email           | Lösenord |
 | --------------- | -------- |
-| tobias@gmail.com  | Abc123!      |
+|   |       |
 
 # Bilder från appen
