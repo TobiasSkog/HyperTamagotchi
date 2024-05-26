@@ -17,8 +17,8 @@ public class Program
         //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
 
         var builder = WebApplication.CreateBuilder(args);
-
-        var tamagotchiUri = Environment.GetEnvironmentVariable("TamagotchiUri") ?? builder.Configuration["ApiUri:Azure"];
+        //ApiUri:Tamagotchi or ApiUri:Azure
+        var tamagotchiUri = Environment.GetEnvironmentVariable("TamagotchiUri") ?? builder.Configuration["ApiUri:Tamagotchi"];
         var issuer = Environment.GetEnvironmentVariable("JwtIssuer") ?? builder.Configuration["Jwt:Issuer"];
         var audience = Environment.GetEnvironmentVariable("JwtAudience") ?? builder.Configuration["Jwt:Audience"];
         var jwtkey = Environment.GetEnvironmentVariable("JwtKey") ?? builder.Configuration["Jwt:Key"];
